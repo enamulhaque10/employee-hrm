@@ -1,0 +1,208 @@
+{% load i18n %}
+
+<style>
+    .editable-input:read-only {
+        color: hsl(0, 0%, 11%);
+        background-color: transparent;
+        border: none;
+        height: 100%;
+        border: 1px solid transparent;
+    }
+</style>
+<div class="oh-wrapper">
+    <div class="oh-general__tab-target oh-profile-section mb-4 d-none" id="employee_education">
+        <div class="oh-profile-section__card">
+
+            <div class="oh-btn-group p-3 justify-content-end">
+                <div>
+                    <button
+                        class="oh-btn oh-btn--secondary"
+                        data-toggle="oh-modal-toggle"
+                        data-target="#objectCreateModal"
+                        hx-get="{% url 'employee-education-create' form.instance.id %}"
+                        hx-target="#objectCreateModalTarget"
+                        onclick="event.preventDefault()"
+                    >
+                        <ion-icon name="add-sharp" class="mr-2"></ion-icon>{% trans "Create" %}
+                    </button>
+                </div>
+            </div>
+
+            {% if employee_educations %}
+                <div class="mt-2">
+                    {% for employee_education in employee_educations %}
+                        <div id="employee_education{{employee_education.id}}">
+                            <div class="oh-user_permission-list_item accordion exclude-accordion-style" hx-target="#viewFile" data-toggle="oh-modal-toggle" data-target="#viewFileModal" >
+                                <div class="oh-user_permission-list_profile row-status--yellow">
+                                    <div class="oh-feedback-card__name-container ms-1 title_form">
+                                        <span class="oh-profile__info-label mb-1">
+                                            <ion-icon name="construct-outline" role="img" class="md hydrated" aria-label="construct outline"></ion-icon>
+                                            <span>Education Label</span>
+                                        </span>
+                                        <form method="POST"
+                                            hx-post="{% url 'update-employee-education-education-label' employee_education.id %}"
+                                            hx-swap="none"
+                                            hx-on:htmx-after-request="setTimeout(() => { reloadMessage(); }, 300);">
+                                            
+                                        {% csrf_token %}
+                                            <input class="oh-card__title oh-card__title--sm fw-bold me-1 editable-input"
+                                                name="education_label" 
+                                                value="{{employee_education.education_label}}" 
+                                                hx-post="{% url 'update-employee-education-education-label' employee_education.id %}"
+                                                hx-trigger="keyup changed delay:700ms"
+                                                hx-target="closest form"
+                                                hx-swap="none"
+                                                style="width: 270px;"
+                                                readonly />
+                                        </form>
+
+                                        <span class="oh-profile__info-label mb-1">
+                                            <ion-icon name="business-outline" role="img" class="md hydrated" aria-label="construct outline"></ion-icon>
+                                            <span>Institution Name</span>
+                                        </span>
+                                        <form method="POST"
+                                            hx-post="{% url 'update-employee-education-institution-name' employee_education.id %}"
+                                            hx-swap="none"
+                                            hx-on:htmx-after-request="setTimeout(() => { reloadMessage(); }, 300);">
+                                            
+                                        {% csrf_token %}
+                                            <input class="oh-card__title oh-card__title--sm fw-bold me-1 editable-input"
+                                                name="institution_name" 
+                                                value="{{employee_education.institution_name}}" 
+                                                hx-post="{% url 'update-employee-education-institution-name' employee_education.id %}"
+                                                hx-trigger="keyup changed delay:700ms"
+                                                hx-target="closest form"
+                                                hx-swap="none"
+                                                style="width: 270px;"
+                                                readonly />
+                                        </form>
+
+                                        <span class="oh-profile__info-label mb-1">
+                                            <ion-icon name="person-circle-outline" role="img" class="md hydrated" aria-label="construct outline"></ion-icon>
+                                            <span>Subject</span>
+                                        </span>
+                                        <form method="POST"
+                                            hx-post="{% url 'update-employee-education-subject' employee_education.id %}"
+                                            hx-swap="none"
+                                            hx-on:htmx-after-request="setTimeout(() => { reloadMessage(); }, 300);">
+                                            
+                                        {% csrf_token %}
+                                            <input class="oh-card__title oh-card__title--sm fw-bold me-1 editable-input"
+                                                name="subject" 
+                                                value="{{employee_education.subject}}" 
+                                                hx-post="{% url 'update-employee-education-subject' employee_education.id %}"
+                                                hx-trigger="keyup changed delay:700ms"
+                                                hx-target="closest form"
+                                                hx-swap="none"
+                                                style="width: 270px;"
+                                                readonly />
+                                        </form>
+
+                                        <span class="oh-profile__info-label mb-1">
+                                            <ion-icon name="time-outline" role="img" class="md hydrated" aria-label="construct outline"></ion-icon>
+                                            <span>Passing Year</span>
+                                        </span>
+                                        <form method="POST"
+                                            hx-post="{% url 'update-employee-education-passing-year' employee_education.id %}"
+                                            hx-swap="none"
+                                            hx-on:htmx-after-request="setTimeout(() => { reloadMessage(); }, 300);">
+                                            
+                                        {% csrf_token %}
+                                            <input class="oh-card__title oh-card__title--sm fw-bold me-1 editable-input"
+                                                name="passing_year" 
+                                                value="{{employee_education.passing_year}}" 
+                                                hx-post="{% url 'update-employee-education-passing-year' employee_education.id %}"
+                                                hx-trigger="keyup changed delay:700ms"
+                                                hx-target="closest form"
+                                                hx-swap="none"
+                                                style="width: 270px;"
+                                                readonly />
+                                        </form>
+
+                                    </div>
+                                </div>
+                                <div class="oh-btn-group">
+                                    <form hx-confirm="{% trans 'Are you sure you want to delete this Document Request?' %}"
+                                        hx-post="{% url 'employee-education-delete' employee_education.id %}"
+                                        hx-target="#employee_education{{employee_education.id}}"
+                                        hx-swap="outerHTML"
+                                        hx-on-htmx-after-request="setTimeout(() => { reloadMessage(); }, 300);"
+                                        onclick="event.stopPropagation()"
+                                        >
+                                        {% csrf_token %}
+                                        <button
+                                            type="submit"
+                                            class="oh-btn  oh-btn--secondary"
+                                            title="{% trans 'Delete' %}"
+                                        >
+                                            <ion-icon
+                                                class="me-1 md hydrated"
+                                                name="trash-outline"
+                                                role="img"
+                                                aria-label="trash outline"
+                                            ></ion-icon
+                                            >
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="d-flex justify-content-center align-items-center" style="height: 40vh;">
+                    <div class="text-center">
+                        <h5 class="oh-404__subtitle">{% trans "No Education Details have been uploaded yet." %}</h5>
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/htmx.org@1.9.2"></script>
+
+<script>
+    document.body.addEventListener('htmx:configRequest', function(evt) {
+        console.log('HTMX is sending a request to:', evt.detail.path);
+    });
+</script>
+
+
+ <script>
+	$(document).ready(function(){
+		editableInput = $(".editable-input")
+		var typingTimer;
+		var doneTypingInterval = 300;
+
+		editableInput.on("focus", function(){
+			$(this).prop("readonly", false)
+		})
+
+		editableInput.on("blur", function(){
+			$(this).prop("readonly", true)
+		})
+
+		editableInput.on("keyup", function(){
+			let error = ""
+			let $this = $(this)
+			clearTimeout(typingTimer);
+			typingTimer = setTimeout(function(){
+				if ($this.val().length <=3){
+					$this.siblings(".error").removeClass("d-none")
+					$this.siblings(".error").addClass("d-block")
+				} else {
+					$this.siblings('.title-submit').click();
+					$this.siblings(".error").removeClass("d-block")
+					$this.siblings(".error").addClass("d-none")
+				}
+			}, doneTypingInterval);
+
+			if (event.keyCode === 13) {
+				$(this).blur();
+			}
+		});
+
+	})
+</script>

@@ -1,0 +1,46 @@
+{% load i18n %}
+<div class="oh-modal__dialog-header pb-0">
+  <span class="oh-modal__dialog-title" id="confirmModalLabel"
+    >
+    {% if employee_unit.id %}
+      {% trans "Employee Unit" %}
+    {% else %}
+      {% trans "Employee Unit" %}
+    {% endif %}
+  </span>
+  <button class="oh-modal__close" aria-label="Close">
+    <ion-icon name="close-outline"></ion-icon>
+  </button>
+</div>
+<div class="oh-modal__dialog-body">
+  <form
+    {% if job_role.id %}
+      hx-post="{% url 'employee-unit-update' employee_unit.id %}"
+    {% else %}
+      hx-post="{% url 'employee-unit-create' %}?dynamic={{dynamic}}"
+    {% endif %}
+    {% if dynamic %}
+      hx-target="#dynamicCreateModalBody"
+    {% else %}
+      hx-target="#employeeUnitForm"
+    {%endif%}
+    class="oh-profile-section"
+    >
+    {% csrf_token %} {{form.non_field_errors}}
+    <div class="oh-inner-sidebar-content__body">
+      <div class="oh-input-group mb-2">
+        <label class="mb-1"> {% trans "Employee Section:" %} </label>
+        {{form.employee_section_id.errors}} {{form.employee_section_id}}
+      </div>
+      <div class="oh-input-group mb-2">
+        <label class="mb-1"> {% trans "Employee Unit:" %} </label>
+        {{form.employee_unit.errors}} {{form.employee_unit}}
+      </div>
+    </div>
+    <div class="oh-modal__dialog-footer p-0 mt-3">
+      <button type="submit" class="oh-btn oh-btn--secondary oh-btn--shadow">
+        {% trans "Save" %}
+      </button>
+    </div>
+  </form>
+</div>

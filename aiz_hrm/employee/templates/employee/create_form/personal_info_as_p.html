@@ -1,0 +1,135 @@
+{% load i18n %} {% load basefilters %}{% load widget_tweaks %}
+{{ form.non_field_errors }}
+
+  <div class="row">
+    {% for field in form %}
+      {% if field.label != "Employee profile" and field.label != 'Country' and field.label != 'State' and field.label != 'Address' and field.label != 'Badge id' and  field.label != 'Employee permanent address' and field.label != 'Employee permanent address country' and field.label != 'Employee permanent address state' and field.label != 'Employee permanent address city' and field.label != 'Employee permanent address zip'%}
+        <div class="col-lg-6">
+          <div class="oh-input__group">
+            <label
+              class="oh-label {% if field.field.required %}required-star{% endif %}"
+              for="id_{{ field.name }}"
+              title="{{ field.help_text|safe }}"
+            >
+              {% trans field.label %}
+            </label>
+
+            {% if field.field.widget.input_type == 'checkbox' %}
+              <div class="oh-switch" style="width: 30px;">{{ field|add_class:'oh-switch__checkbox' }}</div>
+            {% else %}
+              {{ field|add_class:'form-control' }}
+            {% endif %}
+
+            {{ field.errors }}
+          </div>
+        </div>
+
+          <!-- present address  -->
+          {% elif field.label == 'Address' %}
+            <div class="col-lg-12">
+              
+              <div class="oh-input__group">
+                <h6 style="margin-top: 40px;">Present Address</h6>
+                <label
+                  class="oh-label {% if field.field.required %}required-star{% endif %}"
+                  for="id_{{ field.name }}"
+                  title="{{ field.help_text|safe }}"
+                >
+                  {% trans field.label %}
+                </label>
+                {{ field }}
+                {{ field.errors }}
+              </div>
+            </div>
+          {% elif field.label == 'Country' %}
+            <div class="row">
+                <div class="col-lg-6">
+                  <label class="oh-label" for="country">{% trans "Country" %}</label>
+                  <select name="country" class="w-100 oh-select-2" id="id_country">
+                    <option value="{{form.instance.country}}" selected>{{form.instance.country}}</option>
+                  </select>
+                  {{form.country.errors}}
+                  <span class="dropdown-wrapper" aria-hidden="true"></span>
+                  </span>
+                </div>
+                <div class="col-lg-6">
+                  <label class="oh-label d-block" for="state">{% trans "State/District" %}</label>
+                  <select name="state" class="w-100 oh-select-2" id="id_state">
+                    <option value="{{form.instance.state}}" selected>{{form.instance.state}}</option>
+
+                  </select>
+                  {{form.state.errors}}
+                </div>
+            </div>
+
+          <!-- permanent address  -->
+          {% elif field.label == 'Employee permanent address' %}
+            <div class="col-lg-12">
+              <div class="oh-input__group">
+                <h6 style="margin-top: 40px;">Permanent Address</h6>
+                <input type="checkbox" name="as_present_addr" id="as_present_addr">
+                <label for="">As Present Address</label>
+                <br>
+                <label
+                  class="oh-label {% if field.field.required %}required-star{% endif %}"
+                  for="id_{{ field.name }}"
+                  title="{{ field.help_text|safe }}"
+                >
+                  <!-- {% trans field.label %} -->
+                  Address
+                </label>
+                {{ field }}
+                {{ field.errors }}
+              </div>
+            </div>
+            {% elif field.label == 'Employee permanent address country' %}
+            <div class="row">
+                <div class="col-lg-6">
+                  <label class="oh-label" for="employee_permanent_address_country">{% trans "Country" %}</label>
+                  <select name="employee_permanent_address_country" class="w-100 oh-select-2" id="id_permanent_country">
+                    <option value="{{form.instance.employee_permanent_address_country}}" selected>{{form.instance.employee_permanent_address_country}}</option>
+                  </select>
+                  {{form.employee_permanent_address_country.errors}}
+                  <span class="dropdown-wrapper" aria-hidden="true"></span>
+                  </span>
+                </div>
+                <div class="col-lg-6">
+                  <label class="oh-label d-block" for="employee_permanent_address_state">{% trans "State/District" %}</label>
+                  <select name="employee_permanent_address_state" class="w-100 oh-select-2" id="id_permanent_state">
+                    <option value="{{form.instance.employee_permanent_address_state}}" selected>{{form.instance.employee_permanent_address_state}}</option>
+                  </select>
+                  {{form.employee_permanent_address_state.errors}}
+                </div>
+            </div>
+
+            <div class="row">
+              {% elif field.label == 'Employee permanent address city' %}
+              <div class="col-lg-6">
+                <label
+                  class="oh-label {% if field.field.required %}required-star{% endif %}"
+                  for="id_{{ field.name }}"
+                  title="{{ field.help_text|safe }}"
+                >
+                city
+                </label>
+                {{ field }}
+                {{form.employee_permanent_address_city.errors}}
+              </div>
+              {% elif field.label == 'Employee permanent address zip' %}
+              <div class="col-lg-6">
+                <label
+                  class="oh-label {% if field.field.required %}required-star{% endif %}"
+                  for="id_{{ field.name }}"
+                  title="{{ field.help_text|safe }}"
+                >
+                zip
+                </label>
+                {{ field }}
+                {{form.employee_permanent_address_zip.errors}}
+              </div>
+          </div>
+
+
+          {% endif %}
+    {% endfor %}
+  </div>

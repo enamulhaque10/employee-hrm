@@ -1,0 +1,38 @@
+{% extends 'settings.html' %} {% load i18n %} {% block settings %} {% load static %}
+<div class="oh-inner-sidebar-content">
+	
+	<div class="oh-inner-sidebar-content__header d-flex justify-content-between align-items-center">
+		<h2 class="oh-inner-sidebar-content__title">{% trans "Employee Section" %}</h2>
+		
+		<button
+			class="oh-btn oh-btn--secondary oh-btn--shadow"
+			data-toggle="oh-modal-toggle"
+			data-target="#employeeSectionModal"
+			hx-get="{% url 'employee-section-creation' %}"
+			hx-target="#employeeSectionForm"
+		>
+			<ion-icon name="add-outline" class="me-1"></ion-icon>
+			{% trans "Create" %}
+		</button>
+	</div>
+		{% if sections %}
+			{% include 'base/employee_section/employee_section_view.html' %}
+		{% else %}
+			<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
+				<img style="display: block; width: 15%; margin: 20px auto; filter: opacity(0.5);" src="{% static 'images/ui/job-position.png' %}" class="" alt="Page not found. 404." />
+				<h5 class="oh-404__subtitle">{% trans "There is no Employee Section at this moment." %}</h5>
+			</div>
+		{% endif %}
+</div>
+<div
+	class="oh-modal"
+	id="employeeSectionModal"
+	role="dialog"
+	aria-labelledby="employeeSectionModal"
+	aria-hidden="true"
+    >
+	<div class="oh-modal__dialog" id="employeeSectionForm">
+	</div>
+</div>
+
+{% endblock settings %}
