@@ -23,7 +23,7 @@
             {{ field.errors }}
           </div>
         </div>
-
+        <!-- <div class="oh-tabs"> -->
           <!-- present address  -->
           {% elif field.label == 'Address' %}
             <div class="col-lg-12">
@@ -61,6 +61,34 @@
                   {{form.state.errors}}
                 </div>
             </div>
+            <div class="row">
+              {% elif field.label == 'City' %}
+              <div class="col-lg-6">
+                <label
+                  class="oh-label {% if field.field.required %}required-star{% endif %}"
+                  for="id_{{ field.name }}"
+                  title="{{ field.help_text|safe }}"
+                  id="id_city"
+                >
+                City
+                </label>
+                {{ field }}
+                {{form.city.errors}}
+              </div>
+              {% elif field.label == 'Zip' %}
+              <div class="col-lg-6">
+                <label
+                  class="oh-label {% if field.field.required %}required-star{% endif %}"
+                  for="id_{{ field.name }}"
+                  title="{{ field.help_text|safe }}"
+                  id="id_zip"
+                >
+                Zip/Post Code
+                </label>
+                {{ field }}
+                {{form.zip.errors}}
+              </div>
+          </div>
 
           <!-- permanent address  -->
           {% elif field.label == 'Employee permanent address' %}
@@ -110,9 +138,18 @@
                   for="id_{{ field.name }}"
                   title="{{ field.help_text|safe }}"
                 >
-                city
+                City
                 </label>
-                {{ field }}
+ 
+                <input 
+                type="text" 
+                name="employee_permanent_address_city" 
+                maxlength="30" 
+                class="oh-input w-100" 
+                placeholder="Employee Permanent Address City" 
+                id="id_employee_permanent_address_city"
+                value="{{form.instance.employee_permanent_address_city}}">
+                               <!-- {{ field }} -->
                 {{form.employee_permanent_address_city.errors}}
               </div>
               {% elif field.label == 'Employee permanent address zip' %}
@@ -122,9 +159,19 @@
                   for="id_{{ field.name }}"
                   title="{{ field.help_text|safe }}"
                 >
-                zip
+                Zip/Post Code
                 </label>
-                {{ field }}
+                <input 
+                type="text" 
+                name="employee_permanent_address_zip" 
+                maxlength="20" 
+                class="oh-input w-100" 
+                placeholder="Employee Permanent Address Zip" 
+                id="id_employee_permanent_address_zip"
+                value="{{form.instance.employee_permanent_address_zip}}">
+                >
+                
+                <!-- {{ field }} -->
                 {{form.employee_permanent_address_zip.errors}}
               </div>
           </div>
@@ -133,3 +180,39 @@
           {% endif %}
     {% endfor %}
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const checkbox = document.getElementById('as_present_addr');
+    
+      checkbox.addEventListener('change', function() {
+        if (checkbox.checked) {
+          document.getElementById('id_employee_permanent_address').value = document.getElementById('id_address').value;
+    
+          const presentCountry = document.getElementById('id_country').value;
+          const permanentCountry = document.getElementById('id_permanent_country');
+          if (permanentCountry) {
+            permanentCountry.innerHTML = `<option value="${presentCountry}" selected>${presentCountry}</option>`;
+          }
+    
+          const presentState = document.getElementById('id_state').value;
+          const permanentState = document.getElementById('id_permanent_state');
+          if (permanentState) {
+            permanentState.innerHTML = `<option value="${presentState}" selected>${presentState}</option>`;
+          }
+    
+          document.getElementById('id_employee_permanent_address_city').value = document.getElementById('id_city')?.value || '';
+    
+          document.getElementById('id_employee_permanent_address_zip').value = document.getElementById('id_zip')?.value || '';
+    
+        } else {
+          document.getElementById('id_employee_permanent_address').value = '';
+          document.getElementById('id_permanent_country').innerHTML = '<option value="" selected>Select Country</option>';
+          document.getElementById('id_permanent_state').innerHTML = '<option value="" selected>Select State</option>';
+          document.getElementById('id_employee_permanent_address_city').value = '';
+          document.getElementById('id_employee_permanent_address_zip').value = '';
+        }
+      });
+    });
+    </script>
+    

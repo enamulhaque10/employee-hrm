@@ -49,6 +49,9 @@ def reporting_manager_validator(value):
     return value
 
 
+
+
+
 class Employee(models.Model):
     """
     Employee model
@@ -80,6 +83,74 @@ class Employee(models.Model):
         ("buddhism", trans("Buddhism")),
         ("christianity", trans("Christianity")),
     )
+
+    district_choices = [
+        ('BAGERHAT', 'Bagerhat'),
+    ('BANDARBAN', 'Bandarban'),
+    ('BARGUNA', 'Barguna'),
+    ('BARISAL', 'Barisal'),
+    ('BHOLA', 'Bhola'),
+    ('BOGURA', 'Bogura'),
+    ('BRAHMANBARIA', 'Brahmanbaria'),
+    ('CHANDPUR', 'Chandpur'),
+    ('CHAPAINAWABGANJ', 'Chapainawabganj'),
+    ('CHATTAGRAM', 'Chattogram'),
+    ('CHUADANGA', 'Chuadanga'),
+    ('COMILLA', 'Cumilla'),
+    ('COX\'S BAZAR', 'Cox\'s Bazar'),
+    ('DHAKA', 'Dhaka'),
+    ('DINAJPUR', 'Dinajpur'),
+    ('FARIDPUR', 'Faridpur'),
+    ('FENI', 'Feni'),
+    ('GAIBANDHA', 'Gaibandha'),
+    ('GAZIPUR', 'Gazipur'),
+    ('GOPALGANJ', 'Gopalganj'),
+    ('HABIGANJ', 'Habiganj'),
+    ('JAMALPUR', 'Jamalpur'),
+    ('JASHORE', 'Jashore'),
+    ('JHALOKATI', 'Jhalokati'),
+    ('JHENAIDAH', 'Jhenaidah'),
+    ('JOYPURHAT', 'Joypurhat'),
+    ('KHAGRACHHARI', 'Khagrachhari'),
+    ('KHULNA', 'Khulna'),
+    ('KISHOREGONJ', 'Kishoreganj'),
+    ('KURIGRAM', 'Kurigram'),
+    ('KUSHTIA', 'Kushtia'),
+    ('LAKSHMIPUR', 'Lakshmipur'),
+    ('LALMONIRHAT', 'Lalmonirhat'),
+    ('MADARIPUR', 'Madaripur'),
+    ('MAGURA', 'Magura'),
+    ('MANIKGANJ', 'Manikganj'),
+    ('MEHERPUR', 'Meherpur'),
+    ('MOULVIBAZAR', 'Moulvibazar'),
+    ('MUNSHIGANJ', 'Munshiganj'),
+    ('MYMENSINGH', 'Mymensingh'),
+    ('NAOGAON', 'Naogaon'),
+    ('NARAIL', 'Narail'),
+    ('NARAYANGANJ', 'Narayanganj'),
+    ('NARSINGDI', 'Narsingdi'),
+    ('NATORE', 'Natore'),
+    ('NETRAKONA', 'Netrakona'),
+    ('NILPHAMARI', 'Nilphamari'),
+    ('NOAKHALI', 'Noakhali'),
+    ('PABNA', 'Pabna'),
+    ('PANCHAGARH', 'Panchagarh'),
+    ('PATUAKHALI', 'Patuakhali'),
+    ('PIROJPUR', 'Pirojpur'),
+    ('RAJBARI', 'Rajbari'),
+    ('RAJSHAHI', 'Rajshahi'),
+    ('RANGAMATI', 'Rangamati'),
+    ('RANGPUR', 'Rangpur'),
+    ('SATKHIRA', 'Satkhira'),
+    ('SHARIATPUR', 'Shariatpur'),
+    ('SHERPUR', 'Sherpur'),
+    ('SIRAJGANJ', 'Sirajganj'),
+    ('SUNAMGANJ', 'Sunamganj'),
+    ('SYLHET', 'Sylhet'),
+    ('TANGAIL', 'Tangail'),
+    ('THAKURGAON', 'Thakurgaon'),
+
+]
     badge_id = models.CharField(max_length=50, null=True, blank=True)
     employee_user_id = models.OneToOneField(
         User,
@@ -154,6 +225,7 @@ class Employee(models.Model):
     employee_nid_number = models.CharField(max_length=50, null=True, blank=True)
     employee_passport_number = models.CharField(max_length=50, null=True, blank=True)
     employee_driving_license_number = models.CharField(max_length=50, null=True, blank=True)
+    employee_home_district = models.CharField(max_length=50, null=True, blank=True, choices=district_choices)
 
 
 
