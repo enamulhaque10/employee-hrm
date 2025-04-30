@@ -115,6 +115,7 @@ class Department(aizModel):
     class Meta:
         verbose_name = _("Department")
         verbose_name_plural = _("Departments")
+        app_label = 'base'
 
     def clean(self, *args, **kwargs):
         super().clean(*args, **kwargs)

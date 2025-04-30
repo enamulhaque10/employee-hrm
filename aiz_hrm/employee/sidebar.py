@@ -14,11 +14,11 @@ MENU = trans("Employee")
 IMG_SRC = "images/ui/employees.svg"
 
 SUBMENUS = [
-    {
-        "menu": trans("Profile"),
-        "redirect": reverse("employee-profile"),
-        "accessibility": "employee.sidebar.profile_accessibility",
-    },
+    # {
+    #     "menu": trans("Profile"),
+    #     "redirect": reverse("employee-profile"),
+    #     "accessibility": "employee.sidebar.profile_accessibility",
+    # },
     {
         "menu": trans("Employees"),
         "redirect": reverse("employee-view"),

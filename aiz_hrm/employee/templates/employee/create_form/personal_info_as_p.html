@@ -23,6 +23,7 @@
             {{ field.errors }}
           </div>
         </div>
+
         <!-- <div class="oh-tabs"> -->
           <!-- present address  -->
           {% elif field.label == 'Address' %}
@@ -175,6 +176,24 @@
                 {{form.employee_permanent_address_zip.errors}}
               </div>
           </div>
+
+
+          {% elif field.label == 'Dob' %}
+            <div class="col-lg-12">
+              <div class="oh-input__group">
+                <h6 style="margin-top: 40px;">Personal Information</h6>
+                <label
+                  class="oh-label {% if field.field.required %}required-star{% endif %}"
+                  for="id_{{ field.name }}"
+                  title="{{ field.help_text|safe }}"
+                >
+                  <!-- {% trans field.label %} -->
+                  Personal Information
+                </label>
+                {{ field }}
+                {{ field.errors }}
+              </div>
+            </div>
 
 
           {% endif %}

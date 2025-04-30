@@ -85,7 +85,8 @@ class Employee(models.Model):
     )
 
     district_choices = [
-        ('BAGERHAT', 'Bagerhat'),
+    # ('NONE', 'None'),
+    ('BAGERHAT', 'Bagerhat'),
     ('BANDARBAN', 'Bandarban'),
     ('BARGUNA', 'Barguna'),
     ('BARISAL', 'Barisal'),
@@ -213,6 +214,11 @@ class Employee(models.Model):
     employee_religion = models.CharField(
         max_length=50, blank=True, null=True, choices=choice_religion, default="single"
     )
+    employee_nationality = models.CharField(max_length=30, null=True, blank=True)
+    employee_nid_number = models.CharField(max_length=50, null=True, blank=True)
+    employee_passport_number = models.CharField(max_length=50, null=True, blank=True)
+    employee_driving_license_number = models.CharField(max_length=50, null=True, blank=True)
+    employee_home_district = models.CharField(max_length=50, null=True, blank=True, choices=district_choices)
     employee_father_name = models.CharField(max_length=50, null=True, blank=True)
     employee_mother_name = models.CharField(max_length=50, null=True, blank=True)
     employee_spouse_name = models.CharField(max_length=50, null=True, blank=True)
@@ -221,11 +227,7 @@ class Employee(models.Model):
     employee_nominee_name = models.CharField(max_length=50, null=True, blank=True)
     employee_nominee_contact = models.CharField(max_length=15, null=True, blank=True)
     employee_nominee_relation = models.CharField(max_length=50, null=True, blank=True)
-    employee_nationality = models.CharField(max_length=30, null=True, blank=True)
-    employee_nid_number = models.CharField(max_length=50, null=True, blank=True)
-    employee_passport_number = models.CharField(max_length=50, null=True, blank=True)
-    employee_driving_license_number = models.CharField(max_length=50, null=True, blank=True)
-    employee_home_district = models.CharField(max_length=50, null=True, blank=True, choices=district_choices)
+    
 
 
 

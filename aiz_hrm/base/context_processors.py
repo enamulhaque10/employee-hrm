@@ -67,6 +67,7 @@ def get_companies(request):
     selected_company = request.session.get("selected_company")
     company_selected = False
     if selected_company and selected_company == "all":
+        print(selected_company, 'company', companies)
         companies[0][3] = True
         company_selected = True
     else:
