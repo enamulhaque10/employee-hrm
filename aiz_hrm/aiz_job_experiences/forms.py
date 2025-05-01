@@ -17,7 +17,7 @@ class JobExperienceForm(ModelForm):
     class Meta:
         model = EmployeeJobExperiences
         fields = "__all__"
-        exclude = ["status", "is_active"]
+        exclude = ["status", "is_active", "title"]
         widgets = {
             "employee_id": forms.HiddenInput()
         }

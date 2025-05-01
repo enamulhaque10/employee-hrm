@@ -3982,6 +3982,7 @@ def get_job_positions(request):
         if department_id
         else []
     )
+
     return JsonResponse({"job_positions": dict(job_positions)})
 
 @login_required

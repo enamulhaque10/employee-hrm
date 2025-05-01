@@ -63,18 +63,21 @@ def get_companies(request):
             "https://ui-avatars.com/api/?name=All+Company&background=random",
             False,
         ],
-    ] + companies
+    ] 
+    #+ companies
     selected_company = request.session.get("selected_company")
-    company_selected = False
-    if selected_company and selected_company == "all":
-        print(selected_company, 'company', companies)
-        companies[0][3] = True
-        company_selected = True
-    else:
-        for company in companies:
-            if str(company[0]) == selected_company:
-                company[3] = True
-                company_selected = True
+    companies[0][3] = True
+    company_selected = True
+    # company_selected = False
+    # if selected_company and selected_company == "all":
+    #     print(selected_company, 'company', companies)
+    #     companies[0][3] = True
+    #     company_selected = True
+    # else:
+    #     for company in companies:
+    #         if str(company[0]) == selected_company:
+    #             company[3] = True
+    #             company_selected = True
     return {"all_companies": companies, "company_selected": company_selected}
 
 
