@@ -127,8 +127,9 @@ from aiz_documents.forms import (
     DocumentRejectForm,
     DocumentRequestForm,
     DocumentUpdateForm,
+    DocumentCategoryForm,
 )
-from aiz_documents.models import Document, DocumentRequest
+from aiz_documents.models import Document, DocumentRequest, DocumentCategory
 from aiz_job_experiences.forms import (
     JobExperienceUpdateForm,
     JobExperienceForm
@@ -622,6 +623,34 @@ def document_tab(request, emp_id):
     }
     return render(request, "tabs/document_tab.html", context=context)
 
+
+
+@login_required
+@hx_request_required
+@owner_can_enter("aiz_documents.view_document", Employee)
+def employee_document_tab(request, emp_id):
+    """
+    This function is used to view documents tab of an employee in employee individual
+    & profile view.
+
+    Parameters:
+    request (HttpRequest): The HTTP request object.
+    emp_id (int): The id of the employee.
+
+    Returns: return document_tab template
+    """
+    form = DocumentUpdateForm(request.POST, request.FILES)
+    documents = Document.objects.filter(employee_id=emp_id)
+
+    context = {
+        "documents": documents,
+        "form": form,
+        "emp_id": emp_id,
+    }
+    print(context, 'context')
+    return render(request, "employee/update_form/document_tab.html", context=context)
+
+
 @login_required
 @hx_request_required
 @owner_can_enter("aiz_job_experiences.view_job_experience", Employee)
@@ -634,7 +663,7 @@ def job_experiences_tab(request, emp_id):
         "form": form,
         "emp_id": emp_id,
     }
-    return render(request, "tabs/job_experience_tab.html", context=context)
+    return render(request, "tabs/`job_experience_tab`.html", context=context)
 
 @login_required
 @hx_request_required
@@ -707,6 +736,34 @@ def document_create(request, emp_id):
         "emp_id": emp_id,
     }
     return render(request, "tabs/htmx/document_create_form.html", context=context)
+
+@login_required
+@hx_request_required
+@owner_can_enter("aiz_documents.add_document", Employee)
+def document_category_create(request):
+    """
+    This method renders form and template to create document category
+    """
+    print("document")
+
+    form = DocumentCategoryForm()
+    if request.method == "POST":
+        print("aschi")
+        form = DocumentCategoryForm(request.POST)
+        if form.is_valid():
+            print("vitore aschi")
+            form.save()
+            form = DocumentCategoryForm()
+            messages.success(request, _("Category has been created successfully!"))
+            return HttpResponse("<script>window.location.reload()</script>")
+    return render(
+        request,
+        "tabs/document_category_form",
+        {
+            "form": form,
+        },
+    )
+
 
 @login_required
 @hx_request_required
@@ -3982,8 +4039,22 @@ def get_job_positions(request):
         if department_id
         else []
     )
+    print(job_positions, 'posi')
 
     return JsonResponse({"job_positions": dict(job_positions)})
+
+
+@login_required
+def get_document_category(request):
+    document_category = (
+        DocumentCategory.objects.all()
+        if document_category
+        else []
+    )
+
+    return JsonResponse({"document_category": dict(document_category)})
+
+
 
 @login_required
 def get_employee_section(request):
@@ -3995,6 +4066,7 @@ def get_employee_section(request):
         if department_id
         else []
     )
+    print(employee_sections, 'sds')
     return JsonResponse({"employee_sections": dict(employee_sections)})
 
 

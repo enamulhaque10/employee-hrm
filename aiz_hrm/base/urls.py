@@ -229,6 +229,7 @@ urlpatterns = [
             "HttpResponse": True,
         },
     ),
+
     path(
         "settings/job-position-creation/",
         views.job_position_creation,

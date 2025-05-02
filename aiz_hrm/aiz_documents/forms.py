@@ -5,7 +5,7 @@ from base.forms import ModelForm
 from base.methods import reload_queryset
 from employee.filters import EmployeeFilter
 from employee.models import Employee
-from aiz_documents.models import Document, DocumentRequest
+from aiz_documents.models import Document, DocumentRequest, DocumentCategory
 from aiz_widgets.widgets.aiz_multi_select_field import aizMultiSelectField
 from aiz_widgets.widgets.select_widgets import aizMultiSelectWidget
 
@@ -57,7 +57,7 @@ class DocumentForm(ModelForm):
     class Meta:
         model = Document
         fields = "__all__"
-        exclude = ["document_request_id", "status", "reject_reason", "is_active"]
+        exclude = ["document_request_id", "status", "reject_reason", "is_active", "issue_date","expiry_date", "is_digital_asset"]
         widgets = {
             "employee_id": forms.HiddenInput(),
             "issue_date": forms.DateInput(
@@ -106,3 +106,13 @@ class DocumentRejectForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["reject_reason"].widget.attrs["required"] = True
+
+class DocumentCategoryForm(ModelForm):
+
+    class Meta:
+        model = DocumentCategory
+        fields = ["category_title"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["category_title"].widget.attrs["required"] = True

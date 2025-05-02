@@ -1013,6 +1013,8 @@ class CandidateDocumentRequest(aizModel):
         return self.title
 
 
+
+
 class CandidateDocument(aizModel):
     title = models.CharField(max_length=250)
     candidate_id = models.ForeignKey(
@@ -1072,3 +1074,10 @@ def candidate_document_create(instance):
         )
         document.title = f"Upload {instance.title}"
         document.save()
+
+
+
+
+
+
+

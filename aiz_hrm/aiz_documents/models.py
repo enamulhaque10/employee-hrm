@@ -64,6 +64,14 @@ def document_request_m2m_changed(sender, instance, action, **kwargs):
         document_create(instance)
 
 
+
+class DocumentCategory(aizModel):
+        category_title = models.CharField(max_length=250)
+
+        def __str__(self):
+                return f"{self.category_title}"
+
+
 class Document(aizModel):
     title = models.CharField(max_length=250)
     employee_id = models.ForeignKey(Employee, on_delete=models.PROTECT)
@@ -71,6 +79,8 @@ class Document(aizModel):
         DocumentRequest, on_delete=models.PROTECT, null=True
     )
     document = models.FileField(upload_to="employee/documents", null=True)
+    document_category_id = models.ForeignKey(DocumentCategory, blank=True, null=True,on_delete=models.PROTECT, verbose_name="document category")
+    format = models.CharField(choices=FORMATS, blank=True, null=True, max_length=10)
     status = models.CharField(choices=STATUS, max_length=10, default="requested")
     reject_reason = models.TextField(blank=True, null=True, max_length=255)
     issue_date = models.DateField(null=True, blank=True, verbose_name=_("Issue Date"))
@@ -84,6 +94,8 @@ class Document(aizModel):
     objects = aizCompanyManager(
         related_company_field="employee_id__employee_work_info__company_id"
     )
+    
+
 
     def __str__(self) -> str:
         return f"{self.title}"

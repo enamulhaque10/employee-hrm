@@ -89,6 +89,31 @@
       hx-get="{% url 'employee-shift-create' %}?dynamic=true"
       hx-target="#dynamicCreateModalBody"
     ></span>
+
+    <span
+      name=""
+      id="dynamicJoining"
+      style="display: none"
+      data-toggle="oh-modal-toggle"
+      data-target="#dynamicCreateModal"
+      hx-target="#dynamicCreateModalBody"
+      
+
+    >
+  </span>
+
+  <span
+      name=""
+      id="dynamicServiceLength"
+      style="display: none"
+      data-toggle="oh-modal-toggle"
+      data-target="#dynamicCreateModal"
+      hx-target="#dynamicCreateModalBody"
+      
+
+    >
+    </span>
+
     <div
       class="oh-profile-section__card"
       data-select2-id="select2-data-29-vht3"
@@ -139,6 +164,12 @@
       createText = "Create New Job Role";
       emptyText = "---Choose Job Role---";
     }
+    else if (id === "#dynamicDept") {
+      url = '{% url "get-employee-section" %}';
+      dropdownId = "#id_employee_section_id";
+      createText = "Create New  Employee Section";
+      emptyText = "---Choose Employee Section---";
+    }
 
     if (value) {
       $.ajax({
@@ -179,6 +210,18 @@
     var departmentId = $("#id_department_id").val();
     var selectedJobPosition = $("#id_job_position_id").val();
     var selectedJobRole = $("#id_job_role_id").val();
+    var selectedEmployeeSection = $("#id_employee_section_id").val();
+    var selectedSectionUnit = $("#id_employee_unit_id").val();
+  $("#id_date_joining").on("change", calculateServiceLength);
+
+  $("#select2-id_department_id-container").on("change", sectionBind);
+
+  $("select[name='department']").on("change", function () {
+    const departmentId = $(this).val();
+    console.log(departmentId, 'iddddd')
+    // your AJAX here
+});
+
 
     // Make AJAX request to fetch available Job Positions for the selected department
     $.ajax({
@@ -218,6 +261,76 @@
       },
     });
 
+
+
+
+    $.ajax({
+      url: '{% url "get-employee-section" %}',
+      method: "GET",
+      data: {
+        department_id: departmentId,
+      },
+      success: function (data) {
+
+        console.log(data, 'data')
+        // Clear existing options in the Job Position dropdown
+        $("#id_employee_section_id").empty();
+        $("#id_employee_section_id").append(
+          $("<option>", {
+            value: "",
+            text: "---Choose Job Position---",
+          })
+        );
+        // Append new options based on the response
+        $.each(data.job_positions, function (key, value) {
+          $("#id_employee_section_id").append(
+            $("<option>", {
+              value: key,
+              text: value,
+            })
+          );
+        });
+        $("#id_employee_section_id").append(
+          $("<option>", {
+            value: "create",
+            text: "Create New Job Position",
+          })
+        );
+        // Set the selected Job Position back to the dropdown
+        if (selectedEmployeeSection) {
+          $("#id_employee_section_id").val(selectedEmployeeSection);
+        }
+      },
+    });
+
+    $(document).ready(function () {
+    $("#select2-id_department_id-container").on("change","onkeyup", function () {
+        const departmentId = $(this).val();
+        console.log("Selected departmentId:", departmentId);
+    });
+});
+
+
+    $("#id_department_id").on("change", function () {
+    const departmentId = $(this).val();
+
+    console.log(departmentId, 'department')
+
+    $.ajax({
+        url: "{% url 'get-employee-section' %}",
+        method: "GET",
+        data: { department_id: departmentId },
+        success: function (data) {
+            const sectionDropdown = $("#id_employee_section_id");
+            sectionDropdown.empty();
+            sectionDropdown.append('<option value="">---Choose Employee Section---</option>');
+            $.each(data.sections, function (key, value) {
+                sectionDropdown.append(`<option value="${key}">${value}</option>`);
+            });
+            sectionDropdown.append('<option value="create">Create New Employee Section</option>');
+        }
+    });
+});
     if (selectedJobPosition) {
       $.ajax({
         url: '{% url "get-job-roles" %}',
@@ -244,4 +357,61 @@
       });
     }
   });
+
+  function sectionBind(){
+    const departmentId = document.getElementById("select2-id_department_id-container").value
+
+    console.log(departmentId, 'department')
+  }
+
+
+  function calculateServiceLength() {
+    const joiningInput = document.getElementById("id_date_joining").value;
+    const serviceLengthInput = document.getElementById("id_service_length_in_incepta");
+
+    console.log(joiningInput, 'input')
+
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(joiningInput)) {
+      serviceLengthInput.value = "Invalid format";
+      return;
+    }
+
+    const joiningDate = new Date(joiningInput);
+    const today = new Date();
+
+    if (isNaN(joiningDate.getTime())) {
+      serviceLengthInput.value = "Invalid date";
+      return;
+    }
+
+    let years = today.getFullYear() - joiningDate.getFullYear();
+  let months = today.getMonth() - joiningDate.getMonth();
+  let days = today.getDate() - joiningDate.getDate();
+
+  if (days < 0) {
+    months--;
+    days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+  }
+
+  if (months < 0) {
+    years--;
+    months += 12;
+  }
+
+  let miliSecond = 1000 * 60 * 60 * 24;
+         let yearOfExperience =  Math.floor(
+          Math.abs(
+            new Date(
+              new Date()
+            ).getTime() - new Date(joiningDate)
+          )/ miliSecond
+        ) / 365 ;
+  
+
+  serviceLengthInput.value = yearOfExperience.toFixed(2) +" " + "Year"
+  //`${years} years, ${months} months`;
+
+
+    
+  }
 </script>

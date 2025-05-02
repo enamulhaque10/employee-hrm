@@ -221,6 +221,7 @@ urlpatterns = [
         kwargs={"model": Employee},
     ),
     path("document-tab/<int:emp_id>", views.document_tab, name="document-tab"),
+    path("employee-document-tab/<int:emp_id>", views.employee_document_tab, name="employee-document-tab"),
     path("job-experiences-tab/<int:emp_id>", views.job_experiences_tab, name="job-experiences-tab"),
     path("employee-education-tab/<int:emp_id>", views.employee_education_tab, name="employee-education-tab"),
     path("employee-training-tab/<int:emp_id>", views.employee_training_tab, name="employee-training-tab"),
@@ -289,6 +290,7 @@ urlpatterns = [
     path("employee-education-create/<int:emp_id>", views.employee_education_create, name="employee-education-create"),
     path("employee-training-create/<int:emp_id>", views.employee_training_create, name="employee-training-create"),
     path("job-reference-create/<int:emp_id>", views.job_reference_create, name="job-reference-create"),
+    path("document-category-create/", views.document_category_create, name="document-category-create"),
 
     path(
         "update-document-title/<int:id>",
@@ -517,6 +519,7 @@ urlpatterns = [
         name="get-manager-in",
     ),
     path("get-job-positions", views.get_job_positions, name="get-job-positions"),
+    path("get-employee-section", views.get_employee_section, name="get-employee-section"),
     path("get-job-roles", views.get_job_roles, name="get-job-roles"),
     path("employee-tag-view/", views.employee_tag_view, name="employee-tag-view"),
     path("employee-tag-create", views.employee_tag_create, name="employee-tag-create"),

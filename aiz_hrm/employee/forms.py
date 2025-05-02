@@ -343,13 +343,12 @@ class EmployeeWorkInformationForm(ModelForm):
             "service_length_in_incepta",
             "mobile",
             "email",
-            "company_id",
-            "tags",
+            
         )
         labels = {
             "badge_id" : "Employee ID",
         }
-        exclude = ("employee_id",)
+        exclude = ("employee_id", "company_id", "tags")
 
         widgets = { 
             "date_joining": DateInput(attrs={"type": "date"}),
@@ -380,6 +379,7 @@ class EmployeeWorkInformationForm(ModelForm):
             "Employee Grade": "work_type",
             "Employee Category": "employee_type",
             "Shift": "employee_shift",
+            "Joining Date":"joining_date"
         }
         urls = {
             "Department": "#dynamicDept",
@@ -390,9 +390,12 @@ class EmployeeWorkInformationForm(ModelForm):
             "Employee Grade": "#dynamicWorkType",
             "Employee Category": "#dynamicEmployeeType",
             "Shift": "#dynamicShift",
+            "Joining Date": "#dynamicJoining",
+            "Service Length": "#dynamicServiceLength"
         }
 
         for label, field in self.fields.items():
+            print(field, field.label, field_names)
             if isinstance(field, forms.ModelChoiceField) and field.label in field_names:
                 if field.label is not None:
                     field_name = field_names.get(field.label)
