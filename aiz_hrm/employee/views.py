@@ -2996,129 +2996,144 @@ def work_info_import(request):
             )
         )
         users = []
+        print(work_info_dicts, 'dict')
         for work_info in work_info_dicts:
             error = False
-            try:
-                email = work_info["Email"]
-                phone = work_info["Phone"]
-                first_name = convert_nan("First Name", work_info)
-                last_name = convert_nan("Last Name", work_info)
-                badge_id = work_info["Badge id"] 
-                date_joining = work_info["Date joining"]
-                last_promotion_date = work_info["Last Promotion Date"]
-                contract_end_date = work_info["Contract End Date"]
-                basic_salary = convert_nan("Basic Salary", work_info)
-                salary_hour = convert_nan("Salary Hour", work_info)
-                pattern = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+            print(work_info, 'workinfodict')
+            #try:
+            print(work_info, 'workinfodictvitor')
+            email = work_info["Email"]
+            phone = work_info["Phone"]
+            first_name = convert_nan("First Name", work_info)
+            last_name = convert_nan("Last Name", work_info)
+            badge_id = work_info["Badge id"] 
+            date_joining = work_info["Date joining"]
+            #last_promotion_date = work_info["Last Promotion Date"]
+            contract_end_date = work_info["Contract End Date"]
+            basic_salary = convert_nan("Basic Salary", work_info)
+            salary_hour = convert_nan("Salary Hour", work_info)
+            pattern = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
 
-                try:
-                    if pd.isna(email) or not re.match(pattern, email):
-                        work_info["Email Error"] = f"Invalid Email address"
-                        error = True
-                except:
-                    error = True
+            try:
+                if pd.isna(email) or not re.match(pattern, email):
                     work_info["Email Error"] = f"Invalid Email address"
+                    #error = True
+            except:
+                print("email")
+                error = True
+                work_info["Email Error"] = f"Invalid Email address"
 
-                try:
-                    pd.to_numeric(basic_salary)
-                except ValueError:
-                    work_info["Basic Salary Error"] = f"Basic Salary must be a number"
-                    error = True
-
-                try:
-                    pd.to_numeric(salary_hour)
-                except ValueError:
-                    work_info["Salary Hour Error"] = f"Salary Hour must be a number"
-                    error = True
-
-                if pd.isna(first_name):
-                    work_info["First Name error"] = f"First Name can't be empty"
-                    error = True
-
-                if pd.isna(phone):
-                    work_info["Phone error"] = f"Phone Number can't be empty"
-                    error = True
-
-                name_email_tuple = (first_name, last_name, email)
-                if name_email_tuple in existing_name_emails:
-                    work_info["Name and Email Error"] = (
-                        "An employee with this first name, last name, and email already exists."
-                    )
-                    error = True
-                else:
-                    existing_name_emails.add(name_email_tuple)
-
-                try:
-                    pd.to_datetime(date_joining).date()
-                except:
-                    work_info["Joining Date Error"] = (
-                        f"Invalid Date format. Please use the format YYYY-MM-DD"
-                    )
-                    error = True
-
-                try:
-                    pd.to_datetime(last_promotion_date).date()
-                except:
-                    work_info["Last Promotion Date Error"] = (
-                        f"Invalid Date format. Please use the format YYYY-MM-DD"
-                    )
-                    error = True
-
-                try:
-                    pd.to_datetime(contract_end_date).date()
-                except:
-                    work_info["Contract Error"] = (
-                        f"Invalid Date format. Please use the format YYYY-MM-DD"
-                    )
-                    error = True
-
-                if badge_id in existing_badge_ids:
-                    work_info["Badge ID Error"] = (
-                        f"An Employee with the badge ID already exists"
-                    )
-                    error = True
-                else:
-                    existing_badge_ids.add(badge_id)
-
-                if email in existing_usernames:
-                    work_info["User ID Error"] = (
-                        f"User with the email ID already exists"
-                    )
-                    error = True
-                else:
-                    existing_usernames.add(email)
-
-                if error:
-                    error_lists.append(work_info)
-                else:
-                    success_lists.append(work_info)
-
-            except Exception as e:
-                error_occured = True
-                logger.error(e)
-
-        if create_work_info or not error_lists:
             try:
-                users = bulk_create_user_import(success_lists)
-                employees = bulk_create_employee_import(success_lists)
-                thread = threading.Thread(
-                    target=set_initial_password, args=(employees,)
+                pd.to_numeric(basic_salary)
+            except ValueError:
+                print("salary")
+                work_info["Basic Salary Error"] = f"Basic Salary must be a number"
+                error = True
+
+            try:
+                pd.to_numeric(salary_hour)
+            except ValueError:
+                print("hour")
+                work_info["Salary Hour Error"] = f"Salary Hour must be a number"
+                error = True
+
+            if pd.isna(first_name):
+                print('firstname')
+                work_info["First Name error"] = f"First Name can't be empty"
+                error = True
+
+            if pd.isna(phone):
+                print('phone')
+                work_info["Phone error"] = f"Phone Number can't be empty"
+                error = True
+
+            name_email_tuple = (first_name, last_name, email)
+            if name_email_tuple in existing_name_emails:
+                print("name and email")
+                work_info["Name and Email Error"] = (
+                    "An employee with this first name, last name, and email already exists."
                 )
-                thread.start()
+                error = True
+            else:
+                existing_name_emails.add(name_email_tuple)
 
-                total_count = len(employees)
-                bulk_create_department_import(success_lists)
-                bulk_create_job_position_import(success_lists)
-                bulk_create_job_role_import(success_lists)
-                bulk_create_work_types(success_lists)
-                bulk_create_shifts(success_lists)
-                bulk_create_employee_types(success_lists)
-                bulk_create_work_info_import(success_lists)
+            try:
+                pd.to_datetime(date_joining).date()
+            except:
+                print("joining")
+                work_info["Joining Date Error"] = (
+                    f"Invalid Date format. Please use the format YYYY-MM-DD"
+                )
+                error = True
 
-            except Exception as e:
-                error_occured = True
-                logger.error(e)
+            # try:
+            #     pd.to_datetime(last_promotion_date).date()
+            # except:
+            #     print("promotion")
+            #     work_info["Last Promotion Date Error"] = (
+            #         f"Invalid Date format. Please use the format YYYY-MM-DD"
+            #     )
+            #     error = True
 
+            try:
+                pd.to_datetime(contract_end_date).date()
+            except:
+                print("contract")
+                work_info["Contract Error"] = (
+                    f"Invalid Date format. Please use the format YYYY-MM-DD"
+                )
+                error = True
+
+            if badge_id in existing_badge_ids:
+                print("badge")
+                work_info["Badge ID Error"] = (
+                    f"An Employee with the badge ID already exists"
+                )
+                error = True
+            else:
+                existing_badge_ids.add(badge_id)
+
+            if email in existing_usernames:
+                print("userid")
+                work_info["User ID Error"] = (
+                    f"User with the email ID already exists"
+                )
+                error = True
+            else:
+                existing_usernames.add(email)
+            if error:
+                error_lists.append(work_info)
+            else:
+                success_lists.append(work_info)
+
+            #except Exception as e:
+            # print("Error Occured")
+            # error_occured = True
+            # logger.error(e)
+        print(create_work_info, 'workinfo', error_lists)
+        if create_work_info or not error_lists:
+            #try:
+            print(success_lists, 'success')
+            users = bulk_create_user_import(success_lists)
+            employees = bulk_create_employee_import(success_lists)
+            thread = threading.Thread(
+                target=set_initial_password, args=(employees,)
+            )
+            thread.start()
+
+            total_count = len(employees)
+            bulk_create_department_import(success_lists)
+            bulk_create_job_position_import(success_lists)
+            bulk_create_job_role_import(success_lists)
+            bulk_create_work_types(success_lists)
+            bulk_create_shifts(success_lists)
+            bulk_create_employee_types(success_lists)
+            bulk_create_work_info_import(success_lists)
+
+            # except Exception as e:
+            #     error_occured = True
+            #     logger.error(e)
+        error_occured = False
         if error_occured:
             messages.error(request, "something went wrong....")
             data_frame = pd.DataFrame(

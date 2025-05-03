@@ -264,44 +264,9 @@
 
 
 
-    $.ajax({
-      url: '{% url "get-employee-section" %}',
-      method: "GET",
-      data: {
-        department_id: departmentId,
-      },
-      success: function (data) {
+    
 
-        console.log(data, 'data')
-        // Clear existing options in the Job Position dropdown
-        $("#id_employee_section_id").empty();
-        $("#id_employee_section_id").append(
-          $("<option>", {
-            value: "",
-            text: "---Choose Job Position---",
-          })
-        );
-        // Append new options based on the response
-        $.each(data.job_positions, function (key, value) {
-          $("#id_employee_section_id").append(
-            $("<option>", {
-              value: key,
-              text: value,
-            })
-          );
-        });
-        $("#id_employee_section_id").append(
-          $("<option>", {
-            value: "create",
-            text: "Create New Job Position",
-          })
-        );
-        // Set the selected Job Position back to the dropdown
-        if (selectedEmployeeSection) {
-          $("#id_employee_section_id").val(selectedEmployeeSection);
-        }
-      },
-    });
+
 
     $(document).ready(function () {
     $("#select2-id_department_id-container").on("change","onkeyup", function () {
