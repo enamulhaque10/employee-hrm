@@ -400,6 +400,8 @@ def about_tab(request, obj_id, **kwargs):
     employee_leaves = (
         employee.available_leave.all() if apps.is_installed("leave") else None
     )
+
+    print(employee, 'employee')
     return render(
         request,
         "tabs/personal_tab.html",

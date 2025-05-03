@@ -562,7 +562,20 @@ excel_columns = [
     ("employee_bank_details__any_other_code2", trans("Bank Code #2")),
     ("employee_bank_details__country", trans("Bank Country")),
     ("employee_bank_details__state", trans("Bank State")),
-    ("employee_bank_details__city", trans("Bank City")),
+    ("employee_nationality", trans("Nationality")),
+    ("employee_nid_number", trans("Nid Number")),
+    ("employee_passport_number", trans("Passport Number")),
+    ("employee_driving_license_number", trans("driving License")),
+    ("employee_home_district", trans("Home Town")),
+    ("employee_number_of_son", trans("Number Of Son")),
+    ("employee_number_of_daughter", trans("Number Of Daughter")),
+    ("employee_nominee_name", trans("Nominee Name")),
+    ("employee_nominee_contact", trans("Nominee Contact")),
+    ("employee_nominee_relation", trans("Nominee Relation")),
+
+
+
+
 ]
 fields_to_remove = [
     "badge_id",
@@ -586,14 +599,27 @@ class EmployeeExportExcelForm(forms.Form):
             "email",
             "phone",
             "gender",
+            "employee_home_district",
             "employee_work_info__department_id",
             "employee_work_info__job_position_id",
             "employee_work_info__job_role_id",
-            "employee_work_info__shift_id",
+            "employee_work_info__employee_unit_id",
             "employee_work_info__work_type_id",
             "employee_work_info__reporting_manager_id",
             "employee_work_info__employee_type_id",
+            "experience",
             "employee_work_info__company_id",
+            "employee_work_info__date_joining",
+            "employee_work_info__last_promotion_date",
+            "marital_status",
+            "emergency_contact_name",
+            "emergency_contact_relation",
+            "employee_number_of_son",
+            "employee_number_of_daughter",
+            "employee_nominee_name",
+            "employee_nominee_contact",
+            "employee_nominee_relation"
+            
         ],
     )
 

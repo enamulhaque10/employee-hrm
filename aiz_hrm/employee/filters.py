@@ -130,6 +130,7 @@ class EmployeeFilter(aizFilterSet):
             "employee_work_info__tags",
             "employee_user_id__groups",
             "employee_user_id__user_permissions",
+            
         ]
 
     def not_in_yet_func(self, queryset, _, value):
