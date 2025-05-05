@@ -2906,6 +2906,7 @@ def convert_nan(field, dicts):
     except ValueError:
         return field_value
 
+  
 
 @login_required
 @permission_required("employee.add_employee")
@@ -2921,17 +2922,24 @@ def work_info_import(request):
             "Phone",
             "Email",
             "Gender",
+            "Marital Status",
+            "Emergency Contact Name",
+            "Emergency Contact Relation",
+            "Number Of Son",
+            "Number Of Daughter",
+            "Nominee Name",
+            "Nominee Relation",
             "Department",
             "Job Position",
+            "Section",
             "Unit",
             "Employee Grade",
-            "Shift",
             "Employee Category",
             "Reporting Manager",
-            "Company",
+            #"Company",
             "Location",
             "Date joining",
-            "Contract End Date",
+            #"Contract End Date",
             "Basic Salary",
             "Salary Hour",
         ]
@@ -2947,13 +2955,12 @@ def work_info_import(request):
         "Job Position": [],
         "Unit": [],
         "Employee Grade": [],
-        "Shift": [],
         "Employee Category": [],
         "Reporting Manager": [],
-        "Company": [],
+        #"Company": [],
         "Location": [],
         "Date joining": [],
-        "Contract End Date": [],
+        #"Contract End Date": [],
         "Basic Salary": [],
         "Salary Hour": [],
         "Email Error": [],
@@ -2962,7 +2969,7 @@ def work_info_import(request):
         "Phone error": [],
         "Joining Date Error": [],
         "Last Promotion Date Error": [],
-        "Contract Error": [],
+        #"Contract Error": [],
         "Badge ID Error": [],
         "Basic Salary Error": [],
         "Salary Hour Error": [],
@@ -3009,7 +3016,7 @@ def work_info_import(request):
             badge_id = work_info["Badge id"] 
             date_joining = work_info["Date joining"]
             #last_promotion_date = work_info["Last Promotion Date"]
-            contract_end_date = work_info["Contract End Date"]
+            #contract_end_date = work_info["Contract End Date"]
             basic_salary = convert_nan("Basic Salary", work_info)
             salary_hour = convert_nan("Salary Hour", work_info)
             pattern = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
@@ -3075,14 +3082,14 @@ def work_info_import(request):
             #     )
             #     error = True
 
-            try:
-                pd.to_datetime(contract_end_date).date()
-            except:
-                print("contract")
-                work_info["Contract Error"] = (
-                    f"Invalid Date format. Please use the format YYYY-MM-DD"
-                )
-                error = True
+            # try:
+            #     pd.to_datetime(contract_end_date).date()
+            # except:
+            #     print("contract")
+            #     work_info["Contract Error"] = (
+            #         f"Invalid Date format. Please use the format YYYY-MM-DD"
+            #     )
+            #     error = True
 
             if badge_id in existing_badge_ids:
                 print("badge")
