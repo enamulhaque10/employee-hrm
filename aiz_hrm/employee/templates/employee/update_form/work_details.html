@@ -97,20 +97,16 @@
       data-toggle="oh-modal-toggle"
       data-target="#dynamicCreateModal"
       hx-target="#dynamicCreateModalBody"
-      
-
     >
-  </span>
+    </span>
 
-  <span
+    <span
       name=""
       id="dynamicServiceLength"
       style="display: none"
       data-toggle="oh-modal-toggle"
       data-target="#dynamicCreateModal"
       hx-target="#dynamicCreateModalBody"
-      
-
     >
     </span>
 
@@ -120,12 +116,9 @@
     >
       <div id="workMessage"></div>
       <form method="post" action="">
-        <input type="hidden" name="form" value="work">
-        {% if work_info_history %}
-          {{history_form.as_history_modal}}
-        {% endif %}
-        {% csrf_token %}
-        {{work_form.as_p}}
+        <input type="hidden" name="form" value="work" />
+        {% if work_info_history %} {{history_form.as_history_modal}} {% endif %}
+        {% csrf_token %} {{work_form.as_p}}
         <hr class="mt-5 mb-3" />
         <div class="w-100 d-flex align-items-center justify-content-end">
           <button
@@ -163,8 +156,7 @@
       dropdownId = "#id_job_role_id";
       createText = "Create New Job Role";
       emptyText = "---Choose Job Role---";
-    }
-    else if (id === "#dynamicDept") {
+    } else if (id === "#dynamicDept") {
       url = '{% url "get-employee-section" %}';
       dropdownId = "#id_employee_section_id";
       createText = "Create New  Employee Section";
@@ -212,16 +204,14 @@
     var selectedJobRole = $("#id_job_role_id").val();
     var selectedEmployeeSection = $("#id_employee_section_id").val();
     var selectedSectionUnit = $("#id_employee_unit_id").val();
-  $("#id_date_joining").on("change", calculateServiceLength);
+    $("#id_date_joining").on("change", calculateServiceLength);
 
-  $("#select2-id_department_id-container").on("change", sectionBind);
+    $("#select2-id_department_id-container").on("change", sectionBind);
 
-  $("select[name='department']").on("change", function () {
-    const departmentId = $(this).val();
-    console.log(departmentId, 'iddddd')
-    // your AJAX here
-});
-
+    $("select[name='department']").on("change", function () {
+      const departmentId = $(this).val();
+      // your AJAX here
+    });
 
     // Make AJAX request to fetch available Job Positions for the selected department
     $.ajax({
@@ -248,6 +238,7 @@
             })
           );
         });
+
         $("#id_job_position_id").append(
           $("<option>", {
             value: "create",
@@ -261,41 +252,41 @@
       },
     });
 
-
-
-
-    
-
-
-
     $(document).ready(function () {
-    $("#select2-id_department_id-container").on("change","onkeyup", function () {
-        const departmentId = $(this).val();
-        console.log("Selected departmentId:", departmentId);
+      $("#select2-id_department_id-container").on(
+        "change",
+        "onkeyup",
+        function () {
+          const departmentId = $(this).val();
+          console.log("Selected departmentId:", departmentId);
+        }
+      );
     });
-});
-
 
     $("#id_department_id").on("change", function () {
-    const departmentId = $(this).val();
+      const departmentId = $(this).val();
 
-    console.log(departmentId, 'department')
+      console.log(departmentId, "department");
 
-    $.ajax({
+      $.ajax({
         url: "{% url 'get-employee-section' %}",
         method: "GET",
         data: { department_id: departmentId },
         success: function (data) {
-            const sectionDropdown = $("#id_employee_section_id");
-            sectionDropdown.empty();
-            sectionDropdown.append('<option value="">---Choose Employee Section---</option>');
-            $.each(data.sections, function (key, value) {
-                sectionDropdown.append(`<option value="${key}">${value}</option>`);
-            });
-            sectionDropdown.append('<option value="create">Create New Employee Section</option>');
-        }
+          const sectionDropdown = $("#id_employee_section_id");
+          sectionDropdown.empty();
+          sectionDropdown.append(
+            '<option value="">---Choose Employee Section---</option>'
+          );
+          $.each(data.sections, function (key, value) {
+            sectionDropdown.append(`<option value="${key}">${value}</option>`);
+          });
+          sectionDropdown.append(
+            '<option value="create">Create New Employee Section</option>'
+          );
+        },
+      });
     });
-});
     if (selectedJobPosition) {
       $.ajax({
         url: '{% url "get-job-roles" %}',
@@ -323,18 +314,21 @@
     }
   });
 
-  function sectionBind(){
-    const departmentId = document.getElementById("select2-id_department_id-container").value
+  function sectionBind() {
+    const departmentId = document.getElementById(
+      "select2-id_department_id-container"
+    ).value;
 
-    console.log(departmentId, 'department')
+    console.log(departmentId, "department");
   }
-
 
   function calculateServiceLength() {
     const joiningInput = document.getElementById("id_date_joining").value;
-    const serviceLengthInput = document.getElementById("id_service_length_in_incepta");
+    const serviceLengthInput = document.getElementById(
+      "id_service_length_in_incepta"
+    );
 
-    console.log(joiningInput, 'input')
+    console.log(joiningInput, "input");
 
     if (!/^\d{4}-\d{2}-\d{2}$/.test(joiningInput)) {
       serviceLengthInput.value = "Invalid format";
@@ -350,33 +344,27 @@
     }
 
     let years = today.getFullYear() - joiningDate.getFullYear();
-  let months = today.getMonth() - joiningDate.getMonth();
-  let days = today.getDate() - joiningDate.getDate();
+    let months = today.getMonth() - joiningDate.getMonth();
+    let days = today.getDate() - joiningDate.getDate();
 
-  if (days < 0) {
-    months--;
-    days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
-  }
+    if (days < 0) {
+      months--;
+      days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+    }
 
-  if (months < 0) {
-    years--;
-    months += 12;
-  }
+    if (months < 0) {
+      years--;
+      months += 12;
+    }
 
-  let miliSecond = 1000 * 60 * 60 * 24;
-         let yearOfExperience =  Math.floor(
-          Math.abs(
-            new Date(
-              new Date()
-            ).getTime() - new Date(joiningDate)
-          )/ miliSecond
-        ) / 365 ;
-  
+    let miliSecond = 1000 * 60 * 60 * 24;
+    let yearOfExperience =
+      Math.floor(
+        Math.abs(new Date(new Date()).getTime() - new Date(joiningDate)) /
+          miliSecond
+      ) / 365;
 
-  serviceLengthInput.value = yearOfExperience.toFixed(2) +" " + "Year"
-  //`${years} years, ${months} months`;
-
-
-    
+    serviceLengthInput.value = yearOfExperience.toFixed(2) + " " + "Year";
+    //`${years} years, ${months} months`;
   }
 </script>

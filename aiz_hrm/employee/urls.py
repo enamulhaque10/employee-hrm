@@ -291,6 +291,8 @@ urlpatterns = [
     path("employee-training-create/<int:emp_id>", views.employee_training_create, name="employee-training-create"),
     path("job-reference-create/<int:emp_id>", views.job_reference_create, name="job-reference-create"),
     path("document-category-create/", views.document_category_create, name="document-category-create"),
+    path("document-category-update/", views.document_category_create, name="document-category-update"),
+    path("get-document-category/", views.get_document_category, name="get-document-category"),
 
     path(
         "update-document-title/<int:id>",

@@ -746,11 +746,10 @@ def document_category_create(request):
     """
     This method renders form and template to create document category
     """
-    print("document")
-
+    print(request, 'request')
+    dynamic = request.GET.get("dynamic") if request.GET.get("dynamic") else ""
     form = DocumentCategoryForm()
     if request.method == "POST":
-        print("aschi")
         form = DocumentCategoryForm(request.POST)
         if form.is_valid():
             print("vitore aschi")
@@ -763,7 +762,32 @@ def document_category_create(request):
         "tabs/document_category_form",
         {
             "form": form,
+            "dynamic": dynamic
         },
+    )
+
+@login_required
+@hx_request_required
+@owner_can_enter("aiz_documents.add_document", Employee)
+def document_category_update(request, id, **kwargs):
+    """
+    This method is used to update document category Section
+    args:
+        id : document category instance id
+
+    """
+    category_section = DocumentCategory.find(id)
+    form = DocumentCategoryForm(instance=category_section)
+    if request.method == "POST":
+        form = DocumentCategoryForm(request.POST, instance=category_section)
+        if form.is_valid():
+            form.save(commit=True)
+            messages.success(request, _("Category Section updated."))
+            return HttpResponse("<script>window.location.reload()</script>")
+    return render(
+        request,
+        "tabs/document_category_form",
+        {"form": form, "category_section": category_section},
     )
 
 

@@ -571,6 +571,8 @@ def login_user(request):
 
         user = authenticate(request, username=username, password=password)
 
+        print(user, 'user')
+
         if not user:
             user_object = User.objects.filter(username=username).first()
             if user_object and not user_object.is_active:
@@ -580,6 +582,7 @@ def login_user(request):
             return redirect("login")
 
         employee = getattr(user, "employee_get", None)
+        print(employee, 'employee')
         if employee is None:
             messages.error(
                 request,

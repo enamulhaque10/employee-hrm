@@ -395,7 +395,6 @@ class EmployeeWorkInformationForm(ModelForm):
         }
 
         for label, field in self.fields.items():
-            print(field, field.label, field_names)
             if isinstance(field, forms.ModelChoiceField) and field.label in field_names:
                 if field.label is not None:
                     field_name = field_names.get(field.label)
