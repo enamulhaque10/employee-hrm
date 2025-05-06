@@ -1,0 +1,29 @@
+{% load i18n %}
+<div class="oh-modal__dialog-header pb-0">
+  <span class="oh-modal__dialog-title" id="editModal1ModalLabel">
+  </span>
+  <button class="oh-modal__close" aria-label="Close">
+    <ion-icon name="close-outline"></ion-icon>
+  </button>
+</div>
+<div class="oh-modal__dialog-body">
+  <form {% if category_title.id %} hx-post="{% url 'document-category-update' category_title.id %}" {% else %}
+    hx-post="{% url 'document-category-create' %}?dynamic={{dynamic}}" {% endif %} {% if dynamic%}
+    hx-target="#dynamicCreateModalBody" {% else %} hx-target="#DocumentCategoryForm" {% endif %}
+    class="oh-profile-section">
+    {% csrf_token %}
+    <div class="oh-inner-sidebar-content__body">
+      <div class="oh-input-group mb-2">
+        <label class="mb-1" for="id_{{form.category_title}}">
+          {% trans "Category Section:" %}
+        </label>
+        {{form.category_title}} {{form.category_title.errors}}
+      </div>
+    </div>
+    <div class="oh-modal__dialog-footer p-0 mt-3">
+      <button type="submit" class="oh-btn oh-btn--secondary oh-btn--shadow">
+        {% trans "Save" %}
+      </button>
+    </div>
+  </form>
+</div>

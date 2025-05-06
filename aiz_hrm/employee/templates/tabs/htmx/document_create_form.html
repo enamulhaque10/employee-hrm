@@ -12,13 +12,15 @@
 <div class="oh-modal__dialog-body">
   <span
     name=""
-    id="documentForm"
+    id="dynamicDocumentCategory"
     style="display: none"
     data-toggle="oh-modal-toggle"
     data-target="#dynamicCreateModal"
     hx-get="{% url 'document-category-create' %}?dynamic=true"
     hx-target="#objectCreateModalTarget"
-  ></span>
+  >
+  
+</span>
 
   <form
     id="add-form"
@@ -49,11 +51,47 @@
       }
     });
 
+    $(document).on('change', '#id_document_category_id', function () {
+  const selectedValue = $(this).val();
+
+  if (selectedValue === "create") {
+    // Trigger the hidden span to activate HTMX modal
+    $('#dynamicDocumentCategory').click();
+  }
+});
+
+
     let url, dropdownId, createText, emptyText;
 
     url = '{% url "get-document-category" %}';
     dropdownId = "#id_document_category_id";
-    createText = "Create New  Employee Section";
+    createText = "Create New  Document Category";
     emptyText = "---Choose Document Category---";
+
+    $.ajax({
+          url: url,
+          method: "GET",
+          success: function (data) {
+            const dropdown = $(dropdownId);
+            const options = [`<option value="">${emptyText}</option>`];
+
+            $.each(data.document_category, function (key, value) {
+              console.log(key, value, 'category')
+              options.push(`<option value="${key}">${value}</option>`);
+            });
+
+            options.push(`<option value="create">${createText}</option>`);
+            dropdown.html(options.join(""));
+          },
+        });
+
+
+
+    
+
   });
+
+
+
+
 </script>

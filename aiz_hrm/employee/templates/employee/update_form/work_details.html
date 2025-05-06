@@ -1,119 +1,50 @@
 {% load i18n %}
 <div class="oh-wrapper">
-  <div
-    class="oh-general__tab-target oh-profile-section mb-4 d-none"
-    id="work"
-    data-select2-id="select2-data-work"
-  >
-    <div
-      class="oh-modal"
-      id="dynamicCreateModal"
-      role="dialog"
-      aria-hidden="true"
-    >
-      <div
-        class="oh-modal__dialog"
-        style="max-width: 550px"
-        id="dynamicCreateModalBody"
-      ></div>
+  <div class="oh-general__tab-target oh-profile-section mb-4 d-none" id="work" data-select2-id="select2-data-work">
+    <div class="oh-modal" id="dynamicCreateModal" role="dialog" aria-hidden="true">
+      <div class="oh-modal__dialog" style="max-width: 550px" id="dynamicCreateModalBody"></div>
     </div>
-    <span
-      name=""
-      id="dynamicDept"
-      style="display: none"
-      data-toggle="oh-modal-toggle"
-      data-target="#dynamicCreateModal"
-      hx-get="{% url 'department-creation' %}?dynamic=true"
-      hx-target="#dynamicCreateModalBody"
-    ></span>
-    <span
-      name=""
-      id="dynamicJobPosition"
-      style="display: none"
-      data-toggle="oh-modal-toggle"
-      data-target="#dynamicCreateModal"
-      hx-get="{% url 'job-position-creation' %}?dynamic=true"
-      hx-target="#dynamicCreateModalBody"
-    ></span>
-    <span
-      name=""
-      id="dynamicEmployeeSection"
-      style="display: none"
-      data-toggle="oh-modal-toggle"
-      data-target="#dynamicCreateModal"
-      hx-get="{% url 'employee-section-creation' %}?dynamic=true"
-      hx-target="#dynamicCreateModalBody"
-    ></span>
-    <span
-      name=""
-      id="dynamicJobRole"
-      style="display: none"
-      data-toggle="oh-modal-toggle"
-      data-target="#dynamicCreateModal"
-      hx-get="{% url 'job-role-create' %}?dynamic=true"
-      hx-target="#dynamicCreateModalBody"
-    ></span>
-    <span
-      name=""
-      id="dynamicEmployeeUnit"
-      style="display: none"
-      data-toggle="oh-modal-toggle"
-      data-target="#dynamicCreateModal"
-      hx-get="{% url 'employee-unit-create' %}?dynamic=true"
-      hx-target="#dynamicCreateModalBody"
-    ></span>
-    <span
-      name=""
-      id="dynamicWorkType"
-      style="display: none"
-      data-toggle="oh-modal-toggle"
-      data-target="#dynamicCreateModal"
-      hx-get="{% url 'work-type-create' %}?dynamic=true"
-      hx-target="#dynamicCreateModalBody"
-    ></span>
-    <span
-      name=""
-      id="dynamicEmployeeType"
-      style="display: none"
-      data-toggle="oh-modal-toggle"
-      data-target="#dynamicCreateModal"
-      hx-get="{% url 'employee-type-create' %}?dynamic=true"
-      hx-target="#dynamicCreateModalBody"
-    ></span>
-    <span
-      name=""
-      id="dynamicShift"
-      style="display: none"
-      data-toggle="oh-modal-toggle"
-      data-target="#dynamicCreateModal"
-      hx-get="{% url 'employee-shift-create' %}?dynamic=true"
-      hx-target="#dynamicCreateModalBody"
-    ></span>
+    <span name="" id="dynamicDept" style="display: none" data-toggle="oh-modal-toggle" data-target="#dynamicCreateModal"
+      hx-get="{% url 'department-creation' %}?dynamic=true" hx-target="#dynamicCreateModalBody">
+      <!-- <select id="id_department_id" name="department" onchange="onDynamicCreate(this.value, '#dynamicDept')">
+    </select> -->
 
-    <span
-      name=""
-      id="dynamicJoining"
-      style="display: none"
-      data-toggle="oh-modal-toggle"
-      data-target="#dynamicCreateModal"
-      hx-target="#dynamicCreateModalBody"
-    >
+    </span>
+    <span name="" id="dynamicJobPosition" style="display: none" data-toggle="oh-modal-toggle"
+      data-target="#dynamicCreateModal" hx-get="{% url 'job-position-creation' %}?dynamic=true"
+      hx-target="#dynamicCreateModalBody"></span>
+    <span name="" id="dynamicEmployeeSection" style="display: none" data-toggle="oh-modal-toggle"
+      data-target="#dynamicCreateModal" hx-get="{% url 'employee-section-creation' %}?dynamic=true"
+      hx-target="#dynamicCreateModalBody">
+      <!-- <select id="id_employee_section_id" name="section"
+        onchange="onDynamicCreate(this.value, '#dynamicEmployeeSection')">
+      </select> -->
+    </span>
+    <span name="" id="dynamicJobRole" style="display: none" data-toggle="oh-modal-toggle"
+      data-target="#dynamicCreateModal" hx-get="{% url 'job-role-create' %}?dynamic=true"
+      hx-target="#dynamicCreateModalBody"></span>
+    <span name="" id="dynamicEmployeeUnit" style="display: none" data-toggle="oh-modal-toggle"
+      data-target="#dynamicCreateModal" hx-get="{% url 'employee-unit-create' %}?dynamic=true"
+      hx-target="#dynamicCreateModalBody"></span>
+    <span name="" id="dynamicWorkType" style="display: none" data-toggle="oh-modal-toggle"
+      data-target="#dynamicCreateModal" hx-get="{% url 'work-type-create' %}?dynamic=true"
+      hx-target="#dynamicCreateModalBody"></span>
+    <span name="" id="dynamicEmployeeType" style="display: none" data-toggle="oh-modal-toggle"
+      data-target="#dynamicCreateModal" hx-get="{% url 'employee-type-create' %}?dynamic=true"
+      hx-target="#dynamicCreateModalBody"></span>
+    <span name="" id="dynamicShift" style="display: none" data-toggle="oh-modal-toggle"
+      data-target="#dynamicCreateModal" hx-get="{% url 'employee-shift-create' %}?dynamic=true"
+      hx-target="#dynamicCreateModalBody"></span>
+
+    <span name="" id="dynamicJoining" style="display: none" data-toggle="oh-modal-toggle"
+      data-target="#dynamicCreateModal" hx-target="#dynamicCreateModalBody">
     </span>
 
-    <span
-      name=""
-      id="dynamicServiceLength"
-      style="display: none"
-      data-toggle="oh-modal-toggle"
-      data-target="#dynamicCreateModal"
-      hx-target="#dynamicCreateModalBody"
-    >
+    <span name="" id="dynamicServiceLength" style="display: none" data-toggle="oh-modal-toggle"
+      data-target="#dynamicCreateModal" hx-target="#dynamicCreateModalBody">
     </span>
 
-    <div
-      class="oh-profile-section__card"
-      data-select2-id="select2-data-29-vht3"
-    >
+    <div class="oh-profile-section__card" data-select2-id="select2-data-29-vht3">
       <div id="workMessage"></div>
       <form method="post" action="">
         <input type="hidden" name="form" value="work" />
@@ -121,10 +52,7 @@
         {% csrf_token %} {{work_form.as_p}}
         <hr class="mt-5 mb-3" />
         <div class="w-100 d-flex align-items-center justify-content-end">
-          <button
-            type="submit"
-            class="oh-btn oh-btn--secondary oh-btn--w-100-resp"
-          >
+          <button type="submit" class="oh-btn oh-btn--secondary oh-btn--w-100-resp">
             {% trans "Save" %}
           </button>
         </div>
@@ -143,6 +71,14 @@
     const data =
       id === "#dynamicDept" ? { department_id: value } : { job_id: value };
 
+
+    console.log('iddd', value)
+
+
+
+
+
+
     if (id === "#dynamicDept") {
       url = '{% url "get-job-positions" %}';
       dropdownId = "#id_job_position_id";
@@ -156,30 +92,72 @@
       dropdownId = "#id_job_role_id";
       createText = "Create New Job Role";
       emptyText = "---Choose Job Role---";
-    } else if (id === "#dynamicDept") {
-      url = '{% url "get-employee-section" %}';
-      dropdownId = "#id_employee_section_id";
-      createText = "Create New  Employee Section";
-      emptyText = "---Choose Employee Section---";
     }
+    
+
+    console.log(data, 'dataaa',)
 
     if (value) {
-      $.ajax({
-        url: url,
-        method: "GET",
-        data: data,
-        success: function (data) {
-          const dropdown = $(dropdownId);
-          const options = [`<option value="">${emptyText}</option>`];
+      if (id === "#dynamicDept") {
 
-          $.each(data.job_positions || data.job_roles, function (key, value) {
-            options.push(`<option value="${key}">${value}</option>`);
-          });
+        $.ajax({
+          url: url,
+          method: "GET",
+          data: data,
+          success: function (data) {
+            const dropdown = $(dropdownId);
+            const options = [`<option value="">${emptyText}</option>`];
 
-          options.push(`<option value="create">${createText}</option>`);
-          dropdown.html(options.join(""));
-        },
-      });
+            $.each(data.job_positions, function (key, value) {
+              options.push(`<option value="${key}">${value}</option>`);
+            });
+
+            options.push(`<option value="create">${createText}</option>`);
+            dropdown.html(options.join(""));
+          },
+        });
+        $.ajax({
+          url: '{% url "get-employee-section" %}',
+          method: "GET",
+          data: data,
+          success: function (data) {
+            const dropdown = $("#id_employee_section_id");  
+            const options = [`<option value="">---Choose Employee Section---</option>`];
+
+            $.each(data.employee_sections, function (key, value) {
+              console.log(key, value, 'section');
+              options.push(`<option value="${key}">${value}</option>`);
+            });
+
+            options.push(`<option value="create">Create New Employee Section</option>`);
+            dropdown.html(options.join(""));  
+          },
+        });
+
+
+      } else if (id==="#dynamicEmployeeSection") {
+
+        $.ajax({
+          url: '{% url "get-employee-unit" %}',
+          method: "GET",
+          data: data,
+          success: function (data) {
+            const dropdown = $("#id_employee_unit_id");  
+            const options = [`<option value="">---Choose Employee Unit---</option>`];
+
+            $.each(data.employee_units, function (key, value) {
+              console.log(key, value, 'section');
+              options.push(`<option value="${key}">${value}</option>`);
+            });
+
+            options.push(`<option value="create">Create New Employee Unit</option>`);
+            dropdown.html(options.join(""));  
+          },
+        });
+
+
+      }
+
     } else {
       const resetOptions = `<option value="">${emptyText}</option><option value="create">${createText}</option>`;
       $(dropdownId).html(resetOptions);
@@ -206,12 +184,12 @@
     var selectedSectionUnit = $("#id_employee_unit_id").val();
     $("#id_date_joining").on("change", calculateServiceLength);
 
-    $("#select2-id_department_id-container").on("change", sectionBind);
+    // $("select[name='department']").on("change", function () {
+    //   const departmentId = $(this).val();
+    //   // your AJAX here
+    // });
 
-    $("select[name='department']").on("change", function () {
-      const departmentId = $(this).val();
-      // your AJAX here
-    });
+    console.log(departmentId, 'department')
 
     // Make AJAX request to fetch available Job Positions for the selected department
     $.ajax({
@@ -252,41 +230,9 @@
       },
     });
 
-    $(document).ready(function () {
-      $("#select2-id_department_id-container").on(
-        "change",
-        "onkeyup",
-        function () {
-          const departmentId = $(this).val();
-          console.log("Selected departmentId:", departmentId);
-        }
-      );
-    });
 
-    $("#id_department_id").on("change", function () {
-      const departmentId = $(this).val();
 
-      console.log(departmentId, "department");
 
-      $.ajax({
-        url: "{% url 'get-employee-section' %}",
-        method: "GET",
-        data: { department_id: departmentId },
-        success: function (data) {
-          const sectionDropdown = $("#id_employee_section_id");
-          sectionDropdown.empty();
-          sectionDropdown.append(
-            '<option value="">---Choose Employee Section---</option>'
-          );
-          $.each(data.sections, function (key, value) {
-            sectionDropdown.append(`<option value="${key}">${value}</option>`);
-          });
-          sectionDropdown.append(
-            '<option value="create">Create New Employee Section</option>'
-          );
-        },
-      });
-    });
     if (selectedJobPosition) {
       $.ajax({
         url: '{% url "get-job-roles" %}',
@@ -314,21 +260,13 @@
     }
   });
 
-  function sectionBind() {
-    const departmentId = document.getElementById(
-      "select2-id_department_id-container"
-    ).value;
 
-    console.log(departmentId, "department");
-  }
 
   function calculateServiceLength() {
     const joiningInput = document.getElementById("id_date_joining").value;
     const serviceLengthInput = document.getElementById(
       "id_service_length_in_incepta"
     );
-
-    console.log(joiningInput, "input");
 
     if (!/^\d{4}-\d{2}-\d{2}$/.test(joiningInput)) {
       serviceLengthInput.value = "Invalid format";
@@ -361,7 +299,7 @@
     let yearOfExperience =
       Math.floor(
         Math.abs(new Date(new Date()).getTime() - new Date(joiningDate)) /
-          miliSecond
+        miliSecond
       ) / 365;
 
     serviceLengthInput.value = yearOfExperience.toFixed(2) + " " + "Year";

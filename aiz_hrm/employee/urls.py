@@ -291,7 +291,7 @@ urlpatterns = [
     path("employee-training-create/<int:emp_id>", views.employee_training_create, name="employee-training-create"),
     path("job-reference-create/<int:emp_id>", views.job_reference_create, name="job-reference-create"),
     path("document-category-create/", views.document_category_create, name="document-category-create"),
-    path("document-category-update/", views.document_category_create, name="document-category-update"),
+    #path("document-category-update/", views.document_category_create, name="document-category-update"),
     path("get-document-category/", views.get_document_category, name="get-document-category"),
 
     path(
@@ -522,6 +522,7 @@ urlpatterns = [
     ),
     path("get-job-positions", views.get_job_positions, name="get-job-positions"),
     path("get-employee-section", views.get_employee_section, name="get-employee-section"),
+     path("get-employee-unit", views.get_employee_unit, name="get-employee-unit"),
     path("get-job-roles", views.get_job_roles, name="get-job-roles"),
     path("employee-tag-view/", views.employee_tag_view, name="employee-tag-view"),
     path("employee-tag-create", views.employee_tag_create, name="employee-tag-create"),

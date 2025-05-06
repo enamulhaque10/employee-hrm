@@ -28,7 +28,7 @@
                     <a href="#" class="oh-general__tab-link" data-action="general-tab" data-target="#employee_training">{% trans "Employee Training" %}</a>
                 </li>
                 <li class="oh-general__tab">
-                  <a href="#" class="oh-general__tab-link" hx-get="{% url 'employee-document-tab' form.instance.id %}?employee_view=true" data-action="general-tab" data-target="#document_target">{% trans "Document upload" %}</a>
+                  <a href="#" class="oh-general__tab-link" hx-get="{% url 'employee-document-tab' form.instance.id %}?employee_view=true" data-action="general-tab" data-target="#document_target">{% trans "Document Upload" %}</a>
               </li>
                 <li class="oh-general__tab">
                     <a href="#" class="oh-general__tab-link" data-action="general-tab" data-target="#job_reference">{% trans "Job Reference" %}</a>
@@ -38,11 +38,10 @@
     </section>
 {% include 'employee/update_form/personal_info.html' %}
 {% include 'employee/update_form/work_details.html' %}
-{% include 'employee/update_form/bank_details.html' %}
+<!-- {% include 'employee/update_form/bank_details.html' %} -->
 {% include 'employee/update_form/job_experiences_details.html' %}
 {% include 'employee/update_form/employee_education_details.html' %}
 {% include 'employee/update_form/employee_training_details.html' %}
-{% include 'employee/update_form/job_reference_details.html' %}
 {% include 'employee/update_form/job_reference_details.html' %}
 {% include 'employee/update_form/document_tab.html' %}
 

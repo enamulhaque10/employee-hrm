@@ -741,7 +741,6 @@ def document_create(request, emp_id):
 
 @login_required
 @hx_request_required
-@owner_can_enter("aiz_documents.add_document", Employee)
 def document_category_create(request):
     """
     This method renders form and template to create document category
@@ -757,9 +756,10 @@ def document_category_create(request):
             form = DocumentCategoryForm()
             messages.success(request, _("Category has been created successfully!"))
             return HttpResponse("<script>window.location.reload()</script>")
+    print(form, 'form')
     return render(
         request,
-        "tabs/document_category_form",
+        "tabs/document_category_form.html",
         {
             "form": form,
             "dynamic": dynamic
@@ -4087,7 +4087,6 @@ def get_job_positions(request):
         if department_id
         else []
     )
-    print(job_positions, 'posi')
 
     return JsonResponse({"job_positions": dict(job_positions)})
 
@@ -4095,10 +4094,12 @@ def get_job_positions(request):
 @login_required
 def get_document_category(request):
     document_category = (
-        DocumentCategory.objects.all()
-        if document_category
-        else []
+        DocumentCategory.objects.all().values_list(
+            "id", "category_title"
+        )
     )
+
+    print(document_category, 'documment')
 
     return JsonResponse({"document_category": dict(document_category)})
 
@@ -4114,7 +4115,6 @@ def get_employee_section(request):
         if department_id
         else []
     )
-    print(employee_sections, 'sds')
     return JsonResponse({"employee_sections": dict(employee_sections)})
 
 
@@ -4136,7 +4136,7 @@ def get_job_roles(request):
 @login_required
 def get_employee_unit(request):
     job_id = request.GET.get("job_id")
-    employee_units = JobRole.objects.filter(employee_section_id=job_id).values_list(
+    employee_units = EmployeeUnit.objects.filter(employee_section_id=job_id).values_list(
         "id", "employee_unit"
     )
     return JsonResponse({"employee_units": dict(employee_units)})

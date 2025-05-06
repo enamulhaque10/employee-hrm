@@ -66,7 +66,10 @@ def document_request_m2m_changed(sender, instance, action, **kwargs):
 
 
 class DocumentCategory(aizModel):
-        category_title = models.CharField(max_length=250)
+        category_title = models.CharField(max_length=250,blank=True, null=True)
+
+        class Meta:
+            verbose_name = _("Category Title")
 
         def __str__(self):
                 return f"{self.category_title}"
