@@ -4,7 +4,7 @@
 		<div class="oh-card oh-card--margin">
 			<div class="oh-card__header">
 				<span class="oh-card__title oh-card__title--sm fw-bold me-2">
-					{% trans "Personal Information" %}
+					{% trans "Personal Information3333" %}
 				</span>
 			</div>
 			<div class="oh-card__body mt-4">
@@ -33,19 +33,10 @@
 						</span>
 						<span class="oh-profile__info-value">{{employee.address|default:_("None")}}</span>
 					</li>
-
-					<li class="oh-profile__card-info-item">
-						<span class="oh-profile__info-label mb-1">
-							<ion-icon name="home-outline"></ion-icon>
-							<span>{% trans "Permanent Address" %}</span>
-						</span>
-						<span class="oh-profile__info-value">{{employee.employee_permanent_address_country|default:_("None")}}</span>
-					</li>
-
 					<li class="oh-profile__card-info-item">
 						<span class="oh-profile__info-label mb-1">
 							<ion-icon name="flag-outline"></ion-icon>
-							<span>{% trans "Country" %}</span>
+							<span>{% trans " Country" %}</span>
 						</span>
 						<span class="oh-profile__info-value">{{employee.country|default:_("None")}}</span>
 					</li>
@@ -64,6 +55,39 @@
 							<span>{% trans "City" %}</span>
 						</span>
 						<span class="oh-profile__info-value">{{employee.city|default:_("None")}}</span>
+					</li>
+
+
+					<li class="oh-profile__card-info-item">
+						<span class="oh-profile__info-label mb-1">
+							<ion-icon name="home-outline"></ion-icon>
+							<span>{% trans "Permanent Address" %}</span>
+						</span>
+						<span class="oh-profile__info-value">{{employee.employee_permanent_address_country|default:_("None")}}</span>
+					</li>
+
+					<li class="oh-profile__card-info-item">
+						<span class="oh-profile__info-label mb-1">
+							<ion-icon name="flag-outline"></ion-icon>
+							<span>{% trans "Country" %}</span>
+						</span>
+						<span class="oh-profile__info-value">{{employee.employee_permanent_address_country|default:_("None")}}</span>
+					</li>
+
+					<li class="oh-profile__card-info-item">
+						<span class="oh-profile__info-label mb-1">
+							<ion-icon name="compass-outline"></ion-icon>
+							<span>{% trans "State/District" %}</span>
+						</span>
+						<span class="oh-profile__info-value">{{employee.employee_permanent_address_state|default:_("None")}}</span>
+					</li>
+
+					<li class="oh-profile__card-info-item">
+						<span class="oh-profile__info-label mb-1">
+							<ion-icon name="planet-outline"></ion-icon>
+							<span>{% trans "City" %}</span>
+						</span>
+						<span class="oh-profile__info-value">{{employee.employee_permanent_address_city|default:_("None")}}</span>
 					</li>
 
 					<li class="oh-profile__card-info-item">

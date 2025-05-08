@@ -1928,6 +1928,7 @@ def employee_view_update(request, obj_id, **kwargs):
         employee_educations = EmployeeEducation.objects.filter(employee_id=employee)
         employee_trainings = EmployeeTraining.objects.filter(employee_id=employee)
         job_refers = JobReference.objects.filter(employee_id=employee)
+        documents = Document.objects.filter(employee_id=employee)
         return render(
             request,
             "employee/update_form/form_view.html",
@@ -1940,7 +1941,8 @@ def employee_view_update(request, obj_id, **kwargs):
                 "job_experiences": job_experiences,
                 "employee_educations": employee_educations,
                 "employee_trainings": employee_trainings,
-                "job_refers": job_refers
+                "job_refers": job_refers,
+                "documents" : documents
             },
         )
     return HttpResponseRedirect(
