@@ -279,6 +279,28 @@ class Employee(models.Model):
         return getattr(
             getattr(self, "employee_work_info", None), "job_position_id", None
         )
+    def get_employee_section(self):
+        """
+        This method is used to return the Job Position of the employee
+        """
+        return getattr(
+            getattr(self, "employee_work_info", None), "employee_section_id", None
+        )
+    def get_employee_unit(self):
+        """
+        This method is used to return the Job Position of the employee
+        """
+        return getattr(
+            getattr(self, "employee_work_info", None), "employee_unit_id", None
+        )
+    def get_employee_grade(self):
+        """
+        This method is used to return the Job Position of the employee
+        """
+        return getattr(
+            getattr(self, "employee_work_info", None), "employee_grade", None
+        )
+
 
     def get_department(self):
         """
