@@ -39,6 +39,10 @@ class EmployeeFilter(aizFilterSet):
             ("reporting_manager", _("Search in : Reporting manager")),
             ("department", _("Search in : Department")),
             ("job_position", _("Search in : Job Position")),
+            ("employee_section", _("Search in :Employee Section")),
+            ("employee_unit", _("Search in : Employe Unit")),
+
+
         ],
         method="filter_by_name_and_field",
         widget=forms.Select(
@@ -119,6 +123,8 @@ class EmployeeFilter(aizFilterSet):
             "gender",
             "is_active",
             "employee_work_info__job_position_id",
+            "employee_work_info__employee_section_id",
+            'employee_work_info__employee_unit_id',
             "employee_work_info__department_id",
             "department",
             "employee_work_info__work_type_id",

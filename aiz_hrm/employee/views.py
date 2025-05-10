@@ -664,7 +664,7 @@ def job_experiences_tab(request, emp_id):
         "form": form,
         "emp_id": emp_id,
     }
-    return render(request, "tabs/`job_experience_tab`.html", context=context)
+    return render(request, "tabs/job_experience_tab.html", context=context)
 
 @login_required
 @hx_request_required
@@ -3227,6 +3227,7 @@ def work_info_export(request):
             "export_form": EmployeeExportExcelForm(),
         }
         return render(request, "employee_export_filter.html", context)
+    
     employees_data = {}
     selected_columns = []
     form = EmployeeExportExcelForm()
@@ -3248,6 +3249,7 @@ def work_info_export(request):
     for column_value, column_name in selected_columns:
         nested_attributes = column_value.split("__")
         employees_data[column_name] = []
+        print(column_value, column_name, 'column')
         for employee in employees:
             value = employee
             for attr in nested_attributes:
@@ -3286,7 +3288,80 @@ def work_info_export(request):
                 data = _("Yes")
             elif data == "False":
                 data = _("No")
+            job_experiences = EmployeeJobExperiences.objects.filter(employee_id=employee.id)
+
+            
+            if column_value == 'employee_job_experience_1':
+                company = job_experiences[0].company_name if len(job_experiences)>0 else ""
+                designation = job_experiences[0].designation if len(job_experiences)>0 else ""
+                experience = job_experiences[0].year_of_experience if len(job_experiences)>0 else ""
+                data = company + "," + designation + "," + str(experience)
+            elif column_value == 'employee_job_experience_2':
+                company = job_experiences[1].company_name if len(job_experiences)>1 else ""
+                designation = job_experiences[1].designation if len(job_experiences)>1 else ""
+                experience = job_experiences[1].year_of_experience if len(job_experiences)>1 else ""
+                data = company + "," + designation + "," + str(experience) 
+            elif column_value == 'employee_job_experience_3':
+                company = job_experiences[2].company_name if len(job_experiences)>2 else ""
+                designation = job_experiences[2].designation if len(job_experiences)>2 else ""
+                experience = job_experiences[2].year_of_experience if len(job_experiences)>2 else ""
+                data = company + "," + designation + "," + str(experience) 
+            elif column_value == 'employee_job_experience_4':
+                company = job_experiences[3].company_name if len(job_experiences)>3 else ""
+                designation = job_experiences[3].designation if len(job_experiences)>3 else ""
+                experience = job_experiences[3].year_of_experience if len(job_experiences)>3 else ""
+                data = company + "," + designation + "," + str(experience) 
+            
+            educations = EmployeeEducation.objects.filter(employee_id=employee.id)
+            if column_value == "employee_graduation_subject":
+                for i in educations:
+                    if i.education_label == "bachelor" or i.education_label == "honours":
+                        data = i.subject
+                        break
+            elif column_value == "employee_graduation_university":
+                for i in educations:
+                    if i.education_label == "bachelor" or i.education_label == "honours":
+                        data =  i.institution_name
+                        break
+            elif column_value == "employee_post_graduation_subject":
+                for i in educations:
+                    if i.education_label == "masters" or i.education_label == "kamil":
+                        data = i.subject
+                        post_graduation_university = i.institution_name
+                        break
+            elif column_value == "employee_post_graduation_university":
+                for i in educations:
+                    if i.education_label == "masters" or i.education_label == "kamil":
+                        data = i.institution_name
+                        break
+            elif column_value =="employee_highest_educational_degree":
+                data = educations[len(educations)-1].education_label if len(educations)>0 else ""
+
+            if column_value == "employee_training":
+                training = EmployeeTraining.objects.filter(employee_id=employee.id)
+                data = training[len(training)-1].training_name + "," + training[len(training)-1].institution if len(training)>0 else ""
+            
+            if column_value == "employee_job_reference":
+                references = JobReference.objects.filter(employee_id=employee.id)
+                data = references[len(references)-1].reference_name + "," + references[len(references)-1].department +"," + references[len(references)-1].company_name + "," +references[len(references)-1].mobile_number if len(references)>0 else ""
+                
+            if column_value  == "employee_phone":
+                data = employee.phone
+            if column_value == "employee_nominee":
+                data = employee.employee_nominee_name + "," + employee.employee_nominee_contact + "," + employee.employee_nominee_relation if employee.employee_nominee_name !=None else ""
+            
+            if column_value == "employee_present_address":
+                data = employee.address  if employee.address!= None else "" + "," + employee.zip  if employee.zip != None else "" + "," + employee.city if employee.city != None else "" + "," + employee.state if employee.state != None else "" + "," + employee.country  if employee.country != None else ""
+
+
+            if column_value == "employee_permanent_address":
+                data = employee.employee_permanent_address if employee.employee_permanent_address != None else "" + "," + employee.employee_permanent_address_zip if employee.employee_permanent_address_zip != None else "" + "," + employee.employee_permanent_address_city if employee.employee_permanent_address_city != None else "" + "," + employee.employee_permanent_address_state if employee.employee_permanent_address_state != None else "" + "," + employee.employee_permanent_address_country if employee.employee_permanent_address_country  != None else ""
+
+
+
+                
             employees_data[column_name].append(data)
+
 
     data_frame = pd.DataFrame(data=employees_data)
     response = HttpResponse(content_type="application/ms-excel")

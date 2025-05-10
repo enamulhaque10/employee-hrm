@@ -24,19 +24,24 @@ class EmployeeEducation(aizModel):
     ("primary", trans("Primary Education")),
     ("jsc", trans("Junior School Certificate")),
     ("ssc", trans("Secondary School Certificate")),
+    ("dakhil", trans("Dakhil (Madrasa)")),
     ("hsc", trans("Higher Secondary Certificate")),
+    ("alim", trans("Alim (Madrasa)")),
     ("diploma", trans("Diploma in Engineering")),
+    ("vocational", trans("Technical/Vocational")),
+    ("fazil", trans("Fazil (Madrasa)")),
     ("bachelor", trans("Bachelor Degree")),
     ("honours", trans("Honours Degree")),
     ("pass", trans("Pass Course")),
     ("masters", trans("Masters Degree")),
+    ("kamil", trans("Kamil (Madrasa)")),
     ("mphil", trans("MPhil")),
     ("phd", trans("PhD")),
-    ("dakhil", trans("Dakhil (Madrasa)")),
-    ("alim", trans("Alim (Madrasa)")),
-    ("fazil", trans("Fazil (Madrasa)")),
-    ("kamil", trans("Kamil (Madrasa)")),
-    ("vocational", trans("Technical/Vocational")),
+    
+    
+    
+    
+    
 ]
 
     employee_id = models.ForeignKey(Employee, on_delete=models.PROTECT)

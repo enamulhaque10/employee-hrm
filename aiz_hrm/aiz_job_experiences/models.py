@@ -22,7 +22,7 @@ class EmployeeJobExperiences(aizModel):
 
     title = models.CharField(max_length=250)
     employee_id = models.ForeignKey(Employee, on_delete=models.PROTECT)
-    company_name = models.CharField(max_length=50,null=False,blank=False,default="",)
+    company_name = models.CharField(max_length=50,null=True,blank=True,default="",)
     designation = models.CharField(max_length=50,null=False,blank=False,default="",)
     year_of_experience = models.FloatField(default=0, help_text="Employee Year Of Experience.")
 
