@@ -38,6 +38,12 @@ from django.utils import timezone
 from django.utils.translation import gettext as __
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
+from openpyxl import Workbook
+from openpyxl.drawing.image import Image as ExcelImage
+from io import BytesIO
+import requests
+from PIL import Image as PILImage
+
 
 from accessibility.decorators import enter_if_accessible
 from accessibility.methods import update_employee_accessibility_cache
@@ -2941,36 +2947,82 @@ def work_info_import(request):
     """
     data_frame = pd.DataFrame(
         columns=[
-            "Badge id",
+            "Employee ID",
             "First Name",
             "Last Name",
-            "Phone",
-            "Email",
-            "Gender",
-            "Marital Status",
-            "Emergency Contact Name",
-            "Emergency Contact Relation",
-            "Number Of Son",
-            "Number Of Daughter",
-            "Nominee Name",
-            "Nominee Relation",
-            "Department",
             "Job Position",
-            "Section",
-            "Unit",
             "Employee Grade",
-            "Employee Category",
+            "Department",
+            "Employee Section",
             "Reporting Manager",
-            #"Company",
-            "Location",
-            "Date joining",
-            #"Contract End Date",
-            "Basic Salary",
-            "Salary Hour",
+            "Employee Unit",
+            "Employee Category",
+            "Date Of Joining",
+            "Last Promotion Date",
+            "Service Length In Incepta",
+            "Date of Birth",
+            "Job Experience 1",
+            "Job Experience 2",
+            "Job Experience 3",
+            "Job Experience 4",
+            "Graduation Subject",
+            "Graduation University",
+            "Post Graduation Subject",
+            "Post Graduation University",
+            "Highest Educational Degree",
+            "Professional Degree or Specialized Training",
+            "Job Reference",
+            "Employee Contact Number (Official)",
+            "Employee Contact Number (Personal)",
+            "Emergency Contact Number",
+            "Employee Email(Official)",
+            "Employee Email(Personal)",
+            "Employee Gender",
+            "Employee Blood Group",
+            "Employee Religion",
+            "Employee Father's Name (According to NID)",
+            "Employee Mother's Name (According to NID)",
+            "Employee Marital Status",
+            "Employee Spouse Name (According to NID)_If Married",
+            "Number of Son of Employee",
+            "Number of Daughter of Employee",
+            "Nominee Information",
+            "Employee Present Address",
+            "Employee Permanent Address",
+            "Employee Home District",
+            "Employee Nationality",
+            "Employee NID Number",
+            "Employee Passport Number(If Any)",
+            "Employee Driving License Number(If Any)",
+            # "Employee Updated Photo",
+            # "Employee Scanned Signature"
+            # "Phone",
+            # "Email",
+            # "Gender",
+            # "Marital Status",
+            # "Emergency Contact Name",
+            # "Emergency Contact Relation",
+            # "Number Of Son",
+            # "Number Of Daughter",
+            # "Nominee Name",
+            # "Nominee Relation",
+            # "Department",
+            # "Job Position",
+            # "Section",
+            # "Unit",
+            # "Employee Grade",
+            # "Employee Category",
+            # "Reporting Manager",
+            # #"Company",
+            # "Location",
+            # "Date joining",
+            # #"Contract End Date",
+            # "Basic Salary",
+            # "Salary Hour",
         ]
     )
     error_data = {
-        "Badge id": [],
+        "Employee ID": [],
         "First Name": [],
         "Last Name": [],
         "Phone": [],
@@ -2995,7 +3047,7 @@ def work_info_import(request):
         "Joining Date Error": [],
         "Last Promotion Date Error": [],
         #"Contract Error": [],
-        "Badge ID Error": [],
+        "Employee ID Error": [],
         "Basic Salary Error": [],
         "Salary Hour Error": [],
         "User ID Error": [],
@@ -3028,22 +3080,19 @@ def work_info_import(request):
             )
         )
         users = []
-        print(work_info_dicts, 'dict')
         for work_info in work_info_dicts:
             error = False
-            print(work_info, 'workinfodict')
             #try:
-            print(work_info, 'workinfodictvitor')
-            email = work_info["Email"]
-            phone = work_info["Phone"]
+            email = work_info["Employee Email(Personal)"]
+            phone = work_info["Employee Contact Number (Personal)"]
             first_name = convert_nan("First Name", work_info)
             last_name = convert_nan("Last Name", work_info)
-            badge_id = work_info["Badge id"] 
-            date_joining = work_info["Date joining"]
+            badge_id = work_info["Employee ID"] 
+            date_joining = work_info["Date Of Joining"]
             #last_promotion_date = work_info["Last Promotion Date"]
             #contract_end_date = work_info["Contract End Date"]
-            basic_salary = convert_nan("Basic Salary", work_info)
-            salary_hour = convert_nan("Salary Hour", work_info)
+            # basic_salary = convert_nan("Basic Salary", work_info)
+            # salary_hour = convert_nan("Salary Hour", work_info)
             pattern = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
 
             try:
@@ -3051,48 +3100,43 @@ def work_info_import(request):
                     work_info["Email Error"] = f"Invalid Email address"
                     #error = True
             except:
-                print("email")
                 error = True
                 work_info["Email Error"] = f"Invalid Email address"
 
-            try:
-                pd.to_numeric(basic_salary)
-            except ValueError:
-                print("salary")
-                work_info["Basic Salary Error"] = f"Basic Salary must be a number"
-                error = True
+            # try:
+            #     pd.to_numeric(basic_salary)
+            # except ValueError:
+            #     print("salary")
+            #     work_info["Basic Salary Error"] = f"Basic Salary must be a number"
+            #     error = True
 
-            try:
-                pd.to_numeric(salary_hour)
-            except ValueError:
-                print("hour")
-                work_info["Salary Hour Error"] = f"Salary Hour must be a number"
-                error = True
+            # try:
+            #     pd.to_numeric(salary_hour)
+            # except ValueError:
+            #     print("hour")
+            #     work_info["Salary Hour Error"] = f"Salary Hour must be a number"
+            #     error = True
 
             if pd.isna(first_name):
-                print('firstname')
                 work_info["First Name error"] = f"First Name can't be empty"
                 error = True
 
             if pd.isna(phone):
-                print('phone')
                 work_info["Phone error"] = f"Phone Number can't be empty"
                 error = True
 
             name_email_tuple = (first_name, last_name, email)
-            if name_email_tuple in existing_name_emails:
-                print("name and email")
-                work_info["Name and Email Error"] = (
-                    "An employee with this first name, last name, and email already exists."
-                )
-                error = True
-            else:
-                existing_name_emails.add(name_email_tuple)
+            # if name_email_tuple in existing_name_emails:
+            #     work_info["Name and Email Error"] = (
+            #         "An employee with this first name, last name, and email already exists."
+            #     )
+            #     error = True
+            # else:
+            #     existing_name_emails.add(name_email_tuple)
 
             try:
                 pd.to_datetime(date_joining).date()
             except:
-                print("joining")
                 work_info["Joining Date Error"] = (
                     f"Invalid Date format. Please use the format YYYY-MM-DD"
                 )
@@ -3117,7 +3161,6 @@ def work_info_import(request):
             #     error = True
 
             if badge_id in existing_badge_ids:
-                print("badge")
                 work_info["Badge ID Error"] = (
                     f"An Employee with the badge ID already exists"
                 )
@@ -3125,14 +3168,14 @@ def work_info_import(request):
             else:
                 existing_badge_ids.add(badge_id)
 
-            if email in existing_usernames:
-                print("userid")
-                work_info["User ID Error"] = (
-                    f"User with the email ID already exists"
-                )
-                error = True
-            else:
-                existing_usernames.add(email)
+            # if email in existing_usernames:
+            #     print('aschi')
+            #     work_info["User ID Error"] = (
+            #         f"User with the email ID already exists"
+            #     )
+            #     error = True
+            # else:
+            #     existing_usernames.add(email)
             if error:
                 error_lists.append(work_info)
             else:
@@ -3142,25 +3185,30 @@ def work_info_import(request):
             # print("Error Occured")
             # error_occured = True
             # logger.error(e)
-        print(create_work_info, 'workinfo', error_lists)
-        if create_work_info or not error_lists:
-            #try:
-            print(success_lists, 'success')
-            users = bulk_create_user_import(success_lists)
-            employees = bulk_create_employee_import(success_lists)
-            thread = threading.Thread(
-                target=set_initial_password, args=(employees,)
-            )
-            thread.start()
+            if create_work_info or not error_lists:
+                print('age aschi')
+                #try:
+                # if name_email_tuple in existing_name_emails:
+                #     raise ValueError("Invalid input!")
 
-            total_count = len(employees)
-            bulk_create_department_import(success_lists)
-            bulk_create_job_position_import(success_lists)
-            bulk_create_job_role_import(success_lists)
-            bulk_create_work_types(success_lists)
-            bulk_create_shifts(success_lists)
-            bulk_create_employee_types(success_lists)
-            bulk_create_work_info_import(success_lists)
+                # work_info["Name and Email Error"] = (
+                #     "An employee with this first name, last name, and email already exists."
+                # )
+                users = bulk_create_user_import(success_lists)
+                employees = bulk_create_employee_import(success_lists)
+                thread = threading.Thread(
+                    target=set_initial_password, args=(employees,)
+                )
+                thread.start()
+
+                total_count = len(employees)
+                bulk_create_department_import(success_lists)
+                bulk_create_job_position_import(success_lists)
+                bulk_create_job_role_import(success_lists)
+                bulk_create_work_types(success_lists)
+                bulk_create_shifts(success_lists)
+                bulk_create_employee_types(success_lists)
+                bulk_create_work_info_import(success_lists)
 
             # except Exception as e:
             #     error_occured = True
@@ -3249,7 +3297,6 @@ def work_info_export(request):
     for column_value, column_name in selected_columns:
         nested_attributes = column_value.split("__")
         employees_data[column_name] = []
-        print(column_value, column_name, 'column')
         for employee in employees:
             value = employee
             for attr in nested_attributes:
@@ -3356,12 +3403,20 @@ def work_info_export(request):
 
             if column_value == "employee_permanent_address":
                 data = employee.employee_permanent_address if employee.employee_permanent_address != None else "" + "," + employee.employee_permanent_address_zip if employee.employee_permanent_address_zip != None else "" + "," + employee.employee_permanent_address_city if employee.employee_permanent_address_city != None else "" + "," + employee.employee_permanent_address_state if employee.employee_permanent_address_state != None else "" + "," + employee.employee_permanent_address_country if employee.employee_permanent_address_country  != None else ""
-
-
-
+            
+            
+            
+            if column_value == "employee_photo":
+                documents = Document.objects.filter(employee_id=employee.id)
+                profile_img = documents.filter(document_category_id__category_title="profile image").first()
+                data = profile_img.document.url if profile_img !=None else ""
+                
+            elif column_value == "employee_signature":
+                documents = Document.objects.filter(employee_id=employee.id)
+                profile_signature = documents.filter(document_category_id__category_title="profile signature").first()
+                data = profile_signature.document.url if profile_signature !=None else ""
                 
             employees_data[column_name].append(data)
-
 
     data_frame = pd.DataFrame(data=employees_data)
     response = HttpResponse(content_type="application/ms-excel")

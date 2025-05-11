@@ -11,6 +11,8 @@ import pandas as pd
 from django.apps import apps
 from django.contrib.auth.models import User
 from django.db import models
+from datetime import date
+
 
 from base.context_processors import get_initial_prefix
 from base.models import (
@@ -121,20 +123,24 @@ def bulk_create_user_import(success_lists):
     """
     Bulk creation of user instances based on the excel import of employees
     """
+    print(success_lists, 'success')
     user_obj_list = []
+    cleaned_success_list = [
+    {k.strip(): v for k, v in row.items()} for row in success_lists
+]
     existing_usernames = {
         user.username
         for user in User.objects.filter(
-            username__in=[row["Email"] for row in success_lists]
+            username__in=[row["Employee Email(Personal)"] for row in cleaned_success_list]
         )
     }
 
     for work_info in success_lists:
-        email = work_info["Email"]
+        email = work_info["Employee Email(Personal)"]
         if email in existing_usernames:
             continue
 
-        phone = work_info["Phone"]
+        phone = work_info["Employee Contact Number (Personal)"]
         user_obj = User(
             username=email,
             email=email,
@@ -156,21 +162,44 @@ def bulk_create_employee_import(success_lists):
     existing_users = {
         user.username: user
         for user in User.objects.filter(
-            username__in=[row["Email"] for row in success_lists]
+            username__in=[row["Employee Email(Personal)"] for row in success_lists]
         )
     }
 
     for work_info in success_lists:
-        email = work_info["Email"]
+        email = work_info["Employee Email(Personal)"]
         user = existing_users.get(email)
         if not user:
             continue
 
-        badge_id = work_info["Badge id"]
+        badge_id = work_info["Employee ID"]
         first_name = convert_nan("First Name", work_info)
         last_name = convert_nan("Last Name", work_info)
-        phone = work_info["Phone"]
-        gender = work_info.get("Gender", "").lower()
+        phone = work_info["Employee Contact Number (Personal)"]
+        gender = work_info.get("Employee Gender", "").lower()
+        address = work_info["Employee Present Address"]
+        #address1, zip, city,state,country = [part.strip() for part in address.split(',')]
+        permanent_address = work_info["Employee Permanent Address"]
+        dob = work_info["Date of Birth"] if work_info["Date of Birth"] !="" else date.today()
+        dt = datetime.strptime(str(dob), "%Y-%m-%d %H:%M:%S")
+        date_str = dt.date().isoformat()  # This gives '2000-05-05'
+
+        marital_status = work_info["Employee Marital Status"]
+        emegency_contact = work_info["Emergency Contact Number"]
+        blood_group = work_info["Employee Blood Group"]
+        religion=work_info["Employee Religion"]
+        natonality=work_info["Employee Nationality"]
+        nid = work_info["Employee NID Number"]
+        passport_number = work_info["Employee Passport Number(If Any)"]
+        driving_license = work_info["Employee Driving License Number(If Any)"]
+        home_district = work_info["Employee Home District"]
+        father_name=work_info["Employee Father's Name (According to NID)"]
+        mother_name = work_info["Employee Mother's Name (According to NID)"]
+        spouse_name= work_info["Employee Spouse Name (According to NID)_If Married"]
+        number_of_son = work_info["Number of Son of Employee"]
+        number_of_daughter = work_info["Number of Daughter of Employee"]
+        nomenee = work_info["Nominee Information"]
+        n_name,n_number,n_relation = [part.strip() for part in nomenee.split(',')]
         employee_obj = Employee(
             employee_user_id=user,
             badge_id=badge_id,
@@ -179,6 +208,26 @@ def bulk_create_employee_import(success_lists):
             email=email,
             phone=phone,
             gender=gender,
+            address=address,
+            employee_permanent_address=permanent_address,
+            dob=date_str,
+            marital_status=marital_status,
+            emergency_contact=emegency_contact,
+            employee_blood_group=blood_group,
+            employee_religion=religion,
+            employee_nationality=natonality,
+            employee_nid_number=nid,
+            employee_passport_number=passport_number,
+            employee_driving_license_number=driving_license,
+            employee_home_district=home_district,
+            employee_father_name=father_name,
+            employee_mother_name=mother_name,
+            employee_spouse_name=spouse_name,
+            employee_number_of_son=number_of_son,
+            employee_number_of_daughter=number_of_daughter,
+            employee_nominee_name=n_name,
+            employee_nominee_contact=n_number,
+            employee_nominee_relation=n_relation
         )
         employee_obj_list.append(employee_obj)
     result = []
