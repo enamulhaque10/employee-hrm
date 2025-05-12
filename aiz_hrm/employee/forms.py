@@ -567,8 +567,8 @@ excel_columns = [
     ("employee_nid_number", trans("Employee NID Number")),
     ("employee_passport_number", trans("Employee Passport Number(If Any)")),
     ("employee_driving_license_number", trans("Employee Driving License Number(If Any)")),
-    ("employee_photo", trans("Employee Updated Photo")),
-    ("employee_signature", trans("Employee Scanned Signature")),
+    # ("employee_photo", trans("Employee Updated Photo")),
+    # ("employee_signature", trans("Employee Scanned Signature")),
 
 
 
@@ -685,8 +685,8 @@ class EmployeeExportExcelForm(forms.Form):
             "employee_passport_number",
             "employee_driving_license_number",
             "employee_nationality",
-            "employee_photo",
-            "employee_signature",
+            # "employee_photo",
+            # "employee_signature",
             "employee_nominee_name",
             "employee_nominee_contact",
             "employee_nominee_relation"

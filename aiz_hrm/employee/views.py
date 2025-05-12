@@ -104,6 +104,8 @@ from employee.methods.methods import (
     convert_nan,
     get_ordered_badge_ids,
     set_initial_password,
+    bulk_create_job_section_import,
+    bulk_create_job_unit_import,
 )
 from employee.models import (
     BonusPoint,
@@ -3204,9 +3206,12 @@ def work_info_import(request):
                 total_count = len(employees)
                 bulk_create_department_import(success_lists)
                 bulk_create_job_position_import(success_lists)
-                bulk_create_job_role_import(success_lists)
+                bulk_create_job_section_import(success_lists)
+                bulk_create_job_unit_import(success_lists)
+                
+                #bulk_create_job_role_import(success_lists)
                 bulk_create_work_types(success_lists)
-                bulk_create_shifts(success_lists)
+                #bulk_create_shifts(success_lists)
                 bulk_create_employee_types(success_lists)
                 bulk_create_work_info_import(success_lists)
 
