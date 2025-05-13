@@ -348,7 +348,7 @@ def bulk_create_job_section_import(success_lists):
     }
     departments = {dep.department: dep for dep in Department.objects.all()}
     existing_job_section = {
-        (job_section.job_section, job_section.department_id): job_section
+        (job_section.employee_section, job_section.department_id): job_section
         for job_section in EmployeeSection.objects.all()
     }
     job_section_obj_list = []
@@ -363,7 +363,7 @@ def bulk_create_job_section_import(success_lists):
         # Check if this Job Position already exists for this department
         if (job_section, department_obj.id) not in existing_job_section:
             job_section_obj = EmployeeSection(
-                department_id=department_obj, job_position=job_section
+                department_id=department_obj, employee_section=job_section
             )
             job_section_obj_list.append(job_section_obj)
             existing_job_section[(job_section, department_obj.id)] = job_section_obj
@@ -379,17 +379,17 @@ def bulk_create_job_unit_import(success_lists):
         (convert_nan("Employee Unit", work_info), convert_nan("Employee Section", work_info))
         for work_info in success_lists
     }
-    sections = {dep.EmployeeSection: dep for dep in EmployeeSection.objects.all()}
+    sections = {dep.employee_section: dep for dep in EmployeeSection.objects.all()}
     existing_job_unit = {
-        (job_unit.job_unit, job_unit.section_id): job_unit
+        (job_unit.employee_unit, job_unit.employee_section_id): job_unit
         for job_unit in EmployeeUnit.objects.all()
     }
     job_unit_obj_list = []
-    for job_unit, employee_section in job_unit_to_import:
-        if not job_unit or not employee_section:
+    for job_unit, employee_section_id in job_unit_to_import:
+        if not job_unit or not employee_section_id:
             continue
 
-        section_obj = sections.get(employee_section)
+        section_obj = sections.get(employee_section_id)
         if not section_obj:
             continue
 
@@ -550,6 +550,7 @@ def bulk_create_work_info_import(success_lists):
     """
     new_work_info_list = []
     update_work_info_list = []
+    print("workinfo")
 
     # Filtered data for required lookups
     badge_ids = [row["Employee ID"] for row in success_lists]
@@ -616,7 +617,8 @@ def bulk_create_work_info_import(success_lists):
     }
     reporting_manager_dict = optimize_reporting_manager_lookup(success_lists)
     for work_info in success_lists:
-        email = work_info["Employee Contact Number (Official)"]
+        print("insideloop")
+        email = work_info["Employee Email(Official)"]
         badge_id = work_info["Employee ID"]
         department_obj = existing_departments.get(work_info.get("Department"))
         key = (
@@ -651,26 +653,27 @@ def bulk_create_work_info_import(success_lists):
         )
 
 
-        # contract_end_date = (
-        #     work_info["Contract End Date"]
-        #     if not pd.isnull(work_info["Contract End Date"])
-        #     else None
-        # )
-        # basic_salary = (
-        #     convert_nan("Basic Salary", work_info)
-        #     if type(convert_nan("Basic Salary", work_info)) is int
-        #     else 0
-        # )
-        # salary_hour = (
-        #     convert_nan("Salary Hour", work_info)
-        #     if type(convert_nan("Salary Hour", work_info)) is int
-        #     else 0
-        # )
+        contract_end_date = (
+            work_info["Contract End Date"]
+            if not pd.isnull(work_info["Contract End Date"])
+            else None
+        )
+        basic_salary = (
+            convert_nan("Basic Salary", work_info)
+            if type(convert_nan("Basic Salary", work_info)) is int
+            else 0
+        )
+        salary_hour = (
+            convert_nan("Salary Hour", work_info)
+            if type(convert_nan("Salary Hour", work_info)) is int
+            else 0
+        )
 
         employee_obj = existing_employees.get(badge_id)
         employee_work_info = existing_employee_work_infos.get(employee_obj)
 
         if employee_work_info is None:
+            print("newwork")
             # Create a new instance
             employee_work_info = EmployeeWorkInformation(
                 employee_id=employee_obj,
@@ -690,14 +693,15 @@ def bulk_create_work_info_import(success_lists):
                 last_promotion_date=(
                     last_promotion_date if not pd.isnull(last_promotion_date) else datetime.today()
                 ),
-                # contract_end_date=(
-                #     contract_end_date if not pd.isnull(contract_end_date) else None
-                # ),
-                # basic_salary=basic_salary,
-                # salary_hour=salary_hour,
+                contract_end_date=(
+                    contract_end_date if not pd.isnull(contract_end_date) else None
+                ),
+                basic_salary=basic_salary,
+                salary_hour=salary_hour,
             )
             new_work_info_list.append(employee_work_info)
         else:
+            print("update work")
             # Update the existing instance
             employee_work_info.email = email
             employee_work_info.department_id = department_obj
@@ -715,11 +719,11 @@ def bulk_create_work_info_import(success_lists):
             employee_work_info.last_promotion_date = (
                 last_promotion_date if not pd.isnull(last_promotion_date) else datetime.today()
             )
-            # employee_work_info.contract_end_date = (
-            #     contract_end_date if not pd.isnull(contract_end_date) else None
-            # )
-            # employee_work_info.basic_salary = basic_salary
-            # employee_work_info.salary_hour = salary_hour
+            employee_work_info.contract_end_date = (
+                contract_end_date if not pd.isnull(contract_end_date) else None
+            )
+            employee_work_info.basic_salary = basic_salary
+            employee_work_info.salary_hour = salary_hour
             update_work_info_list.append(employee_work_info)
 
     if new_work_info_list:

@@ -38,8 +38,6 @@ from django.utils import timezone
 from django.utils.translation import gettext as __
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
-from openpyxl import Workbook
-from openpyxl.drawing.image import Image as ExcelImage
 from io import BytesIO
 import requests
 from PIL import Image as PILImage
@@ -3188,7 +3186,6 @@ def work_info_import(request):
             # error_occured = True
             # logger.error(e)
             if create_work_info or not error_lists:
-                print('age aschi')
                 #try:
                 # if name_email_tuple in existing_name_emails:
                 #     raise ValueError("Invalid input!")
