@@ -103,7 +103,7 @@ from employee.methods.methods import (
     get_ordered_badge_ids,
     set_initial_password,
     bulk_create_job_section_import,
-    bulk_create_job_unit_import,
+    #bulk_create_job_unit_import,
 )
 from employee.models import (
     BonusPoint,
@@ -3126,13 +3126,13 @@ def work_info_import(request):
                 error = True
 
             name_email_tuple = (first_name, last_name, email)
-            # if name_email_tuple in existing_name_emails:
-            #     work_info["Name and Email Error"] = (
-            #         "An employee with this first name, last name, and email already exists."
-            #     )
-            #     error = True
-            # else:
-            #     existing_name_emails.add(name_email_tuple)
+            if name_email_tuple in existing_name_emails:
+                work_info["Name and Email Error"] = (
+                    "An employee with this first name, last name, and email already exists."
+                )
+                error = True
+            else:
+                existing_name_emails.add(name_email_tuple)
 
             try:
                 pd.to_datetime(date_joining).date()
@@ -3160,13 +3160,13 @@ def work_info_import(request):
             #     )
             #     error = True
 
-            if badge_id in existing_badge_ids:
-                work_info["Badge ID Error"] = (
-                    f"An Employee with the badge ID already exists"
-                )
-                error = True
-            else:
-                existing_badge_ids.add(badge_id)
+            # if badge_id in existing_badge_ids:
+            #     work_info["Badge ID Error"] = (
+            #         f"An Employee with the badge ID already exists"
+            #     )
+            #     error = True
+            # else:
+            #     existing_badge_ids.add(badge_id)
 
             # if email in existing_usernames:
             #     print('aschi')
@@ -3195,16 +3195,16 @@ def work_info_import(request):
                 # )
                 users = bulk_create_user_import(success_lists)
                 employees = bulk_create_employee_import(success_lists)
-                thread = threading.Thread(
-                    target=set_initial_password, args=(employees,)
-                )
-                thread.start()
+                # thread = threading.Thread(
+                #     target=set_initial_password, args=(employees,)
+                # )
+                # thread.start()
 
                 total_count = len(employees)
                 bulk_create_department_import(success_lists)
                 bulk_create_job_position_import(success_lists)
                 bulk_create_job_section_import(success_lists)
-                bulk_create_job_unit_import(success_lists)
+                #bulk_create_job_unit_import(success_lists)
                 
                 #bulk_create_job_role_import(success_lists)
                 bulk_create_work_types(success_lists)
@@ -3230,7 +3230,6 @@ def work_info_import(request):
             data_frame.to_excel(response, index=False)
             response["X-Error-Count"] = error_count
             return response
-
         if error_lists:
             for item in error_lists:
                 for key, value in error_data.items():

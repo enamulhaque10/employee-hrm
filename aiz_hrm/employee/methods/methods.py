@@ -277,6 +277,8 @@ def optimize_reporting_manager_lookup(success_lists):
         employee_last_name__in=[name.split(" ")[1] for name in manager_names],
     )
 
+    print(manager_names[0], 'manger_namew')
+
     # Step 3: Create a dictionary for quick lookups
     employee_dict = {
         f"{employee.employee_first_name} {employee.employee_last_name}": employee
@@ -371,38 +373,38 @@ def bulk_create_job_section_import(success_lists):
     if job_section_obj_list:
         EmployeeSection.objects.bulk_create(job_section_obj_list)
 
-def bulk_create_job_unit_import(success_lists):
-    """
-    Bulk creation of Job unit instances based on the excel import of employees
-    """
-    job_unit_to_import = {
-        (convert_nan("Employee Unit", work_info), convert_nan("Employee Section", work_info))
-        for work_info in success_lists
-    }
-    sections = {dep.employee_section: dep for dep in EmployeeSection.objects.all()}
-    existing_job_unit = {
-        (job_unit.employee_unit, job_unit.employee_section_id): job_unit
-        for job_unit in EmployeeUnit.objects.all()
-    }
-    job_unit_obj_list = []
-    for job_unit, employee_section_id in job_unit_to_import:
-        if not job_unit or not employee_section_id:
-            continue
+# def bulk_create_job_unit_import(success_lists):
+#     """
+#     Bulk creation of Job unit instances based on the excel import of employees
+#     """
+#     job_unit_to_import = {
+#         (convert_nan("Employee Unit", work_info), convert_nan("Employee Section", work_info))
+#         for work_info in success_lists
+#     }
+#     sections = {dep.employee_section: dep for dep in EmployeeSection.objects.all()}
+#     existing_job_unit = {
+#         (job_unit.employee_unit, job_unit.employee_section_id): job_unit
+#         for job_unit in EmployeeUnit.objects.all()
+#     }
+#     job_unit_obj_list = []
+#     for job_unit, employee_section_id in job_unit_to_import:
+#         if not job_unit or not employee_section_id:
+#             continue
 
-        section_obj = sections.get(employee_section_id)
-        if not section_obj:
-            continue
+#         section_obj = sections.get(employee_section_id)
+#         if not section_obj:
+#             continue
 
-        # Check if this Job Position already exists for this department
-        if (job_unit, section_obj.id) not in existing_job_unit:
-            job_unit_obj = EmployeeUnit(
-                employee_section_id=section_obj, employee_unit=job_unit
-            )
-            job_unit_obj_list.append(job_unit_obj)
-            existing_job_unit[(job_unit, section_obj.id)] = job_unit_obj
+#         # Check if this Job Position already exists for this department
+#         if (job_unit, section_obj.id) not in existing_job_unit:
+#             job_unit_obj = EmployeeUnit(
+#                 employee_section_id=section_obj, employee_unit=job_unit
+#             )
+#             job_unit_obj_list.append(job_unit_obj)
+#             existing_job_unit[(job_unit, section_obj.id)] = job_unit_obj
 
-    if job_unit_obj_list:
-        EmployeeSection.objects.bulk_create(job_unit_obj_list)
+#     if job_unit_obj_list:
+#         EmployeeSection.objects.bulk_create(job_unit_obj_list)
 
 
 def bulk_create_job_role_import(success_lists):
@@ -550,7 +552,7 @@ def bulk_create_work_info_import(success_lists):
     """
     new_work_info_list = []
     update_work_info_list = []
-    print("workinfo")
+    print(success_lists,"workinfo" )
 
     # Filtered data for required lookups
     badge_ids = [row["Employee ID"] for row in success_lists]
@@ -616,6 +618,9 @@ def bulk_create_work_info_import(success_lists):
         for comp in Company.objects.filter(company__in=companies).only("company")
     }
     reporting_manager_dict = optimize_reporting_manager_lookup(success_lists)
+
+    print(reporting_manager_dict,'dict')
+    print(reporting, 'reporting')
     for work_info in success_lists:
         print("insideloop")
         email = work_info["Employee Email(Official)"]
@@ -653,24 +658,26 @@ def bulk_create_work_info_import(success_lists):
         )
 
 
-        contract_end_date = (
-            work_info["Contract End Date"]
-            if not pd.isnull(work_info["Contract End Date"])
-            else None
-        )
-        basic_salary = (
-            convert_nan("Basic Salary", work_info)
-            if type(convert_nan("Basic Salary", work_info)) is int
-            else 0
-        )
-        salary_hour = (
-            convert_nan("Salary Hour", work_info)
-            if type(convert_nan("Salary Hour", work_info)) is int
-            else 0
-        )
+        # contract_end_date = (
+        #     work_info["Contract End Date"]
+        #     if not pd.isnull(work_info["Contract End Date"])
+        #     else None
+        # )
+        # basic_salary = (
+        #     convert_nan("Basic Salary", work_info)
+        #     if type(convert_nan("Basic Salary", work_info)) is int
+        #     else 0
+        # )
+        # salary_hour = (
+        #     convert_nan("Salary Hour", work_info)
+        #     if type(convert_nan("Salary Hour", work_info)) is int
+        #     else 0
+        # )
 
         employee_obj = existing_employees.get(badge_id)
         employee_work_info = existing_employee_work_infos.get(employee_obj)
+
+        print(employee_work_info, 'employee-work-info')
 
         if employee_work_info is None:
             print("newwork")
@@ -693,11 +700,11 @@ def bulk_create_work_info_import(success_lists):
                 last_promotion_date=(
                     last_promotion_date if not pd.isnull(last_promotion_date) else datetime.today()
                 ),
-                contract_end_date=(
-                    contract_end_date if not pd.isnull(contract_end_date) else None
-                ),
-                basic_salary=basic_salary,
-                salary_hour=salary_hour,
+                # contract_end_date=(
+                #     contract_end_date if not pd.isnull(contract_end_date) else None
+                # ),
+                # basic_salary=basic_salary,
+                # salary_hour=salary_hour,
             )
             new_work_info_list.append(employee_work_info)
         else:
@@ -719,11 +726,11 @@ def bulk_create_work_info_import(success_lists):
             employee_work_info.last_promotion_date = (
                 last_promotion_date if not pd.isnull(last_promotion_date) else datetime.today()
             )
-            employee_work_info.contract_end_date = (
-                contract_end_date if not pd.isnull(contract_end_date) else None
-            )
-            employee_work_info.basic_salary = basic_salary
-            employee_work_info.salary_hour = salary_hour
+            # employee_work_info.contract_end_date = (
+            #     contract_end_date if not pd.isnull(contract_end_date) else None
+            # )
+            # employee_work_info.basic_salary = basic_salary
+            # employee_work_info.salary_hour = salary_hour
             update_work_info_list.append(employee_work_info)
 
     if new_work_info_list:
