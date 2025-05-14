@@ -102,7 +102,7 @@ from employee.methods.methods import (
     convert_nan,
     get_ordered_badge_ids,
     set_initial_password,
-    bulk_create_job_section_import,
+    #bulk_create_job_section_import,
     #bulk_create_job_unit_import,
 )
 from employee.models import (
@@ -3089,6 +3089,8 @@ def work_info_import(request):
             last_name = convert_nan("Last Name", work_info)
             badge_id = work_info["Employee ID"] 
             date_joining = work_info["Date Of Joining"]
+            iso_date = datetime.strptime(str(date_joining), "%Y-%m-%d %H:%M:%S")
+            date_of_joining = iso_date.date().isoformat()
             #last_promotion_date = work_info["Last Promotion Date"]
             #contract_end_date = work_info["Contract End Date"]
             # basic_salary = convert_nan("Basic Salary", work_info)
@@ -3203,7 +3205,7 @@ def work_info_import(request):
                 total_count = len(employees)
                 bulk_create_department_import(success_lists)
                 bulk_create_job_position_import(success_lists)
-                bulk_create_job_section_import(success_lists)
+                #bulk_create_job_section_import(success_lists)
                 #bulk_create_job_unit_import(success_lists)
                 
                 #bulk_create_job_role_import(success_lists)
