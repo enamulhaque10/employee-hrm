@@ -125,7 +125,6 @@ def bulk_create_user_import(success_lists):
     """
     Bulk creation of user instances based on the excel import of employees
     """
-    print(success_lists, 'success')
     user_obj_list = []
     cleaned_success_list = [
     {k.strip(): v for k, v in row.items()} for row in success_lists
@@ -277,7 +276,7 @@ def optimize_reporting_manager_lookup(success_lists):
         employee_last_name__in=[name.split(" ")[1] for name in manager_names],
     )
 
-    print(manager_names[0], 'manger_namew')
+    print(manager_names, 'manger_namew')
 
     # Step 3: Create a dictionary for quick lookups
     employee_dict = {
@@ -373,38 +372,38 @@ def bulk_create_job_section_import(success_lists):
     if job_section_obj_list:
         EmployeeSection.objects.bulk_create(job_section_obj_list)
 
-# def bulk_create_job_unit_import(success_lists):
-#     """
-#     Bulk creation of Job unit instances based on the excel import of employees
-#     """
-#     job_unit_to_import = {
-#         (convert_nan("Employee Unit", work_info), convert_nan("Employee Section", work_info))
-#         for work_info in success_lists
-#     }
-#     sections = {dep.employee_section: dep for dep in EmployeeSection.objects.all()}
-#     existing_job_unit = {
-#         (job_unit.employee_unit, job_unit.employee_section_id): job_unit
-#         for job_unit in EmployeeUnit.objects.all()
-#     }
-#     job_unit_obj_list = []
-#     for job_unit, employee_section_id in job_unit_to_import:
-#         if not job_unit or not employee_section_id:
-#             continue
+def bulk_create_job_unit_import(success_lists):
+    """
+    Bulk creation of Job unit instances based on the excel import of employees
+    """
+    job_unit_to_import = {
+        (convert_nan("Employee Unit", work_info), convert_nan("Employee Section", work_info))
+        for work_info in success_lists
+    }
+    sections = {dep.employee_section: dep for dep in EmployeeSection.objects.all()}
+    existing_job_unit = {
+        (job_unit.employee_unit, job_unit.employee_section_id): job_unit
+        for job_unit in EmployeeUnit.objects.all()
+    }
+    job_unit_obj_list = []
+    for job_unit, employee_section in job_unit_to_import:
+        if not job_unit or not employee_section:
+            continue
 
-#         section_obj = sections.get(employee_section_id)
-#         if not section_obj:
-#             continue
+        section_obj = sections.get(employee_section)
+        if not section_obj:
+            continue
 
-#         # Check if this Job Position already exists for this department
-#         if (job_unit, section_obj.id) not in existing_job_unit:
-#             job_unit_obj = EmployeeUnit(
-#                 employee_section_id=section_obj, employee_unit=job_unit
-#             )
-#             job_unit_obj_list.append(job_unit_obj)
-#             existing_job_unit[(job_unit, section_obj.id)] = job_unit_obj
+        # Check if this Job Position already exists for this department
+        if (job_unit, section_obj.id) not in existing_job_unit:
+            job_unit_obj = EmployeeUnit(
+                employee_section_id=section_obj, employee_unit=job_unit
+            )
+            job_unit_obj_list.append(job_unit_obj)
+            existing_job_unit[(job_unit, section_obj.id)] = job_unit_obj
 
-#     if job_unit_obj_list:
-#         EmployeeSection.objects.bulk_create(job_unit_obj_list)
+    if job_unit_obj_list:
+        EmployeeSection.objects.bulk_create(job_unit_obj_list)
 
 
 def bulk_create_job_role_import(success_lists):
@@ -566,7 +565,6 @@ def bulk_create_work_info_import(success_lists):
     section = set(row.get("Employee Section") for row in success_lists)
     unit = set(row.get("Employee Unit") for row in success_lists)
     grade = set(row.get("Employee Grade") for row in success_lists)
-    reporting = set(row.get("Reporting Manager") for row in success_lists)
 
     # Bulk fetch related objects and reduce repeated DB calls
     existing_employees = {
@@ -591,6 +589,21 @@ def bulk_create_work_info_import(success_lists):
         .select_related("department_id")
         .only("department_id", "job_position")
     }
+
+    existing_job_sections = {
+        (jp.department_id, jp.employee_section): jp
+        for jp in EmployeeSection.objects.filter(employee_section__in=section)
+        .select_related("department_id")
+        .only("department_id", "employee_section")
+    }
+
+    existing_job_units = {
+        (jp.employee_section_id, jp.employee_unit): jp
+        for jp in EmployeeUnit.objects.filter(employee_unit__in=unit)
+        .select_related("employee_section_id")
+        .only("employee_section_id", "employee_unit")
+    }
+
     existing_job_roles = {
         (jr.job_position_id, jr.job_role): jr
         for jr in JobRole.objects.filter(job_role__in=job_roles)
@@ -619,8 +632,6 @@ def bulk_create_work_info_import(success_lists):
     }
     reporting_manager_dict = optimize_reporting_manager_lookup(success_lists)
 
-    print(reporting_manager_dict,'dict')
-    print(reporting, 'reporting')
     for work_info in success_lists:
         print("insideloop")
         email = work_info["Employee Email(Official)"]
@@ -643,6 +654,24 @@ def bulk_create_work_info_import(success_lists):
 
         company_obj = existing_companies.get(work_info.get("Company"))
         location = work_info.get("Location")
+        section_key = (
+            existing_departments.get(work_info.get("Department")),
+            work_info.get("Employee Section"),
+
+        )
+        section_obj = existing_job_sections.get(section_key)
+        unit_key = (
+            existing_job_sections.get(work_info.get("Employee Section")),
+            work_info.get("Employee Unit"),
+        )
+        unit_obj = existing_job_units.get(work_info.get("Employee Unit"))
+
+        print(existing_job_sections, 'sectionsobj', section_obj, 'section', section_key)
+        print(existing_job_units, 'department', unit_obj, 'unit', unit_key)
+
+
+
+
 
         # Parsing dates and salary 
         date_joining = (
@@ -677,8 +706,6 @@ def bulk_create_work_info_import(success_lists):
         employee_obj = existing_employees.get(badge_id)
         employee_work_info = existing_employee_work_infos.get(employee_obj)
 
-        print(employee_work_info, 'employee-work-info')
-
         if employee_work_info is None:
             print("newwork")
             # Create a new instance
@@ -700,6 +727,8 @@ def bulk_create_work_info_import(success_lists):
                 last_promotion_date=(
                     last_promotion_date if not pd.isnull(last_promotion_date) else datetime.today()
                 ),
+                employee_section_id=section_obj,
+                employee_unit_id=unit_obj,
                 # contract_end_date=(
                 #     contract_end_date if not pd.isnull(contract_end_date) else None
                 # ),
