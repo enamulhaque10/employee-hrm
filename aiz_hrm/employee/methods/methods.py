@@ -27,6 +27,7 @@ from base.models import (
     EmployeeUnit,
 )
 from employee.models import Employee, EmployeeWorkInformation
+from aiz_job_experiences.models import EmployeeJobExperiences
 
 logger = logging.getLogger(__name__)
 
@@ -665,7 +666,6 @@ def bulk_create_work_info_import(success_lists):
             work_info.get("Employee Unit"),
         )
         unit_obj = existing_job_units.get(unit_key)
-
         
 
         # Parsing dates and salary 
@@ -702,7 +702,6 @@ def bulk_create_work_info_import(success_lists):
         employee_work_info = existing_employee_work_infos.get(employee_obj)
 
         if employee_work_info is None:
-            print("newwork")
             # Create a new instance
             employee_work_info = EmployeeWorkInformation(
                 employee_id=employee_obj,
@@ -733,7 +732,6 @@ def bulk_create_work_info_import(success_lists):
             )
             new_work_info_list.append(employee_work_info)
         else:
-            print("update work")
             # Update the existing instance
             employee_work_info.email = email
             employee_work_info.department_id = department_obj
@@ -801,9 +799,63 @@ def bulk_create_job_experience_info_import(success_lists):
         emp.badge_id: emp
         for emp in Employee.objects.filter(badge_id__in=badge_ids).only("badge_id")
         }
-     employee_obj = existing_employees.get(badge_id)
-     experience1 = work_info["Job Experience 1"]
-     experience2 = work_info["Job Experience 2"]
-     experience3 = work_info["Job Experience 3"]
-     experience4 = work_info["Job Experience 4"]
-     #n_name,n_number,n_relation = [part.strip() for part in nominee.split(',')]
+     employeee_job_experience = []
+     for work_info in success_lists:
+        badge_id = work_info["Employee ID"]
+        employee_obj = existing_employees.get(badge_id)
+        experience1 = work_info["Job Experience 1"]
+        company_name1,designation1,experience_year1 = map(str.strip, experience1.split(","))
+        duration_parts1 = experience_year1.split()
+        experience_year1_value= float(duration_parts1.split()[0])
+        #[part.strip() for part in str(experience1).split(',')]
+        experience2 = work_info["Job Experience 2"]
+        company_name2,designation2,experience_year2 = map(str.strip, experience2.split(","))
+        duration_parts2 = experience_year2.split()
+        experience_year2_value= float(duration_parts2.split()[0])
+
+        #[part.strip() for part in str(experience2).split(',')]
+        experience3 = work_info["Job Experience 3"]
+        company_name3,designation3,experience_year3 = map(str.strip, experience3.split(","))
+        duration_parts3 = experience_year3.split()
+        experience_year3_value= float(duration_parts3.split()[0])
+
+        #[part.strip() for part in str(experience3).split(',')]
+        experience4 = work_info["Job Experience 4"]
+        company_name4,designation4,experience_year4 = map(str.strip, experience4.split(","))
+        duration_parts4 = experience_year4.split()
+        experience_year4_value= float(duration_parts4.split()[0])
+
+        #[part.strip() for part in str(experience4).split(',')]
+        #n_name,n_number,n_relation = [part.strip() for part in nominee.split(',')] 
+        
+
+        for i in range(4):
+            if i==0:
+                company_name = company_name1 if company_name1 else None
+                designation = designation1 if designation1 else None
+                year_of_experience = experience_year1_value if experience_year1_value else None
+            elif i==1:
+                company_name = company_name2 if company_name2 else None
+                designation = designation2 if designation2 else None
+                year_of_experience = experience_year2_value if experience_year2_value else None
+            if i==2:
+                company_name = company_name3 if company_name3 else None
+                designation = designation3 if designation3 else None
+                year_of_experience = experience_year3_value if experience_year3_value else None
+            if i==3:
+                company_name = company_name4 if company_name4 else None
+                designation = designation4 if designation4 else None
+                year_of_experience = experience_year4_value if experience_year4_value else None
+
+            employee_experiece = EmployeeJobExperiences(
+
+                    employee_id=employee_obj,
+                    company_name=company_name,
+                    designation=designation,
+                    year_of_experience= year_of_experience
+                    )
+            employeee_job_experience.append(employee_experiece)
+    
+        EmployeeJobExperiences.objects.bulk_create(employeee_job_experience)
+
+        
