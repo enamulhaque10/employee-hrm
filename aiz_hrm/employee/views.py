@@ -104,7 +104,10 @@ from employee.methods.methods import (
     set_initial_password,
     #bulk_create_job_section_import,
     #bulk_create_job_unit_import,
-    bulk_create_job_experience_info_import
+    bulk_create_job_experience_info_import,
+    bulk_create_educational_info_import,
+    bulk_create_professional_training_import,
+    bulk_create_job_reference_import
 )
 from employee.models import (
     BonusPoint,
@@ -3215,6 +3218,9 @@ def work_info_import(request):
                 bulk_create_employee_types(success_lists)
                 bulk_create_work_info_import(success_lists)
                 bulk_create_job_experience_info_import(success_lists)
+                bulk_create_educational_info_import(success_lists)
+                bulk_create_professional_training_import(success_lists)
+                bulk_create_job_reference_import(success_lists)
 
             # except Exception as e:
             #     error_occured = True

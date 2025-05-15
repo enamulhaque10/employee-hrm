@@ -29,6 +29,8 @@ from base.models import (
 from employee.models import Employee, EmployeeWorkInformation
 from aiz_job_experiences.models import EmployeeJobExperiences
 from aiz_employee_education.models import EmployeeEducation
+from aiz_employee_training.models import EmployeeTraining
+from aiz_job_reference.models import JobReference
 
 logger = logging.getLogger(__name__)
 
@@ -886,6 +888,56 @@ def bulk_create_educational_info_import(success_lists):
 
 
         EmployeeEducation.objects.bulk_create(employee_total_education)
+
+def bulk_create_professional_training_import(success_lists):
+    badge_ids = [row["Employee ID"] for row in success_lists]
+    existing_employees = {
+        emp.badge_id: emp
+        for emp in Employee.objects.filter(badge_id__in=badge_ids).only("badge_id")
+        }
+    employee_training = []
+    for work_info in success_lists:
+        badge_id = work_info["Employee ID"]
+        employee_obj = existing_employees.get(badge_id)
+        professional_training = work_info["Professional Degree or Specialized Training"]
+        
+        training_name,institution = ([part.strip() for part in professional_training.split(",")] if not pd.isna(professional_training)  else ["None", "None"])
+
+        training = EmployeeTraining(
+            employee_id=employee_obj,
+            training_name=training_name,
+            institution=institution
+
+        )
+        employee_training.append(training)
+        EmployeeTraining.objects.bulk_create(employee_training)
+
+def bulk_create_job_reference_import(success_lists):
+    badge_ids = [row["Employee ID"] for row in success_lists]
+    existing_employees = {
+        emp.badge_id: emp
+        for emp in Employee.objects.filter(badge_id__in=badge_ids).only("badge_id")
+        }
+    employee_reference= []
+    for work_info in success_lists:
+        badge_id = work_info["Employee ID"]
+        employee_obj = existing_employees.get(badge_id)
+        job_reference = work_info["Job Reference"]
+        reference_name,department,company_name,mobile_number = ([part.strip() for part in job_reference.split(",")] if not pd.isna(job_reference)  else ["None", "None", "None", "None"])
+        
+        reference = JobReference(
+            employee_id=employee_obj,
+            reference_name=reference_name,
+            department=department,
+            company_name=company_name,
+            mobile_number=mobile_number
+
+        )
+        employee_reference.append(reference)
+        JobReference.objects.bulk_create(employee_reference)
+
+
+
         
 
 
