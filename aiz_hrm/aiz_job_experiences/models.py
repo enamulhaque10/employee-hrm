@@ -24,7 +24,7 @@ class EmployeeJobExperiences(aizModel):
     employee_id = models.ForeignKey(Employee, on_delete=models.PROTECT)
     company_name = models.CharField(max_length=50,null=True,blank=True,default="",)
     designation = models.CharField(max_length=50,null=False,blank=False,default="",)
-    year_of_experience = models.FloatField(default=0, help_text="Employee Year Of Experience.")
+    year_of_experience = models.CharField(max_length=50, null=True, blank=True, help_text="Employee Year Of Experience.")
 
     def __str__(self) -> str:
         return f"{self.employee_id}-{self.company_name}"

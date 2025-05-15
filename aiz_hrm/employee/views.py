@@ -3341,7 +3341,6 @@ def work_info_export(request):
             elif data == "False":
                 data = _("No")
             job_experiences = EmployeeJobExperiences.objects.filter(employee_id=employee.id)
-
             
             if column_value == 'employee_job_experience_1':
                 company = job_experiences[0].company_name if len(job_experiences)>0 else ""

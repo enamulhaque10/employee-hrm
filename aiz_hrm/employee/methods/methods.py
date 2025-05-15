@@ -28,6 +28,7 @@ from base.models import (
 )
 from employee.models import Employee, EmployeeWorkInformation
 from aiz_job_experiences.models import EmployeeJobExperiences
+from aiz_employee_education.models import EmployeeEducation
 
 logger = logging.getLogger(__name__)
 
@@ -799,63 +800,95 @@ def bulk_create_job_experience_info_import(success_lists):
         emp.badge_id: emp
         for emp in Employee.objects.filter(badge_id__in=badge_ids).only("badge_id")
         }
-     employeee_job_experience = []
+     employee_job_experience = []
      for work_info in success_lists:
         badge_id = work_info["Employee ID"]
         employee_obj = existing_employees.get(badge_id)
         experience1 = work_info["Job Experience 1"]
-        company_name1,designation1,experience_year1 = map(str.strip, experience1.split(","))
-        duration_parts1 = experience_year1.split()
-        experience_year1_value= float(duration_parts1.split()[0])
-        #[part.strip() for part in str(experience1).split(',')]
+        company_name1,designation1,experience_year1 = ([part.strip() for part in experience1.split(",")] if not pd.isna(experience1)  else ["None", "None", "0 years"])
         experience2 = work_info["Job Experience 2"]
-        company_name2,designation2,experience_year2 = map(str.strip, experience2.split(","))
-        duration_parts2 = experience_year2.split()
-        experience_year2_value= float(duration_parts2.split()[0])
-
-        #[part.strip() for part in str(experience2).split(',')]
+        company_name2,designation2,experience_year2 = ([part.strip() for part in experience2.split(",")] if not pd.isna(experience2) else ["None", "None", "0 years"])
+        
         experience3 = work_info["Job Experience 3"]
-        company_name3,designation3,experience_year3 = map(str.strip, experience3.split(","))
-        duration_parts3 = experience_year3.split()
-        experience_year3_value= float(duration_parts3.split()[0])
-
-        #[part.strip() for part in str(experience3).split(',')]
+        
+        company_name3,designation3,experience_year3 = ([part.strip() for part in experience3.split(",")] if not pd.isna(experience3)  else ["None", "None", "0 years"])
+       
         experience4 = work_info["Job Experience 4"]
-        company_name4,designation4,experience_year4 = map(str.strip, experience4.split(","))
-        duration_parts4 = experience_year4.split()
-        experience_year4_value= float(duration_parts4.split()[0])
-
-        #[part.strip() for part in str(experience4).split(',')]
-        #n_name,n_number,n_relation = [part.strip() for part in nominee.split(',')] 
+        company_name4,designation4,experience_year4 = ([part.strip() for part in experience4.split(",")] if not pd.isna(experience4) else ["None", "None", "0 years"])
         
 
         for i in range(4):
             if i==0:
                 company_name = company_name1 if company_name1 else None
                 designation = designation1 if designation1 else None
-                year_of_experience = experience_year1_value if experience_year1_value else None
+                year_of_experience = experience_year1 if experience_year1 else None
             elif i==1:
                 company_name = company_name2 if company_name2 else None
                 designation = designation2 if designation2 else None
-                year_of_experience = experience_year2_value if experience_year2_value else None
+                year_of_experience = experience_year2 if experience_year2 else None
             if i==2:
                 company_name = company_name3 if company_name3 else None
                 designation = designation3 if designation3 else None
-                year_of_experience = experience_year3_value if experience_year3_value else None
+                year_of_experience = experience_year3 if experience_year3 else None
             if i==3:
                 company_name = company_name4 if company_name4 else None
                 designation = designation4 if designation4 else None
-                year_of_experience = experience_year4_value if experience_year4_value else None
+                year_of_experience = experience_year4 if experience_year4 else None
 
-            employee_experiece = EmployeeJobExperiences(
-
+            employee_experience = EmployeeJobExperiences(
                     employee_id=employee_obj,
                     company_name=company_name,
                     designation=designation,
                     year_of_experience= year_of_experience
                     )
-            employeee_job_experience.append(employee_experiece)
+            employee_job_experience.append(employee_experience)
     
-        EmployeeJobExperiences.objects.bulk_create(employeee_job_experience)
+        EmployeeJobExperiences.objects.bulk_create(employee_job_experience)
+
+
+def bulk_create_educational_info_import(success_lists):
+    badge_ids = [row["Employee ID"] for row in success_lists]
+    existing_employees = {
+        emp.badge_id: emp
+        for emp in Employee.objects.filter(badge_id__in=badge_ids).only("badge_id")
+        }
+    employee_total_education = []
+    for work_info in success_lists:
+        badge_id = work_info["Employee ID"]
+        employee_obj = existing_employees.get(badge_id)
+        graduation_subject = work_info["Graduation Subject"]
+        graduation_university = work_info["Graduation University"]
+        post_graduation_subject = work_info["Post Graduation Subject"]
+        post_graduation_university = work_info["Post Graduation University"]
+        highest_educational_degree = work_info["Highest Educational Degree"]
+
+        for i in range(2):
+
+            if i == 0:
+                employee_education = EmployeeEducation(
+                employee_id=employee_obj,
+                education_label="bachelor",
+                institution_name=graduation_university,
+                subject=graduation_subject
+
+            )
+
+            elif i == 1:
+                employee_education = EmployeeEducation(
+                employee_id=employee_obj,
+                education_label="masters",
+                institution_name=post_graduation_university,
+                subject=post_graduation_subject
+
+                )
+            employee_total_education.append(employee_education)
+    
+
+
+        EmployeeEducation.objects.bulk_create(employee_total_education)
+        
+
+
+
 
         
