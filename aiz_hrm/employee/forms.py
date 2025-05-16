@@ -343,6 +343,10 @@ class EmployeeWorkInformationForm(ModelForm):
             "service_length_in_incepta",
             "mobile",
             "email",
+            "casual_employee",
+            "casual_id",
+            "casual_employee_joining_date",
+            "casual_employee_payroll_joining_date"
             
         )
         labels = {
@@ -354,6 +358,9 @@ class EmployeeWorkInformationForm(ModelForm):
             "date_joining": DateInput(attrs={"type": "date"}),
             "last_promotion_date": DateInput(attrs={"type": "date"}),
             "contract_end_date": DateInput(attrs={"type": "date"}),
+            "casual_employee_joining_date": DateInput(attrs={"type": "date"}),
+            "casual_employee_payroll_joining_date": DateInput(attrs={"type": "date"}),
+            
         }
 
     def __init__(self, *args, disable=False, **kwargs):
@@ -365,6 +372,11 @@ class EmployeeWorkInformationForm(ModelForm):
                 "onchange": "jobChange($(this))",
             }
         )
+        # self.fields["casual_id"].widget.attrs.update({"id": "id_casual_id"})
+        # self.fields["casual_employee_joining_date"].widget.attrs.update({"id": "id_casual_employee_joining_date"})
+        # self.fields["casual_employee_payroll_joining_date"].widget.attrs.update({"id": "id_casual_employee_payroll_joining_date"})
+        # self.fields["casual_employee"].widget.attrs.update({"id": "id_casual_employee"})
+
 
         for field in self.fields:
             self.fields[field].widget.attrs["placeholder"] = self.fields[field].label
@@ -379,7 +391,13 @@ class EmployeeWorkInformationForm(ModelForm):
             "Employee Grade": "work_type",
             "Employee Category": "employee_type",
             "Shift": "employee_shift",
-            "Joining Date":"joining_date"
+            "Joining Date":"joining_date",
+            "Offical contact":"mobile",
+            "Offical Email": "email",
+            "Casual Employee": "casual_employee",
+            "Casual Id":"casual_id",
+            "Casual Employee Joining Date":"casual_employee_joining_date",
+            "Casual Employee Payroll Date":"casual_employee_payroll_joining_date"
         }
         urls = {
             "Department": "#dynamicDept",

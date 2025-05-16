@@ -819,6 +819,14 @@ class EmployeeWorkInformation(models.Model):
         max_length=50, blank=True, null=True, choices=choice_authorization, default="no"
     )
 
+    casual_employee = models.BooleanField(default=False, verbose_name="Casual Employee")
+    casual_id = models.CharField(max_length=50, blank=True,null=True,verbose_name="Casual Id")
+    casual_employee_joining_date = models.DateField(blank=True,null=True, verbose_name="Casual Joining Date")
+    casual_employee_payroll_joining_date = models.DateField(blank=True,null=True, verbose_name="Payroll Joining Date")
+
+    
+
+
     def __str__(self) -> str:
         return f"{self.employee_id} - {self.job_position_id}"
 
