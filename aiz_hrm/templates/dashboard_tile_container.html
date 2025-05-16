@@ -391,7 +391,67 @@
         </div>
     {% endif %}
 {% endif %}
-{% if not 'objective_status' in charts and "pms"|app_installed %}
+{% if not 'religion_chart' in charts %}
+    {% if 'religion_chart'|feature_is_accessible:request or perms.employee.view_employee or request.user|is_reportingmanager %}
+        <div class="col-12 col-sm-12 col-md-12 col-lg-4 oh-card-dashboard--moveable dashboardChart" id="movable8">
+            <div class="oh-card-dashboard oh-card-dashboard--no-scale oh-card-dashboard--transparent">
+                <div class="oh-card-dashboard__header oh-card-dashboard__header--divider">
+                    <span class="oh-card-dashboard__title">{% trans "Relegion Chart" %}</span>
+                    <span class="float-end chart_close_button " role="button" data-chart="religion_chart"
+                        hx-post="{% url 'dashboard-components-toggle' %}?chart_id=religion_chart" hx-target="#movable8"
+                        hx-swap="outerHTML">
+                        <i class="material-icons fw-lighter fs-5">close</i>
+                    </span>
+                </div>
+                <div class="oh-card-dashboard__body">
+                    <canvas id="religionChart" style="cursor: pointer"></canvas>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endif %}
+
+{% if not 'blood_group_chart' in charts %}
+    {% if 'blood_group_chart'|feature_is_accessible:request or perms.employee.view_employee or request.user|is_reportingmanager %}
+        <div class="col-12 col-sm-12 col-md-12 col-lg-4 oh-card-dashboard--moveable dashboardChart" id="movable9">
+            <div class="oh-card-dashboard oh-card-dashboard--no-scale oh-card-dashboard--transparent">
+                <div class="oh-card-dashboard__header oh-card-dashboard__header--divider">
+                    <span class="oh-card-dashboard__title">{% trans "Blood Group" %}</span>
+                    <span class="float-end chart_close_button " role="button" data-chart="blood_group_chart"
+                        hx-post="{% url 'dashboard-components-toggle' %}?chart_id=blood_group_chart" hx-target="#movable9"
+                        hx-swap="outerHTML">
+                        <i class="material-icons fw-lighter fs-5">close</i>
+                    </span>
+                </div>
+                <div class="oh-card-dashboard__body">
+                    <canvas id="bloodGroup" style="cursor: pointer"></canvas>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endif %}
+
+{% if not 'marital_chart' in charts %}
+    {% if 'marital_chart'|feature_is_accessible:request or perms.employee.view_employee or request.user|is_reportingmanager %}
+        <div class="col-12 col-sm-12 col-md-12 col-lg-4 oh-card-dashboard--moveable dashboardChart" id="movable10">
+            <div class="oh-card-dashboard oh-card-dashboard--no-scale oh-card-dashboard--transparent">
+                <div class="oh-card-dashboard__header oh-card-dashboard__header--divider">
+                    <span class="oh-card-dashboard__title">{% trans "Marital Status" %}</span>
+                    <span class="float-end chart_close_button " role="button" data-chart="marital_chart"
+                        hx-post="{% url 'dashboard-components-toggle' %}?chart_id=marital_chart" hx-target="#movable10"
+                        hx-swap="outerHTML">
+                        <i class="material-icons fw-lighter fs-5">close</i>
+                    </span>
+                </div>
+                <div class="oh-card-dashboard__body">
+                    <canvas id="maritalChart" style="cursor: pointer"></canvas>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endif %}
+
+<!-- {% if not 'objective_status' in charts and "pms"|app_installed %}
     <div class="col-12 col-sm-12 col-md-12 col-lg-4 oh-card-dashboard--moveable dashboardChart" id="movable9">
         <div class="oh-card-dashboard oh-card-dashboard--no-scale oh-card-dashboard--transparent">
             <div class="oh-card-dashboard__header oh-card-dashboard__header--divider">
@@ -426,8 +486,8 @@
             </div>
         </div>
     {% endif %}
-{% endif %}
-{% if "pms"|app_installed and not 'feedback_status' in charts %}
+{% endif %} -->
+<!-- {% if "pms"|app_installed and not 'feedback_status' in charts %}
     {% if perms.pms.view_feedback or request.user|is_reportingmanager %}
         <div class="col-12 col-sm-12 col-md-12 col-lg-4 oh-card-dashboard--moveable dashboardChart" id="movable11">
             <div class="oh-card-dashboard oh-card-dashboard--no-scale oh-card-dashboard--transparent">
@@ -447,7 +507,7 @@
             </div>
         </div>
     {% endif %}
-{% endif %}
+{% endif %} -->
 {% if not 'shift_request_approve' in charts %}
     {% if perms.base.change_shiftrequest or request.user|is_reportingmanager %}
         <div class="col-12 col-sm-12 col-md-12 col-lg-6 oh-card-dashboard--moveable dashboardChart"

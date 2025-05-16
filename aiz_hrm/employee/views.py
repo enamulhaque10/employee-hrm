@@ -2963,6 +2963,9 @@ def work_info_import(request):
             "Employee Category",
             "Date Of Joining",
             "Last Promotion Date",
+            "Casual ID for Casual Employee",
+            "Joining date for Casual Employee",
+            "Payroll Enrollment date for Casual Employee",
             "Service Length In Incepta",
             "Date of Birth",
             "Job Experience 1",
@@ -3611,6 +3614,82 @@ def dashboard_employee_gender(request):
                     len(employees.filter(gender="male")),
                     len(employees.filter(gender="female")),
                     len(employees.filter(gender="other")),
+                ],
+            },
+        ],
+        "labels": labels,
+    }
+    return JsonResponse(response)
+
+
+@login_required
+def dashboard_employee_relegion(request):
+    """
+    This method is used to filter out relegion vise employees
+    """
+    labels = [_("Islam"), _("Hinduism"), _("Buddhism"), _("Christianity")]
+    employees = Employee.objects.filter(is_active=True)
+
+    response = {
+        "dataSet": [
+            {
+                "label": _("Employees"),
+                "data": [
+                    len(employees.filter(employee_religion="Islam")),
+                    len(employees.filter(employee_religion="Hinduism")),
+                    len(employees.filter(employee_religion="Buddhism")),
+                    len(employees.filter(employee_religion="Christianity")),
+                    
+                ],
+            },
+        ],
+        "labels": labels,
+    }
+    return JsonResponse(response)
+
+@login_required
+def dashboard_employee_marital_status(request):
+  
+    labels = [_("Single"), _("Married"), _("Divorced"),]
+    employees = Employee.objects.filter(is_active=True)
+
+    response = {
+        "dataSet": [
+            {
+                "label": _("Employees"),
+                "data": [
+                    len(employees.filter(marital_status="single")),
+                    len(employees.filter(marital_status="married")),
+                    len(employees.filter(marital_status="divorced")),
+                    
+                ],
+            },
+        ],
+        "labels": labels,
+    }
+    return JsonResponse(response)
+
+
+@login_required
+def dashboard_employee_blood_group(request):
+    
+    labels = [_("A+"), _("A-"), _("B+"), _("B-"),_("AB+"),_("AB-"),_("O+"),_("O-")]
+    employees = Employee.objects.filter(is_active=True)
+
+    response = {
+        "dataSet": [
+            {
+                "label": _("Employees"),
+                "data": [
+                    len(employees.filter(employee_blood_group="A+")),
+                    len(employees.filter(employee_blood_group="A-")),
+                    len(employees.filter(employee_blood_group="B+")),
+                    len(employees.filter(employee_blood_group="B-")),
+                    len(employees.filter(employee_blood_group="AB+")),
+                    len(employees.filter(employee_blood_group="AB-")),
+                    len(employees.filter(employee_blood_group="O+")),
+                    len(employees.filter(employee_blood_group="O-")),
+                    
                 ],
             },
         ],

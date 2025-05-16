@@ -72,6 +72,111 @@ $(document).ready(function () {
         }
     }
 
+    function religionChart(dataSet, labels) {
+        const data = {
+            labels: labels,
+            datasets: dataSet,
+        };
+        // Create chart using the Chart.js library
+        window["religionChart"] = {};
+        if (document.getElementById("religionChart")) {
+            const ctx = document.getElementById("religionChart").getContext("2d");
+            religionChart = new Chart(ctx, {
+                type: "doughnut",
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    onClick: (e, activeEls) => {
+                        let datasetIndex = activeEls[0].datasetIndex;
+                        let dataIndex = activeEls[0].index;
+                        let datasetLabel = e.chart.data.datasets[datasetIndex].label;
+                        let value = e.chart.data.datasets[datasetIndex].data[dataIndex];
+                        let label = e.chart.data.labels[dataIndex];
+                        localStorage.removeItem("savedFilters");
+                        window.location.href =
+                            "/employee/employee-view?religion=" + label;
+                    },
+                },
+                plugins: [
+                    {
+                        afterRender: (chart) => emptyChart(chart),
+                    },
+                ],
+            });
+        }
+    }
+
+    function bloodGroup(dataSet, labels) {
+        const data = {
+            labels: labels,
+            datasets: dataSet,
+        };
+        // Create chart using the Chart.js library
+        window["bloodGroup"] = {};
+        if (document.getElementById("bloodGroup")) {
+            const ctx = document.getElementById("bloodGroup").getContext("2d");
+            bloodGroup = new Chart(ctx, {
+                type: "doughnut",
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    onClick: (e, activeEls) => {
+                        let datasetIndex = activeEls[0].datasetIndex;
+                        let dataIndex = activeEls[0].index;
+                        let datasetLabel = e.chart.data.datasets[datasetIndex].label;
+                        let value = e.chart.data.datasets[datasetIndex].data[dataIndex];
+                        let label = e.chart.data.labels[dataIndex];
+                        localStorage.removeItem("savedFilters");
+                        window.location.href =
+                            "/employee/employee-view?bloodGroup=" + label;
+                    },
+                },
+                plugins: [
+                    {
+                        afterRender: (chart) => emptyChart(chart),
+                    },
+                ],
+            });
+        }
+    }
+
+    function maritalChart(dataSet, labels) {
+        const data = {
+            labels: labels,
+            datasets: dataSet,
+        };
+        // Create chart using the Chart.js library
+        window["maritalChart"] = {};
+        if (document.getElementById("maritalChart")) {
+            const ctx = document.getElementById("maritalChart").getContext("2d");
+            maritalChart = new Chart(ctx, {
+                type: "doughnut",
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    onClick: (e, activeEls) => {
+                        let datasetIndex = activeEls[0].datasetIndex;
+                        let dataIndex = activeEls[0].index;
+                        let datasetLabel = e.chart.data.datasets[datasetIndex].label;
+                        let value = e.chart.data.datasets[datasetIndex].data[dataIndex];
+                        let label = e.chart.data.labels[dataIndex];
+                        localStorage.removeItem("savedFilters");
+                        window.location.href =
+                            "/employee/employee-view?marital_status=" + label;
+                    },
+                },
+                plugins: [
+                    {
+                        afterRender: (chart) => emptyChart(chart),
+                    },
+                ],
+            });
+        }
+    }
+
     function departmentChart(dataSet, labels) {
         const data = {
             labels: labels,
@@ -128,6 +233,39 @@ $(document).ready(function () {
             dataSet = response.dataSet;
             labels = response.labels;
             genderChart(dataSet, labels);
+        },
+    });
+
+    $.ajax({
+        url: "/employee/dashboard-employee-relegion",
+        type: "GET",
+        success: function (response) {
+            // Code to handle the response
+            dataSet = response.dataSet;
+            labels = response.labels;
+            religionChart(dataSet, labels);
+        },
+    });
+
+     $.ajax({
+        url: "/employee/dashboard-employee-blood-group",
+        type: "GET",
+        success: function (response) {
+            // Code to handle the response
+            dataSet = response.dataSet;
+            labels = response.labels;
+            bloodGroup(dataSet, labels);
+        },
+    });
+
+     $.ajax({
+        url: "/employee/dashboard-employee-marital-status",
+        type: "GET",
+        success: function (response) {
+            // Code to handle the response
+            dataSet = response.dataSet;
+            labels = response.labels;
+            maritalChart(dataSet, labels);
         },
     });
 

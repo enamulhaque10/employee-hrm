@@ -279,9 +279,6 @@ def optimize_reporting_manager_lookup(success_lists):
         employee_first_name__in=[name.split(" ")[0] for name in manager_names],
         employee_last_name__in=[name.split(" ")[1] for name in manager_names],
     )
-
-    print(manager_names, 'manger_namew')
-
     # Step 3: Create a dictionary for quick lookups
     employee_dict = {
         f"{employee.employee_first_name} {employee.employee_last_name}": employee
@@ -650,6 +647,9 @@ def bulk_create_work_info_import(success_lists):
         employee_type_obj = existing_employee_types.get(work_info.get("Employee Category"))
         shift_obj = existing_shifts.get(work_info.get("Shift"))
         employee_grade = work_info["Employee Grade"]
+        casual_id = work_info["Casual ID for Casual Employee"] if not pd.isna(work_info["Casual ID for Casual Employee"]) else ""
+        casual_joining_date = work_info["Joining date for Casual Employee"] if not pd.isna(work_info["Joining date for Casual Employee"]) else ""
+        payroll_joining_date = work_info["Payroll Enrollment date for Casual Employee"] if not pd.isna(work_info["Payroll Enrollment date for Casual Employee"]) else ""
         reporting_manager = work_info.get("Reporting Manager")
         reporting_manager_obj = None
         if isinstance(reporting_manager, str) and " " in reporting_manager:
@@ -726,7 +726,10 @@ def bulk_create_work_info_import(success_lists):
                 ),
                 employee_section_id=section_obj,
                 employee_unit_id=unit_obj,
-                employee_grade = employee_grade
+                employee_grade = employee_grade,
+                casual_id=casual_id,
+                casual_employee_joining_date=casual_joining_date,
+                casual_employee_payroll_joining_date=payroll_joining_date
                 # contract_end_date=(
                 #     contract_end_date if not pd.isnull(contract_end_date) else None
                 # ),

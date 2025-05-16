@@ -6704,7 +6704,11 @@ def check_chart_permission(request, charts):
         "asset_request_approve": "asset",
         "employees_chart": "employee",
         "gender_chart": "employee",
+        "religion_chart": "employee",
+        "blood_group_chart": "employee",
+        "marital_chart":"employee",
         "department_chart": "base",
+        
     }
     permissions = {
         "offline_employees": "employee.view_employee",
@@ -6786,6 +6790,9 @@ def employee_chart_show(request):
         ("employees_chart", _("Employees Chart")),
         ("department_chart", _("Department Chart")),
         ("gender_chart", _("Gender Chart")),
+        ("religion_chart", _("Religion Chart")),
+        ("blood_group_chart", _("Blood Group")),
+        ("marital_chart", _("Marital Status")),
         ("objective_status", _("Objective Status")),
         ("key_result_status", _("Key Result Status")),
         ("feedback_status", _("Feedback Status")),

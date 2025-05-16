@@ -185,6 +185,21 @@ urlpatterns = [
         name="dashboard-employee-gender",
     ),
     path(
+        "dashboard-employee-relegion",
+        views.dashboard_employee_relegion,
+        name="dashboard-employee-relegion",
+    ),
+    path(
+        "dashboard-employee-blood-group",
+        views.dashboard_employee_blood_group,
+        name="dashboard-employee-blood-group",
+    ),
+     path(
+        "dashboard-employee-marital-status",
+        views.dashboard_employee_marital_status,
+        name="dashboard-employee-marital-status",
+    ),
+    path(
         "dashboard-employee-department",
         views.dashboard_employee_department,
         name="dashboard-employee-department",
