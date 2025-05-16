@@ -51,6 +51,36 @@
                                     {{export_filter.form.gender}}
                                 </div>
                             </div>
+                            <div class="col-sm-12 col-md-12 col-lg-6">
+                                <div class="oh-input-group">
+                                    <label class="oh-label" for="{{export_filter.form.employee_religion.id_for_label}}">{% trans "Relegion" %}</label>
+                                    {{export_filter.form.employee_religion}}
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-12 col-lg-6">
+                                <div class="oh-input-group">
+                                    <label class="oh-label" for="{{export_filter.form.employee_blood_group.id_for_label}}">{% trans "Blood Group" %}</label>
+                                    {{export_filter.form.employee_blood_group}}
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-12 col-lg-6">
+                                <div class="oh-input-group">
+                                    <label class="oh-label" for="{{export_filter.form.marital_status.id_for_label}}">{% trans "Marital Status" %}</label>
+                                    {{export_filter.form.marital_status}}
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-12 col-lg-6">
+                                <div class="oh-input-group">
+                                    <label class="oh-label" for="{{export_filter.form.employee_home_district.id_for_label}}">{% trans "Home District" %}</label>
+                                    {{export_filter.form.employee_home_district}}
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-12 col-lg-6">
+                                <div class="oh-input-group">
+                                    <label class="oh-label" for="{{export_filter.form.employee_nationality.id_for_label}}">{% trans "Natonality" %}</label>
+                                    {{export_filter.form.employee_nationality}}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -96,6 +126,46 @@
                                     {{export_filter.form.employee_work_info__reporting_manager_id}}
                                 </div>
                             </div>
+
+                            <div class="col-sm-12 col-md-12 col-lg-6"> 
+                                <div class="oh-input-group">
+                                    <label class="oh-label"
+                                        for="{{export_filter.form.employee_work_info__employee_grade.id_for_label}}">{% trans "Employee Grade" %}</label>
+                                    {{export_filter.form.employee_work_info__employee_grade}}
+                                </div>
+                             </div>
+                             <div class="col-sm-12 col-md-12 col-lg-6">
+                             <div class="oh-input-group">
+                                    <label class="oh-label"
+                                        for="{{export_filter.form.employee_work_info__service_length.id_in_incepta_for_label}}">{% trans "Service Lngth" %}</label>
+                                    {{export_filter.form.employee_work_info__service_length_in_incepta}}
+                                </div>
+                            </div>
+
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <div class="oh-accordion">
+                    <div class="oh-accordion-header">{% trans "Educational Info" %}</div>
+                    <div class="oh-accordion-body">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12 col-lg-6">
+                                <div class="oh-input-group">
+                                    <label class="oh-label"
+                                        for="{{export_filter.form.education_info__education_label.id_for_label}}">{% trans "Subject" %}</label>
+                                    {{export_filter.form.employee_work_info__department_id}}
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-12 col-lg-6">
+                                <div class="oh-input-group">
+                                    <label class="oh-label"
+                                        for="{{export_filter.form.employee_work_info__job_position_id.id_for_label}}">{% trans "University" %}</label>
+                                    {{export_filter.form.employee_work_info__job_position_id}}
+                                </div>
+                            </div>
+                                                        
                         </div>
                     </div>
                 </div>

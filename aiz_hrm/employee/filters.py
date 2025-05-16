@@ -41,6 +41,8 @@ class EmployeeFilter(aizFilterSet):
             ("job_position", _("Search in : Job Position")),
             ("employee_section", _("Search in :Employee Section")),
             ("employee_unit", _("Search in : Employe Unit")),
+            ("employee_grade", _("Search in : Employee Grade")),
+            ("service_length_in_incepta", _("Search in : Service Length in Incepta")),
 
 
         ],
@@ -122,10 +124,17 @@ class EmployeeFilter(aizFilterSet):
             "country",
             "gender",
             "is_active",
+            "employee_blood_group",
+            "employee_religion",
+            "employee_home_district",
+            "employee_nationality",
+            "marital_status",
             "employee_work_info__job_position_id",
             "employee_work_info__employee_section_id",
             'employee_work_info__employee_unit_id',
             "employee_work_info__department_id",
+            "employee_work_info__employee_grade",
+            "employee_work_info__service_length_in_incepta",
             "department",
             "employee_work_info__work_type_id",
             "employee_work_info__employee_type_id",
@@ -136,6 +145,7 @@ class EmployeeFilter(aizFilterSet):
             "employee_work_info__tags",
             "employee_user_id__groups",
             "employee_user_id__user_permissions",
+           # "employee_educational_info__education_label",
             
         ]
 

@@ -38,6 +38,7 @@ from aiz.methods import get_aiz_model_class
 from aiz.models import aizModel
 from aiz_audit.methods import get_diff
 from aiz_audit.models import aizAuditInfo, aizAuditLog
+#from aiz_employee_education.models import EmployeeEducation
 
 # create your model
 
@@ -344,6 +345,14 @@ class Employee(models.Model):
         return getattr(
             getattr(self, "employee_work_info", None), "reporting_manager_id", None
         )
+    
+    # def get_educational_subject(self):
+    #     """
+    #     """
+    #     education = EmployeeEducation.objects.all()
+    #     return getattr(
+    #         getattr(self, "employee_educational_info", None), "education_label",
+    #     )
 
     def get_avatar(self):
         """

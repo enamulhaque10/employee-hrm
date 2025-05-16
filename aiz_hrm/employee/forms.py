@@ -550,6 +550,9 @@ excel_columns = [
     ("employee_work_info__employee_type_id", trans("Employee Category")),
     ("employee_work_info__date_joining", trans("Date Of Joining")),
     ("employee_work_info__last_promotion_date", trans("Last Promotion Date")),
+    ("employee_work_info__casual_id", trans("Casual ID for Casual Employee")),
+    ("employee_casual_joining_date", trans("Joining date for Casual Employee")),
+    ("employee_payroll_joining_date", trans("Payroll Enrollment date for Casual Employee")),
     ("employee_work_info__service_length_in_incepta", trans("Service Length In Incepta")),
     ("dob", trans("Date of Birth")),
     ("employee_job_experience_1", trans("Job Experience 1")),
@@ -587,6 +590,7 @@ excel_columns = [
     ("employee_driving_license_number", trans("Employee Driving License Number(If Any)")),
     # ("employee_photo", trans("Employee Updated Photo")),
     # ("employee_signature", trans("Employee Scanned Signature")),
+    
 
 
 
@@ -708,6 +712,10 @@ class EmployeeExportExcelForm(forms.Form):
             "employee_nominee_name",
             "employee_nominee_contact",
             "employee_nominee_relation"
+            "employee_work_info__casual_id",
+            "employee_casual_joining_date",
+            "employee_payroll_joining_date"
+
             
         ],
     )

@@ -3414,8 +3414,21 @@ def work_info_export(request):
             if column_value == "employee_permanent_address":
                 data = employee.employee_permanent_address if employee.employee_permanent_address != None else "" + "," + employee.employee_permanent_address_zip if employee.employee_permanent_address_zip != None else "" + "," + employee.employee_permanent_address_city if employee.employee_permanent_address_city != None else "" + "," + employee.employee_permanent_address_state if employee.employee_permanent_address_state != None else "" + "," + employee.employee_permanent_address_country if employee.employee_permanent_address_country  != None else ""
             
+            if column_value == "employee_work_info__casual_id":
+                    casual_info = EmployeeWorkInformation.objects.filter(employee_id=employee.id)
+                    length = len(casual_info)
+                    data = casual_info[length -1].casual_id if length >0 else "N/A"
+            if column_value == "employee_casual_joining_date":
+                    casual_info = EmployeeWorkInformation.objects.filter(employee_id=employee.id)
+                    length = len(casual_info)
+                    data = casual_info[length -1].casual_employee_joining_date if length > 0 else "N/A"
+            if column_value == "employee_payroll_joining_date":
+                    casual_info = EmployeeWorkInformation.objects.filter(employee_id=employee.id)
+                    length = len(casual_info)
+                    data = casual_info[length -1].casual_employee_payroll_joining_date if length > 0 else "N/A"
+
             
-            
+
             if column_value == "employee_photo":
                 documents = Document.objects.filter(employee_id=employee.id)
                 profile_img = documents.filter(document_category_id__category_title="profile image").first()
