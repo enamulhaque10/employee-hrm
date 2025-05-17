@@ -357,6 +357,43 @@ $(document).ready(function () {
         }
     }
 
+    function categoryChart(dataSet, labels) {
+        const data = {
+            labels: labels,
+            datasets: dataSet,
+        };
+        // Create chart using the Chart.js library
+        window["categoryChart"] = {};
+        if (document.getElementById("categoryChart")) {
+            const ctx = document.getElementById("categoryChart").getContext("2d");
+            categoryChart = new Chart(ctx, {
+                type: "doughnut",
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    onClick: (e, activeEls) => {
+                        let datasetIndex = activeEls[0].datasetIndex;
+                        let dataIndex = activeEls[0].index;
+                        let datasetLabel = e.chart.data.datasets[datasetIndex].label;
+                        let value = e.chart.data.datasets[datasetIndex].data[dataIndex];
+                        let label = e.chart.data.labels[dataIndex];
+                        localStorage.removeItem("savedFilters");
+                        window.location.href =
+                            "/employee/employee-view?category=" + label;
+
+                    },
+                },
+                plugins: [
+                    {
+                        afterRender: (chart) => emptyChart(chart),
+                    },
+                ],
+            });
+        }
+    }
+
+
     $.ajax({
         url: "/employee/dashboard-employee",
         type: "GET",
@@ -420,7 +457,6 @@ $(document).ready(function () {
             // Code to handle the response
             dataSet = response.dataSet;
             labels = response.labels;
-            console.log(dataSet,'department')
             departmentChart(dataSet, labels);
         },
         error: function (error) {
@@ -435,7 +471,6 @@ $(document).ready(function () {
             // Code to handle the response
             dataSet = response.dataSet;
             labels = response.labels;
-            console.log(dataSet,'positions')
             positionsChart(dataSet, labels);
         },
         error: function (error) {
@@ -444,13 +479,12 @@ $(document).ready(function () {
     });
 
     $.ajax({
-        url: "/employee/dashboard-employee-job-sectioon",
+        url: "/employee/dashboard-employee-job-section",
         type: "GET",
         success: function (response) {
             // Code to handle the response
             dataSet = response.dataSet;
             labels = response.labels;
-            console.log(dataSet,'sections')
             sectionChart(dataSet, labels);
         },
         error: function (error) {
@@ -465,7 +499,6 @@ $(document).ready(function () {
             // Code to handle the response
             dataSet = response.dataSet;
             labels = response.labels;
-            console.log(dataSet,'unit')
             unitChart(dataSet, labels);
         },
         error: function (error) {
@@ -480,8 +513,22 @@ $(document).ready(function () {
             // Code to handle the response
             dataSet = response.dataSet;
             labels = response.labels;
-            console.log(dataSet,'grade')
             gradeChart(dataSet, labels);
+        },
+        error: function (error) {
+            console.log(error);
+        },
+    });
+
+    $.ajax({
+        url: "/employee/dashboard-employee-category",
+        type: "GET",
+        success: function (response) {
+            // Code to handle the response
+            dataSet = response.dataSet;
+            labels = response.labels;
+            console.log(dataSet,'category')
+            categoryChart(dataSet, labels);
         },
         error: function (error) {
             console.log(error);

@@ -215,9 +215,14 @@ urlpatterns = [
         name="dashboard-employee-job-unit",
     ),
     path(
-        "dashboard-employee-job-sectioon",
-        views.dashboard_employee_job_sectioon,
-        name="dashboard-employee-job-sectioon",
+        "dashboard-employee-job-section",
+        views.dashboard_employee_job_section,
+        name="dashboard-employee-job-section",
+    ),
+    path(
+        "dashboard-employee-category",
+        views.dashboard_employee_category,
+        name="dashboard-employee-category",
     ),
     path(
         "dashboard-employee-job-position",
@@ -257,6 +262,7 @@ urlpatterns = [
     ),
     path("document-tab/<int:emp_id>", views.document_tab, name="document-tab"),
     path("employee-document-tab/<int:emp_id>", views.employee_document_tab, name="employee-document-tab"),
+    path("employee-document-public-tab", views.employee_document_public_tab, name="employee-document-public-tab"),
     path("job-experiences-tab/<int:emp_id>", views.job_experiences_tab, name="job-experiences-tab"),
     path("employee-education-tab/<int:emp_id>", views.employee_education_tab, name="employee-education-tab"),
     path("employee-training-tab/<int:emp_id>", views.employee_training_tab, name="employee-training-tab"),
@@ -319,6 +325,7 @@ urlpatterns = [
     path("file-upload/<int:id>", views.file_upload, name="file-upload"),
     path("view-file/<int:id>", views.view_file, name="view-file"),
     path("document-create/<int:emp_id>", views.document_create, name="document-create"),
+    path("document-create-public", views.document_create_public, name="document-create-public"),
     path("job-experience-create/<int:emp_id>", views.job_experience_create, name="job-experience-create"),
 
 

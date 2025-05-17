@@ -661,6 +661,29 @@ def employee_document_tab(request, emp_id):
     print(context, 'context')
     return render(request, "employee/update_form/document_tab.html", context=context)
 
+def employee_document_public_tab(request):
+    """
+    This function is used to view documents tab of an employee in employee individual
+    & profile view.
+
+    Parameters:
+    request (HttpRequest): The HTTP request object.
+    emp_id (int): The id of the employee.
+
+    Returns: return document_tab template
+    """
+    emp_id = 24
+    form = DocumentUpdateForm(request.POST, request.FILES)
+    documents = Document.objects.filter(employee_id=emp_id)
+
+    context = {
+        "documents": documents,
+        "form": form,
+        "emp_id": emp_id,
+    }
+    print(context, 'context')
+    return render(request, "employee/update_form/document_public_tab.html", context=context)
+
 
 @login_required
 @hx_request_required
@@ -733,6 +756,32 @@ def document_create(request, emp_id):
 
     Returns: return document_tab template
     """
+    employee_id = Employee.objects.get(id=emp_id)
+    form = DocumentForm(initial={"employee_id": employee_id, "expiry_date": None})
+    if request.method == "POST":
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, _("Document created successfully."))
+            return HttpResponse("<script>window.location.reload();</script>")
+
+    context = {
+        "form": form,
+        "emp_id": emp_id,
+    }
+    return render(request, "tabs/htmx/document_create_form.html", context=context)
+
+def document_create_public(request):
+    """
+    This function is used to create documents from employee individual & profile view.
+
+    Parameters:
+    request (HttpRequest): The HTTP request object.
+    emp_id (int): The id of the employee
+
+    Returns: return document_tab template
+    """
+    emp_id = 24
     employee_id = Employee.objects.get(id=emp_id)
     form = DocumentForm(initial={"employee_id": employee_id, "expiry_date": None})
     if request.method == "POST":
@@ -3635,10 +3684,10 @@ def dashboard_employee_relegion(request):
             {
                 "label": _("Employees"),
                 "data": [
-                    len(employees.filter(employee_religion="Islam")),
-                    len(employees.filter(employee_religion="Hinduism")),
-                    len(employees.filter(employee_religion="Buddhism")),
-                    len(employees.filter(employee_religion="Christianity")),
+                    len(employees.filter(employee_religion="islam")),
+                    len(employees.filter(employee_religion="hinduism")),
+                    len(employees.filter(employee_religion="buddhism")),
+                    len(employees.filter(employee_religion="christianity")),
                     
                 ],
             },
@@ -3737,14 +3786,14 @@ def dashboard_employee_job_position(request):
     for dept in positions:
         if len(
             Employee.objects.filter(
-                employee_work_info__job_position_id__job_position=dept, is_active=True
+                employee_work_info__job_position_id=dept, is_active=True
             )
         ):
             labels.append(dept.job_position)
             count.append(
                 len(
                     Employee.objects.filter(
-                        employee_work_info__job_position_id__job_position=dept,
+                        employee_work_info__job_position_id=dept,
                         is_active=True,
                     )
                 )
@@ -3757,7 +3806,7 @@ def dashboard_employee_job_position(request):
     return JsonResponse(response)
 
 @login_required
-def dashboard_employee_job_sectioon(request):
+def dashboard_employee_job_section(request):
     
     labels = []
     count = []
@@ -3765,14 +3814,14 @@ def dashboard_employee_job_sectioon(request):
     for dept in sections:
         if len(
             Employee.objects.filter(
-                employee_work_info__employee_section_id__employee_section=dept, is_active=True
+                employee_work_info__employee_section_id=dept, is_active=True
             )
         ):
-            labels.append(dept.sections)
+            labels.append(dept.employee_section)
             count.append(
                 len(
                     Employee.objects.filter(
-                        employee_work_info__employee_section_id__employee_section=dept,
+                        employee_work_info__employee_section_id=dept,
                         is_active=True,
                     )
                 )
@@ -3783,6 +3832,7 @@ def dashboard_employee_job_sectioon(request):
         "message": _("No Data Found..."),
     }
     return JsonResponse(response)
+
 @login_required
 def dashboard_employee_job_unit(request):
     
@@ -3792,14 +3842,14 @@ def dashboard_employee_job_unit(request):
     for dept in units:
         if len(
             Employee.objects.filter(
-                employee_work_info__employee_unit_id__employee_unit=dept, is_active=True
+                employee_work_info__employee_unit_id=dept, is_active=True
             )
         ):
-            labels.append(dept.units)
+            labels.append(dept.employee_unit)
             count.append(
                 len(
                     Employee.objects.filter(
-                        employee_work_info__employee_unit_id__employee_unit=dept,
+                        employee_work_info__employee_unit_id=dept,
                         is_active=True,
                     )
                 )
@@ -3810,28 +3860,63 @@ def dashboard_employee_job_unit(request):
         "message": _("No Data Found..."),
     }
     return JsonResponse(response)
+
 @login_required
 def dashboard_employee_job_grade(request):
     labels = []
     count = []
+    grade = []
     work_info = EmployeeWorkInformation.objects.all()
-    for dept in work_info:
+    for work in work_info:
+        grade.append(work.employee_grade)
+    grade = set(grade)
+    for dept in grade:
+        print(dept)
         if len(
             Employee.objects.filter(
-                employee_work_info__employee_grade__employee_grade=dept, is_active=True
+                employee_work_info__employee_grade=dept, is_active=True
             )
         ):
-            labels.append(dept.work_info)
+            labels.append(dept)
             count.append(
                 len(
                     Employee.objects.filter(
-                        employee_work_info__employee_grade__employee_grade=dept,
+                        employee_work_info__employee_grade=dept,
                         is_active=True,
                     )
                 )
             )
     response = {
         "dataSet": [{"label": "Grade", "data": count}],
+        "labels": labels,
+        "message": _("No Data Found..."),
+    }
+    return JsonResponse(response)
+
+
+@login_required
+def dashboard_employee_category(request):
+    labels = []
+    count = []
+    employee_type = EmployeeType.objects.all()
+    for dept in employee_type:
+        print(dept)
+        if len(
+            Employee.objects.filter(
+                employee_work_info__employee_type_id=dept, is_active=True
+            )
+        ):
+            labels.append(dept)
+            count.append(
+                len(
+                    Employee.objects.filter(
+                        employee_work_info__employee_type_id=dept,
+                        is_active=True,
+                    )
+                )
+            )
+    response = {
+        "dataSet": [{"label": "Category", "data": count}],
         "labels": labels,
         "message": _("No Data Found..."),
     }
