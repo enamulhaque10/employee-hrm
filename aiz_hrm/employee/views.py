@@ -3871,7 +3871,6 @@ def dashboard_employee_job_grade(request):
         grade.append(work.employee_grade)
     grade = set(grade)
     for dept in grade:
-        print(dept)
         if len(
             Employee.objects.filter(
                 employee_work_info__employee_grade=dept, is_active=True
@@ -3906,7 +3905,7 @@ def dashboard_employee_category(request):
                 employee_work_info__employee_type_id=dept, is_active=True
             )
         ):
-            labels.append(dept)
+            labels.append(dept.employee_type)
             count.append(
                 len(
                     Employee.objects.filter(
