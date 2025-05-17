@@ -204,6 +204,26 @@ urlpatterns = [
         views.dashboard_employee_department,
         name="dashboard-employee-department",
     ),
+    path(
+        "dashboard-employee-job-grade",
+        views.dashboard_employee_job_grade,
+        name="dashboard-employee-job-grade",
+    ),
+    path(
+        "dashboard-employee-job-unit",
+        views.dashboard_employee_job_unit,
+        name="dashboard-employee-job-unit",
+    ),
+    path(
+        "dashboard-employee-job-sectioon",
+        views.dashboard_employee_job_sectioon,
+        name="dashboard-employee-job-sectioon",
+    ),
+    path(
+        "dashboard-employee-job-position",
+        views.dashboard_employee_job_position,
+        name="dashboard-employee-job-position",
+    ),
     path("employee-widget-filter", views.widget_filter, name="employee-widget-filter"),
     path("note-tab/<int:emp_id>", views.note_tab, name="note-tab"),
     path("add-employee-note/<int:emp_id>/", views.add_note, name="add-employee-note"),

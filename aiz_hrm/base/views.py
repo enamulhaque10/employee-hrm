@@ -6708,6 +6708,10 @@ def check_chart_permission(request, charts):
         "blood_group_chart": "employee",
         "marital_chart":"employee",
         "department_chart": "base",
+        "job_position_chart":"base",
+        "job_section_chart":"base",
+        "job_unit_chart":"base",
+        "job_grade_chart":"base",
         
     }
     permissions = {
@@ -6788,7 +6792,10 @@ def employee_chart_show(request):
         ("attendance_analytic", _("Attendance analytics")),
         ("hours_chart", _("Hours Chart")),
         ("employees_chart", _("Employees Chart")),
-        ("department_chart", _("Department Chart")),
+        ("job_position_chart", _("Job Position")),
+        ("job_section_chart", _("Job Section")),
+        ("job_unit_chart", _("Job Unit")),
+        ("job_grade_chart", _("Job Grade")),
         ("gender_chart", _("Gender Chart")),
         ("religion_chart", _("Religion Chart")),
         ("blood_group_chart", _("Blood Group")),

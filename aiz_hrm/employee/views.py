@@ -3728,6 +3728,115 @@ def dashboard_employee_department(request):
     }
     return JsonResponse(response)
 
+@login_required
+def dashboard_employee_job_position(request):
+    
+    labels = []
+    count = []
+    positions = JobPosition.objects.all()
+    for dept in positions:
+        if len(
+            Employee.objects.filter(
+                employee_work_info__job_position_id__job_position=dept, is_active=True
+            )
+        ):
+            labels.append(dept.job_position)
+            count.append(
+                len(
+                    Employee.objects.filter(
+                        employee_work_info__job_position_id__job_position=dept,
+                        is_active=True,
+                    )
+                )
+            )
+    response = {
+        "dataSet": [{"label": "JobPosition", "data": count}],
+        "labels": labels,
+        "message": _("No Data Found..."),
+    }
+    return JsonResponse(response)
+
+@login_required
+def dashboard_employee_job_sectioon(request):
+    
+    labels = []
+    count = []
+    sections = EmployeeSection.objects.all()
+    for dept in sections:
+        if len(
+            Employee.objects.filter(
+                employee_work_info__employee_section_id__employee_section=dept, is_active=True
+            )
+        ):
+            labels.append(dept.sections)
+            count.append(
+                len(
+                    Employee.objects.filter(
+                        employee_work_info__employee_section_id__employee_section=dept,
+                        is_active=True,
+                    )
+                )
+            )
+    response = {
+        "dataSet": [{"label": "EmployeeSection", "data": count}],
+        "labels": labels,
+        "message": _("No Data Found..."),
+    }
+    return JsonResponse(response)
+@login_required
+def dashboard_employee_job_unit(request):
+    
+    labels = []
+    count = []
+    units = EmployeeUnit.objects.all()
+    for dept in units:
+        if len(
+            Employee.objects.filter(
+                employee_work_info__employee_unit_id__employee_unit=dept, is_active=True
+            )
+        ):
+            labels.append(dept.units)
+            count.append(
+                len(
+                    Employee.objects.filter(
+                        employee_work_info__employee_unit_id__employee_unit=dept,
+                        is_active=True,
+                    )
+                )
+            )
+    response = {
+        "dataSet": [{"label": "EmployeeUnit", "data": count}],
+        "labels": labels,
+        "message": _("No Data Found..."),
+    }
+    return JsonResponse(response)
+@login_required
+def dashboard_employee_job_grade(request):
+    labels = []
+    count = []
+    work_info = EmployeeWorkInformation.objects.all()
+    for dept in work_info:
+        if len(
+            Employee.objects.filter(
+                employee_work_info__employee_grade__employee_grade=dept, is_active=True
+            )
+        ):
+            labels.append(dept.work_info)
+            count.append(
+                len(
+                    Employee.objects.filter(
+                        employee_work_info__employee_grade__employee_grade=dept,
+                        is_active=True,
+                    )
+                )
+            )
+    response = {
+        "dataSet": [{"label": "Grade", "data": count}],
+        "labels": labels,
+        "message": _("No Data Found..."),
+    }
+    return JsonResponse(response)
+
 
 @login_required
 def widget_filter(request):

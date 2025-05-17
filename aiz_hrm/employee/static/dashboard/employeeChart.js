@@ -213,6 +213,150 @@ $(document).ready(function () {
         }
     }
 
+    function gradeChart(dataSet, labels) {
+        const data = {
+            labels: labels,
+            datasets: dataSet,
+        };
+        // Create chart using the Chart.js library
+        window["gradeChart"] = {};
+        if (document.getElementById("gradeChart")) {
+            const ctx = document.getElementById("gradeChart").getContext("2d");
+            gradeChart = new Chart(ctx, {
+                type: "doughnut",
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    onClick: (e, activeEls) => {
+                        let datasetIndex = activeEls[0].datasetIndex;
+                        let dataIndex = activeEls[0].index;
+                        let datasetLabel = e.chart.data.datasets[datasetIndex].label;
+                        let value = e.chart.data.datasets[datasetIndex].data[dataIndex];
+                        let label = e.chart.data.labels[dataIndex];
+                        localStorage.removeItem("savedFilters");
+                        window.location.href =
+                            "/employee/employee-view?grade=" + label;
+
+                    },
+                },
+                plugins: [
+                    {
+                        afterRender: (chart) => emptyChart(chart),
+                    },
+                ],
+            });
+        }
+    }
+
+    function unitChart(dataSet, labels) {
+        const data = {
+            labels: labels,
+            datasets: dataSet,
+        };
+        // Create chart using the Chart.js library
+        window["unitChart"] = {};
+        if (document.getElementById("unitChart")) {
+            const ctx = document.getElementById("unitChart").getContext("2d");
+            unitChart = new Chart(ctx, {
+                type: "doughnut",
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    onClick: (e, activeEls) => {
+                        let datasetIndex = activeEls[0].datasetIndex;
+                        let dataIndex = activeEls[0].index;
+                        let datasetLabel = e.chart.data.datasets[datasetIndex].label;
+                        let value = e.chart.data.datasets[datasetIndex].data[dataIndex];
+                        let label = e.chart.data.labels[dataIndex];
+                        localStorage.removeItem("savedFilters");
+                        window.location.href =
+                            "/employee/employee-view?unit=" + label;
+
+                    },
+                },
+                plugins: [
+                    {
+                        afterRender: (chart) => emptyChart(chart),
+                    },
+                ],
+            });
+        }
+    }
+
+    function sectionChart(dataSet, labels) {
+        const data = {
+            labels: labels,
+            datasets: dataSet,
+        };
+        // Create chart using the Chart.js library
+        window["sectionChart"] = {};
+        if (document.getElementById("sectionChart")) {
+            const ctx = document.getElementById("sectionChart").getContext("2d");
+            sectionChart = new Chart(ctx, {
+                type: "doughnut",
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    onClick: (e, activeEls) => {
+                        let datasetIndex = activeEls[0].datasetIndex;
+                        let dataIndex = activeEls[0].index;
+                        let datasetLabel = e.chart.data.datasets[datasetIndex].label;
+                        let value = e.chart.data.datasets[datasetIndex].data[dataIndex];
+                        let label = e.chart.data.labels[dataIndex];
+                        localStorage.removeItem("savedFilters");
+                        window.location.href =
+                            "/employee/employee-view?section=" + label;
+
+                    },
+                },
+                plugins: [
+                    {
+                        afterRender: (chart) => emptyChart(chart),
+                    },
+                ],
+            });
+        }
+    }
+
+    function positionsChart(dataSet, labels) {
+        const data = {
+            labels: labels,
+            datasets: dataSet,
+        };
+        // Create chart using the Chart.js library
+        window["positionsChart"] = {};
+        if (document.getElementById("positionsChart")) {
+            const ctx = document.getElementById("positionsChart").getContext("2d");
+            positionsChart = new Chart(ctx, {
+                type: "doughnut",
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    onClick: (e, activeEls) => {
+                        let datasetIndex = activeEls[0].datasetIndex;
+                        let dataIndex = activeEls[0].index;
+                        let datasetLabel = e.chart.data.datasets[datasetIndex].label;
+                        let value = e.chart.data.datasets[datasetIndex].data[dataIndex];
+                        let label = e.chart.data.labels[dataIndex];
+                        localStorage.removeItem("savedFilters");
+                        window.location.href =
+                            "/employee/employee-view?position=" + label;
+
+                    },
+                },
+                plugins: [
+                    {
+                        afterRender: (chart) => emptyChart(chart),
+                    },
+                ],
+            });
+        }
+    }
+
     $.ajax({
         url: "/employee/dashboard-employee",
         type: "GET",
@@ -276,7 +420,68 @@ $(document).ready(function () {
             // Code to handle the response
             dataSet = response.dataSet;
             labels = response.labels;
+            console.log(dataSet,'department')
             departmentChart(dataSet, labels);
+        },
+        error: function (error) {
+            console.log(error);
+        },
+    });
+
+    $.ajax({
+        url: "/employee/dashboard-employee-job-position",
+        type: "GET",
+        success: function (response) {
+            // Code to handle the response
+            dataSet = response.dataSet;
+            labels = response.labels;
+            console.log(dataSet,'positions')
+            positionsChart(dataSet, labels);
+        },
+        error: function (error) {
+            console.log(error);
+        },
+    });
+
+    $.ajax({
+        url: "/employee/dashboard-employee-job-sectioon",
+        type: "GET",
+        success: function (response) {
+            // Code to handle the response
+            dataSet = response.dataSet;
+            labels = response.labels;
+            console.log(dataSet,'sections')
+            sectionChart(dataSet, labels);
+        },
+        error: function (error) {
+            console.log(error);
+        },
+    });
+
+    $.ajax({
+        url: "/employee/dashboard-employee-job-unit",
+        type: "GET",
+        success: function (response) {
+            // Code to handle the response
+            dataSet = response.dataSet;
+            labels = response.labels;
+            console.log(dataSet,'unit')
+            unitChart(dataSet, labels);
+        },
+        error: function (error) {
+            console.log(error);
+        },
+    });
+
+    $.ajax({
+        url: "/employee/dashboard-employee-job-grade",
+        type: "GET",
+        success: function (response) {
+            // Code to handle the response
+            dataSet = response.dataSet;
+            labels = response.labels;
+            console.log(dataSet,'grade')
+            gradeChart(dataSet, labels);
         },
         error: function (error) {
             console.log(error);
