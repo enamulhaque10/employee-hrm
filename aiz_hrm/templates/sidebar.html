@@ -223,10 +223,14 @@ function initializeSummernote(candId,searchWords,) {
         class="oh-sidebar__menu-link"
         data-id="dashboardNav"
         data-target="#document_target"
-        >{% trans "Incident Record" %}</a> -->
-        <a href="{% url 'employee-document-public-tab' request.user.id %}"
+        >{% trans "Incident Record" %}</a>
+        href="{% url 'employee-document-tab' request.user.id %}"
         onclick="window.location.href=this.href; return false;"
-        hx-get="{% url 'employee-document-public-tab' request.user.id %}"
+        -->
+        <a 
+        
+        href="#"
+        hx-get="{% url 'employee-document-tab' request.user.id %}"
         hx-push-url="true"
         hx-target="#document_target"
        
@@ -381,7 +385,7 @@ function initializeSummernote(candId,searchWords,) {
       {% endif %}
     </ul>
   </div>
-  {% include 'tabs/document_public_tab.html' %}
+  
 </div>
 <style>
   .highlight-selected{

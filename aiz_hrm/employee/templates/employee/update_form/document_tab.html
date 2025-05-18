@@ -9,7 +9,7 @@
 			class="oh-btn oh-btn--secondary"
 			data-toggle="oh-modal-toggle"
 			data-target="#objectCreateModal"
-			hx-get="{% url 'document-create'  form.instance.id %}"
+			hx-get="{% url 'document-create'  form.instance.id  ?? None%}"
 			hx-target="#objectCreateModalTarget"
 			onclick="event.preventDefault()"
 

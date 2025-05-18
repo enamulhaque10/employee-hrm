@@ -1,5 +1,45 @@
 {% load i18n %} {% load static %}
-<style></style>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title class="time-runner stop-runner">{{white_label_company_name}}</title>
+    <link rel="stylesheet" href="{% static 'build/css/driver.min.css' %}" />
+    <meta name="theme-color" content="orangered">
+    <link rel="manifest" href="{% static 'build/manifest.json' %}">
+    <!-- <link rel="apple-touch-icon" sizes="180x180"
+        href="{% if white_label_company.icon %}{{white_label_company.icon.url}} {% else %}{% static 'favicons/apple-touch-icon.png' %}{% endif %}">
+    <link rel="icon" type="image/png" sizes="32x32"
+        href="{% if white_label_company.icon %}{{white_label_company.icon.url}} {% else %}{% static 'favicons/favicon2-32x32.png' %}{% endif %}">
+    <link rel="icon" type="image/png" sizes="16x16"
+        href="{% if white_label_company.icon %}{{white_label_company.icon.url}} {% else %}{% static 'favicons/favicon2-16x16.png' %}{% endif %}"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.css">
+
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="{% static 'build/css/style.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'build/css/summernote-lite.min.css'%}"/>
+    <link rel="stylesheet" href="{% static 'build/css/orgChart.css' %}" />
+    <script src="{% static '/jquery/ajax.js' %}"></script>
+    <script src="{% static '/jquery/jquery.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static '/jquery/jqueryui.css' %}">
+    <script src="{% static '/jquery/jqueryui.js' %}"></script>
+    <script src="{% static '/base/toggleColumn.js' %}"></script>
+    <script src="{% static '/build/js/orgChart.js' %}"></script>
+    <script src="{% static 'build/js/driver.js' %}"></script>
+    <script src="{% static 'build/js/clearFilter.js' %}"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+
+
+    <!-- Popper.JS -->
+    <!-- Bootstrap JS -->
+    {% block styles %}
+    {% endblock styles %}
+</head>
 <div
   class="oh-general__tab-target oh-profile-section mb-4"
 >

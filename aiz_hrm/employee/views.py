@@ -664,7 +664,6 @@ def employee_document_tab(request, emp_id):
         "form": form,
         "emp_id": emp_id,
     }
-    print(context)
     return render(request, "employee/update_form/document_tab.html", context=context)
 
 def employee_document_public_tab(request, emp_id):
