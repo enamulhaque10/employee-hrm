@@ -650,7 +650,13 @@ def employee_document_tab(request, emp_id):
 
     Returns: return document_tab template
     """
-    form = DocumentUpdateForm(request.POST, request.FILES)
+    print(emp_id, 'emp')
+    if request.method == "POST":
+        form = DocumentUpdateForm(request.POST, request.FILES)
+    else:
+        form = DocumentUpdateForm()
+
+    
     documents = Document.objects.filter(employee_id=emp_id)
 
     context = {
@@ -658,10 +664,10 @@ def employee_document_tab(request, emp_id):
         "form": form,
         "emp_id": emp_id,
     }
-    print(context, 'context')
+    print(context)
     return render(request, "employee/update_form/document_tab.html", context=context)
 
-def employee_document_public_tab(request):
+def employee_document_public_tab(request, emp_id):
     """
     This function is used to view documents tab of an employee in employee individual
     & profile view.
@@ -672,8 +678,10 @@ def employee_document_public_tab(request):
 
     Returns: return document_tab template
     """
-    emp_id = 24
     form = DocumentUpdateForm(request.POST, request.FILES)
+    
+
+    
     documents = Document.objects.filter(employee_id=emp_id)
 
     context = {
@@ -681,8 +689,7 @@ def employee_document_public_tab(request):
         "form": form,
         "emp_id": emp_id,
     }
-    print(context, 'context')
-    return render(request, "employee/update_form/document_public_tab.html", context=context)
+    return render(request, "tabs/document_public_tab.html", context=context)
 
 
 @login_required
@@ -771,7 +778,7 @@ def document_create(request, emp_id):
     }
     return render(request, "tabs/htmx/document_create_form.html", context=context)
 
-def document_create_public(request):
+def document_create_public(request, emp_id):
     """
     This function is used to create documents from employee individual & profile view.
 
@@ -781,7 +788,6 @@ def document_create_public(request):
 
     Returns: return document_tab template
     """
-    emp_id = 24
     employee_id = Employee.objects.get(id=emp_id)
     form = DocumentForm(initial={"employee_id": employee_id, "expiry_date": None})
     if request.method == "POST":
