@@ -88,6 +88,7 @@ from employee.forms import (
     EmployeeWorkInformationForm,
     EmployeeWorkInformationUpdateForm,
     excel_columns,
+    IncidentForm,
 )
 from employee.methods.methods import (
     bulk_create_department_import,
@@ -118,6 +119,7 @@ from employee.models import (
     EmployeeTag,
     EmployeeWorkInformation,
     NoteFiles,
+    EmployeeIncident,
 )
 from aiz.decorators import (
     hx_request_required,
@@ -691,6 +693,31 @@ def employee_document_public_tab(request, emp_id):
     return render(request, "tabs/document_public_tab.html", context=context)
 
 
+def employee_incident_document_tab(request, emp_id):
+    """
+    This function is used to view documents tab of an employee in employee individual
+    & profile view.
+
+    Parameters:
+    request (HttpRequest): The HTTP request object.
+    emp_id (int): The id of the employee.
+
+    Returns: return document_tab template
+    """
+    form = IncidentForm(request.POST, request.FILES)
+    
+
+    
+    #documents = EmployeeIncident.objects.filter(employee_id=emp_id)
+
+    context = {
+        "documents": [],
+        "form": form,
+        "emp_id": emp_id,
+    }
+    return render(request, "tabs/incident_document.html", context=context)
+
+
 @login_required
 @hx_request_required
 @owner_can_enter("aiz_job_experiences.view_job_experience", Employee)
@@ -776,6 +803,26 @@ def document_create(request, emp_id):
         "emp_id": emp_id,
     }
     return render(request, "tabs/htmx/document_create_form.html", context=context)
+
+@login_required
+@hx_request_required
+@owner_can_enter("aiz_documents.add_document", Employee)
+def incident_document_create(request, emp_id):
+  
+    employee_id = Employee.objects.get(id=emp_id)
+    form = IncidentForm(initial={"employee_id": employee_id})
+    if request.method == "POST":
+        form = IncidentForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, _(" Incident Document created successfully."))
+            return HttpResponse("<script>window.location.reload();</script>")
+
+    context = {
+        "form": form,
+        "emp_id": emp_id,
+    }
+    return render(request, "tabs/htmx/incident_doccument_create_form.html", context=context)
 
 def document_create_public(request, emp_id):
     """

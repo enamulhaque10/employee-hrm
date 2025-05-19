@@ -48,6 +48,7 @@ from employee.models import (
     NoteFiles,
     Policy,
     PolicyMultipleFile,
+    EmployeeIncident,
 )
 from aiz import aiz_middlewares
 from aiz_audit.models import AccountBlockUnblock
@@ -945,3 +946,28 @@ class EmployeeGeneralSettingPrefixForm(forms.ModelForm):
             "badge_id_prefix": forms.TextInput(attrs={"class": "oh-input w-100"}),
             "company_id": forms.Select(attrs={"class": "oh-select oh-select-2 w-100"}),
         }
+
+
+class IncidentForm(ModelForm):
+    """form to create a new Document"""
+
+    verbose_name = "Document"
+
+    class Meta:
+        model = EmployeeIncident
+        fields = "__all__"
+        exclude = [ "status",  "is_active"]
+        widgets = {
+            "employee_id": forms.HiddenInput(),
+            "issue_date": forms.DateInput(
+                attrs={"type": "date", "class": "oh-input  w-100"}
+            ),
+        }
+
+    def as_p(self):
+        """
+        Render the form fields as HTML table rows with Bootstrap styling.
+        """
+        context = {"form": self}
+        table_html = render_to_string("common_form.html", context)
+        return table_html
