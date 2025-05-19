@@ -3,20 +3,7 @@
 <div
   class="oh-general__tab-target oh-profile-section mb-4"
 >
-  <div class="oh-btn-group p-3 justify-content-end">
-    <div>
-      <button
-        class="oh-btn oh-btn--secondary"
-        data-toggle="oh-modal-toggle"
-        data-target="#objectCreateModal"
-        hx-get="{% url 'document-create-public'  emp_id %}"
-        hx-target="#objectCreateModalTarget"
-        onclick="event.preventDefault()"
-      >
-        <ion-icon name="add-sharp" class="mr-2"></ion-icon>{% trans "Create" %}
-      </button>
-    </div>
-  </div>
+  
 
   {% if documents %}
   <div class="mt-2">
