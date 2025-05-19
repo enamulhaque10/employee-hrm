@@ -56,7 +56,8 @@ SIDEBARS = [
     "onboarding",
     "leave",
     "offboarding",
-    "recruitment"   
+    "recruitment" ,
+    "documents"  
     
 ]
 # "recruitment"

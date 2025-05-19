@@ -10,7 +10,7 @@
 			class="oh-btn oh-btn--secondary"
 			data-toggle="oh-modal-toggle"
 			data-target="#objectCreateModal"
-			hx-get="{% url 'document-create'  emp_id %}"
+			hx-get="{% url 'incident-document-create'  emp_id %}"
 			hx-target="#objectCreateModalTarget"
 			onclick="event.preventDefault()"
 
@@ -155,7 +155,7 @@
 	<div class="d-flex justify-content-center align-items-center" style="height: 40vh;">
 	    <div class="text-center">
 	        <img class="oh-404__image mb-3" style="width: 150px; height: 150px;" src="{% static 'images/ui/no_documents.png' %}" alt="No documents">
-	        <h5 class="oh-404__subtitle">{% trans "No documents have been uploaded yet." %}</h5>
+	        <h5 class="oh-404__subtitle">{% trans "No incident have been uploaded yet." %}</h5>
 	    </div>
 	</div>
 {% endif %}
