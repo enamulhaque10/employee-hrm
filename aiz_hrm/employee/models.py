@@ -1125,7 +1125,7 @@ FORMATS = [
 ]
 class EmployeeIncident(aizModel):
         title = models.CharField(max_length=100)
-        involved_member = models.CharField(blank=True,null=True)
+        involved_member = models.TextField(blank=True,null=True, max_length=255)
         description = models.TextField(blank=True, null=True, max_length=255)
         employee_id = models.ForeignKey(Employee, on_delete=models.PROTECT)
         document = models.FileField(upload_to="employee/documents", null=True)

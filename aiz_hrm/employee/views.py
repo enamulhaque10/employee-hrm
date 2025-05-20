@@ -41,6 +41,8 @@ from django.views.decorators.http import require_http_methods
 from io import BytesIO
 import requests
 from PIL import Image as PILImage
+from django.http import FileResponse, Http404
+
 
 
 from accessibility.decorators import enter_if_accessible
@@ -708,10 +710,10 @@ def employee_incident_document_tab(request, emp_id):
     
 
     
-    #documents = EmployeeIncident.objects.filter(employee_id=emp_id)
+    documents = EmployeeIncident.objects.filter(employee_id=emp_id)
 
     context = {
-        "documents": [],
+        "documents": documents,
         "form": form,
         "emp_id": emp_id,
     }
@@ -1000,6 +1002,20 @@ def update_document_title(request, id):
     return HttpResponse("")
 
 @login_required
+def update_incident_document_title(request, id):
+    
+    document = get_object_or_404(EmployeeIncident, id=id)
+    name = request.POST.get("title")
+    if request.method == "POST":
+        document.title = name
+        document.save()
+        messages.success(request, _("Incident title updated successfully"))
+    else:
+        messages.error(request, _("Invalid request"))
+    return HttpResponse("")
+
+
+@login_required
 def update_job_experience_title(request, id):
     document = get_object_or_404(EmployeeJobExperiences, id=id)
     name = request.POST.get("title")
@@ -1232,6 +1248,48 @@ def document_delete(request, id):
 
 @login_required
 @hx_request_required
+def incident_document_delete(request, id):
+  
+    try:
+        document = EmployeeIncident.objects.filter(id=id)
+        if not request.user.has_perm("aiz_documents.delete_document"):
+            document = document.filter(
+                employee_id__employee_user_id=request.user
+            ).exclude(document_request_id__isnull=False)
+        if document:
+            document_first = document.first()
+            document.delete()
+            messages.success(
+                request,
+                _(
+                    f"Incident request {document_first} for {document_first.employee_id} deleted successfully"
+                ),
+            )
+            referrer = request.META.get("HTTP_REFERER", "")
+            referrer = "/" + "/".join(referrer.split("/")[3:])
+            if referrer.startswith("/employee/employee-view/") or referrer.endswith(
+                "/employee/employee-profile/"
+            ):
+                existing_documents = EmployeeIncident.objects.filter(
+                    employee_id=document_first.employee_id
+                )
+                if not existing_documents:
+                    return HttpResponse(
+                        f"""
+                            <span hx-get='/employee/document-tab/{document_first.employee_id.id}?employee_view=true'
+                            hx-target='#document_target' hx-trigger='load'></span>
+                        """
+                    )
+            return HttpResponse()
+        else:
+            messages.error(request, _("Incident not found"))
+    except ProtectedError:
+        messages.error(request, _("You cannot delete this document."))
+    return HttpResponse("<script>window.location.reload();</script>")
+
+
+@login_required
+@hx_request_required
 def job_experience_delete(request, id):
     try:
         job_experience = EmployeeJobExperiences.objects.filter(id=id)
@@ -1350,6 +1408,7 @@ def file_upload(request, id):
     return render(request, "tabs/htmx/document_form.html", context=context)
 
 
+
 @login_required
 @hx_request_required
 def view_file(request, id):
@@ -1386,6 +1445,40 @@ def view_file(request, id):
         context["content_type"] = content_type
 
     return render(request, "tabs/htmx/view_file.html", context)
+
+@login_required
+@hx_request_required
+def view_incident_file(request, id):
+    
+
+    document_obj = EmployeeIncident.objects.filter(id=id).first()
+    context = {
+        "document": document_obj,
+    }
+    if document_obj.document:
+        file_path = document_obj.document.path
+        file_extension = os.path.splitext(file_path)[1][
+            1:
+        ].lower()  # Get the lowercase file extension
+
+        content_type = get_content_type(file_extension)
+
+        print(content_type, 'content', type (file_extension))
+
+
+
+
+        try:
+            with open(file_path, "rb") as file:
+                file_content = file.read()  # Decode the binary content for display
+        except:
+            file_content = None
+
+        context["file_content"] = file_content
+        context["file_extension"] = file_extension
+        context["content_type"] = content_type
+
+    return render(request, "tabs/htmx/incident_file_view.html", context)
 
 
 def get_content_type(file_extension):

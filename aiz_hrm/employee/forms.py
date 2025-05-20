@@ -951,7 +951,7 @@ class EmployeeGeneralSettingPrefixForm(forms.ModelForm):
 class IncidentForm(ModelForm):
     """form to create a new Document"""
 
-    verbose_name = "Document"
+    verbose_name = "Incident"
 
     class Meta:
         model = EmployeeIncident

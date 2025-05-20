@@ -325,6 +325,7 @@ urlpatterns = [
     ),
     path("file-upload/<int:id>", views.file_upload, name="file-upload"),
     path("view-file/<int:id>", views.view_file, name="view-file"),
+    path("view-incident-file/<int:id>", views.view_incident_file, name="view-incident-file"),
     path("document-create/<int:emp_id>", views.document_create, name="document-create"),
     path("incident-document-create/<int:emp_id>", views.incident_document_create, name="incident-document-create"),
     path("document-create-public/<int:emp_id>", views.document_create_public, name="document-create-public"),
@@ -342,6 +343,11 @@ urlpatterns = [
         "update-document-title/<int:id>",
         views.update_job_experience_title,
         name="update-document-title",
+    ),
+     path(
+        "update-incident-document-title/<int:id>",
+        views.update_incident_document_title,
+        name="update-incident-document-title",
     ),
 
     # job experiences urls start
@@ -490,6 +496,11 @@ urlpatterns = [
         "document-delete/<int:id>/",
         views.document_delete,
         name="document-delete",
+    ),
+     path(
+        "incident-document-delete/<int:id>/",
+        views.incident_document_delete,
+        name="incident-document-delete",
     ),
     
     path("organisation-chart/", views.organisation_chart, name="organisation-chart"),
