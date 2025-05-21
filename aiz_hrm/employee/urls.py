@@ -263,6 +263,7 @@ urlpatterns = [
     path("document-tab/<int:emp_id>", views.document_tab, name="document-tab"),
     path("employee-document-tab/<int:emp_id>", views.employee_document_tab, name="employee-document-tab"),
     path("employee-document-public-tab/<int:emp_id>/", views.employee_document_public_tab, name="employee-document-public-tab"),
+    path("incident-document-public-tab/<int:emp_id>/", views.incident_document_public_tab, name="incident-document-public-tab"),
     path("job-experiences-tab/<int:emp_id>", views.job_experiences_tab, name="job-experiences-tab"),
     path("employee-education-tab/<int:emp_id>", views.employee_education_tab, name="employee-education-tab"),
     path("employee-training-tab/<int:emp_id>", views.employee_training_tab, name="employee-training-tab"),
@@ -324,8 +325,10 @@ urlpatterns = [
     ),
     path("file-upload/<int:id>", views.file_upload, name="file-upload"),
     path("view-file/<int:id>", views.view_file, name="view-file"),
+    path("view-incident-file/<int:id>", views.view_incident_file, name="view-incident-file"),
     path("document-create/<int:emp_id>", views.document_create, name="document-create"),
     path("document-create-public/<int:emp_id>", views.document_create_public, name="document-create-public"),
+    path("incident-document-create-public/<int:emp_id>", views.incident_document_create_public, name="incident-document-create-public"),
     path("job-experience-create/<int:emp_id>", views.job_experience_create, name="job-experience-create"),
 
 
@@ -339,6 +342,11 @@ urlpatterns = [
     path(
         "update-document-title/<int:id>",
         views.update_job_experience_title,
+        name="update-document-title",
+    ),
+    path(
+        "update-incident-document-title/<int:id>",
+        views.update_incident_document_title,
         name="update-document-title",
     ),
 

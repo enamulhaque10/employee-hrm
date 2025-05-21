@@ -12,7 +12,7 @@
 			class="oh-btn oh-btn--secondary"
 			data-toggle="oh-modal-toggle"
 			data-target="#objectCreateModal"
-			hx-get="{% url 'document-create-public'  emp_id %}"
+			hx-get="{% url 'incident-document-create-public'  emp_id %}"
 			hx-target="#objectCreateModalTarget"
 			onclick="event.preventDefault()"
 
@@ -28,7 +28,7 @@
 	<div class="mt-2">
 		{% for document in documents %}
 			<div id="document{{document.id}}">
-				<div class="oh-user_permission-list_item accordion exclude-accordion-style"  hx-get='{% url "view-file" document.id %}'
+				<div class="oh-user_permission-list_item accordion exclude-accordion-style"  hx-get='{% url "view-incident-file" document.id %}'
 					 hx-target="#viewFile" data-toggle="oh-modal-toggle" data-target="#viewFileModal" >
 					<div class="oh-user_permission-list_profile  {% if document.status == "approved" %}row-status--yellow {% elif document.status == 'rejected' %}row-status--red {% elif document.status == 'requested' %}row-status--blue{% endif %}">
 						<div class="oh-navbar__user-photo oh-user_permission--profile">
@@ -78,7 +78,7 @@
 							{% endif %}
 						</div>
 						<div class="oh-feedback-card__name-container ms-1 title_form">
-							<form hx-post = "{% url 'update-document-title' document.id %}" hx-swap="none" hx-on-htmx-after-request="setTimeout(() => { reloadMessage(); }, 300);">
+							<form hx-post = "{% url 'update-incident-document-title' document.id %}" hx-swap="none" hx-on-htmx-after-request="setTimeout(() => { reloadMessage(); }, 300);">
 								<input class="oh-card__title oh-card__title--sm fw-bold me-1 editable-input" onclick="event.stopPropagation();" name="title" value="{{document.title}}" readonly />
 								<span class="error oh-user_permission_list-text text-danger d-none" >{% trans "Title needs to be more than 3 letters" %}</span>
 								<input class="d-none title-submit" type="submit" onclick="event.stopPropagation();" />
@@ -160,7 +160,7 @@
 	<div class="d-flex justify-content-center align-items-center" style="height: 40vh;">
 	    <div class="text-center">
 	        <img class="oh-404__image mb-3" style="width: 150px; height: 150px;" src="{% static 'images/ui/no_documents.png' %}" alt="No documents">
-	        <h5 class="oh-404__subtitle">{% trans "No documents have been uploaded yet." %}</h5>
+	        <h5 class="oh-404__subtitle">{% trans "No Incident have been uploaded yet." %}</h5>
 	    </div>
 	</div>
 {% endif %}
