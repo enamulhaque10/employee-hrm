@@ -87,6 +87,9 @@ class IncidentForm(ModelForm):
         exclude = [ "status", "is_active"]
         widgets = {
             "employee_id": forms.HiddenInput(),
+            "issue_date": forms.DateInput(
+                attrs={"type": "date", "class": "oh-input  w-100"}
+            ),
         }
 
     def as_p(self):
