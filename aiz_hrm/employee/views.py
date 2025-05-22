@@ -142,6 +142,7 @@ from aiz_documents.forms import (
     DocumentRequestForm,
     DocumentUpdateForm,
     DocumentCategoryForm,
+    IncidentForm,
 )
 from aiz_documents.models import Document, DocumentRequest, DocumentCategory
 from aiz_job_experiences.forms import (
@@ -694,6 +695,20 @@ def employee_document_public_tab(request, emp_id):
     }
     return render(request, "tabs/document_public_tab.html", context=context)
 
+def incident_document_public_tab(request, emp_id):
+   
+    form = IncidentForm(request.POST, request.FILES)
+    
+    documents = EmployeeIncident.objects.filter(employee_id=emp_id)
+
+    context = {
+        "documents": documents,
+        "form": form,
+        "emp_id": emp_id,
+    }
+    return render(request, "tabs/incident_document_tab.html", context=context)
+
+
 
 def employee_incident_document_tab(request, emp_id):
     """
@@ -827,15 +842,7 @@ def incident_document_create(request, emp_id):
     return render(request, "tabs/htmx/incident_doccument_create_form.html", context=context)
 
 def document_create_public(request, emp_id):
-    """
-    This function is used to create documents from employee individual & profile view.
-
-    Parameters:
-    request (HttpRequest): The HTTP request object.
-    emp_id (int): The id of the employee
-
-    Returns: return document_tab template
-    """
+    
     employee_id = Employee.objects.get(id=emp_id)
     form = DocumentForm(initial={"employee_id": employee_id, "expiry_date": None})
     if request.method == "POST":
@@ -850,6 +857,26 @@ def document_create_public(request, emp_id):
         "emp_id": emp_id,
     }
     return render(request, "tabs/htmx/document_create_form.html", context=context)
+
+
+
+def incident_document_create_public(request, emp_id):
+    
+    employee_id = Employee.objects.get(id=emp_id)
+    form = IncidentForm(initial={"employee_id": employee_id})
+    if request.method == "POST":
+        form = IncidentForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, _(" Incident Document created successfully."))
+            return HttpResponse("<script>window.location.reload();</script>")
+
+    context = {
+        "form": form,
+        "emp_id": emp_id,
+    }
+    return render(request, "tabs/htmx/incident_create_form.html", context=context)
+
 
 @login_required
 @hx_request_required
@@ -1479,6 +1506,91 @@ def view_incident_file(request, id):
         context["content_type"] = content_type
 
     return render(request, "tabs/htmx/incident_file_view.html", context)
+
+
+@login_required
+def update_incident_document_title(request, id):
+    
+    document = get_object_or_404(EmployeeIncident, id=id)
+    name = request.POST.get("title")
+    if request.method == "POST":
+        document.title = name
+        document.save()
+        messages.success(request, _("Incident title updated successfully"))
+    else:
+        messages.error(request, _("Invalid request"))
+    return HttpResponse("")
+
+@login_required
+@hx_request_required
+def incident_document_delete(request, id):
+  
+    try:
+        document = EmployeeIncident.objects.filter(id=id)
+        if not request.user.has_perm("aiz_documents.delete_document"):
+            document = document.filter(
+                employee_id__employee_user_id=request.user
+            ).exclude(document_request_id__isnull=False)
+        if document:
+            document_first = document.first()
+            document.delete()
+            messages.success(
+                request,
+                _(
+                    f"Incident request {document_first} for {document_first.employee_id} deleted successfully"
+                ),
+            )
+            referrer = request.META.get("HTTP_REFERER", "")
+            referrer = "/" + "/".join(referrer.split("/")[3:])
+            if referrer.startswith("/employee/employee-view/") or referrer.endswith(
+                "/employee/employee-profile/"
+            ):
+                existing_documents = EmployeeIncident.objects.filter(
+                    employee_id=document_first.employee_id
+                )
+                if not existing_documents:
+                    return HttpResponse(
+                        f"""
+                            <span hx-get='/employee/document-tab/{document_first.employee_id.id}?employee_view=true'
+                            hx-target='#document_target' hx-trigger='load'></span>
+                        """
+                    )
+            return HttpResponse()
+        else:
+            messages.error(request, _("Incident not found"))
+    except ProtectedError:
+        messages.error(request, _("You cannot delete this document."))
+    return HttpResponse("<script>window.location.reload();</script>")
+
+@login_required
+@hx_request_required
+def view_incident_file(request, id):
+    
+
+    document_obj = EmployeeIncident.objects.filter(id=id).first()
+    context = {
+        "document": document_obj,
+    }
+    if document_obj.document:
+        file_path = document_obj.document.path
+        file_extension = os.path.splitext(file_path)[1][
+            1:
+        ].lower()  # Get the lowercase file extension
+
+        content_type = get_content_type(file_extension)
+
+        try:
+            with open(file_path, "rb") as file:
+                file_content = file.read()  # Decode the binary content for display
+        except:
+            file_content = None
+
+        context["file_content"] = file_content
+        context["file_extension"] = file_extension
+        context["content_type"] = content_type
+
+    return render(request, "tabs/htmx/incident_file_view.html", context)
+
 
 
 def get_content_type(file_extension):

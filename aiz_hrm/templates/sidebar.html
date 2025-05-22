@@ -173,13 +173,11 @@ function initializeSummernote(candId,searchWords,) {
       </li>
       {% endfor %}
 
-     
-      <li class="oh-sidebar__menu-item">
-        <form action="post"> 
 
-          <a 
-        href="{% url 'employee-document-public-tab' request.user.id %}"
-        hx-get="{% url 'employee-document-public-tab' request.user.id %}"
+      <li class="oh-sidebar__menu-item">
+        <a href="{% url 'employee-document-public-tab' request.user.id %}"
+        onclick="window.location.href=this.href; return false;"
+        
         hx-push-url="true"
         hx-target="#document_target"
         onclick="window.location.href=this.href; return false;"
@@ -193,9 +191,28 @@ function initializeSummernote(candId,searchWords,) {
             />
           </div>
         {% trans "Public Documents" %}
-       </a>
-        </form>
         
+       </a>
+      </li>
+
+      <li class="oh-sidebar__menu-item">
+        <a href="{% url 'incident-document-public-tab' request.user.id %}"
+        onclick="window.location.href=this.href; return false;"
+        
+        hx-push-url="true"
+        hx-target="#document_target"
+       
+        class="oh-sidebar__menu-link">
+        <div class="oh-sidebar__menu-icon">
+            <img
+              src="{% static 'images/ui/no_documents.png' %}"
+              alt="Dashboard"
+              width="24"
+              height="24"
+            />
+          </div>
+        {% trans "Incident Management" %}
+       </a>
 
       </li>
 

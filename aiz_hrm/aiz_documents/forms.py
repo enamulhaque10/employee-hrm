@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 from base.forms import ModelForm
 from base.methods import reload_queryset
 from employee.filters import EmployeeFilter
-from employee.models import Employee
+from employee.models import Employee, EmployeeIncident
 from aiz_documents.models import Document, DocumentRequest, DocumentCategory
 from aiz_widgets.widgets.aiz_multi_select_field import aizMultiSelectField
 from aiz_widgets.widgets.select_widgets import aizMultiSelectWidget
@@ -66,6 +66,27 @@ class DocumentForm(ModelForm):
             "expiry_date": forms.DateInput(
                 attrs={"type": "date", "class": "oh-input  w-100"}
             ),
+        }
+
+    def as_p(self):
+        """
+        Render the form fields as HTML table rows with Bootstrap styling.
+        """
+        context = {"form": self}
+        table_html = render_to_string("common_form.html", context)
+        return table_html
+
+
+class IncidentForm(ModelForm):
+
+    verbose_name = "Incident"
+
+    class Meta:
+        model = EmployeeIncident
+        fields = "__all__"
+        exclude = [ "status", "is_active"]
+        widgets = {
+            "employee_id": forms.HiddenInput(),
         }
 
     def as_p(self):
