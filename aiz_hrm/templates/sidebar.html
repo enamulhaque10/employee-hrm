@@ -214,32 +214,6 @@ function initializeSummernote(candId,searchWords,) {
 
       </li>
 
-      <li class="oh-sidebar__menu-item">
-        <form action="post"> 
-
-          <a 
-        href="{% url 'employee-incident-document-tab' request.user.id %}"
-        hx-get="{% url 'employee-incident-document-tab' request.user.id %}"
-        hx-push-url="true"
-        hx-target="#document_target"
-        onclick="window.location.href=this.href; return false;"
-        class="oh-sidebar__menu-link">
-        <div class="oh-sidebar__menu-icon">
-            <img
-              src="{% static 'images/ui/no_documents.png' %}"
-              alt="Dashboard"
-              width="24"
-              height="24"
-            />
-          </div>
-        {% trans "Incident Record" %}
-       </a>
-        </form>
-        
-
-      </li>
-
-
       <li
         class="oh-sidebar__menu-item"
         x-data="{ isOpen: getOpenState('dashboardNav') }"
@@ -382,6 +356,14 @@ function initializeSummernote(candId,searchWords,) {
       {% endif %}
     </ul>
   </div>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+ 
+=======
+  
+>>>>>>> c18e6c0a (updated)
+>>>>>>> af53fa99 (conflict fixed)
 </div>
 <style>
   .highlight-selected{
