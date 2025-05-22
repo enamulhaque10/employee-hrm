@@ -198,14 +198,12 @@ function initializeSummernote(candId,searchWords,) {
       <li class="oh-sidebar__menu-item">
         <a href="{% url 'incident-document-public-tab' request.user.id %}"
         onclick="window.location.href=this.href; return false;"
-        
         hx-push-url="true"
         hx-target="#document_target"
-       
         class="oh-sidebar__menu-link">
         <div class="oh-sidebar__menu-icon">
             <img
-              src="{% static 'images/ui/no_documents.png' %}"
+              src="{% static 'images/ui/dashboard.svg' %}"
               alt="Dashboard"
               width="24"
               height="24"
@@ -221,11 +219,9 @@ function initializeSummernote(candId,searchWords,) {
         x-data="{ isOpen: getOpenState('dashboardNav') }"
       >
         <a
-          href="{%url 'home-page' %}"
+          href="{%url 'event-calender-tab' request.user.id %}"
           onclick="window.location.href=this.href; return false;"
           class="oh-sidebar__menu-link"
-          data-id="dashboardNav"
-          x-on:click.prevent="isOpen = !isOpen; saveOpenState('dashboardNav', isOpen)"
           x-bind:class="isOpen ? 'oh-sidebar__menu-link--active' : ''"
         >
           <div class="oh-sidebar__menu-icon">

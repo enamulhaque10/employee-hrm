@@ -88,6 +88,7 @@ from employee.forms import (
     EmployeeWorkInformationForm,
     EmployeeWorkInformationUpdateForm,
     excel_columns,
+    EventalenderForm,
 )
 from employee.methods.methods import (
     bulk_create_department_import,
@@ -119,6 +120,7 @@ from employee.models import (
     EmployeeWorkInformation,
     NoteFiles,
     EmployeeIncident,
+    EventCalender,
 )
 from aiz.decorators import (
     hx_request_required,
@@ -751,6 +753,18 @@ def employee_training_tab(request, emp_id):
     return render(request, "tabs/employee_training_tab.html", context=context)
 
 
+def event_calender_tab(request, emp_id):
+    form = EventalenderForm(request.POST, request.FILES)
+    event_calenders = EventCalender.objects.all()
+
+    context = {
+        "event_calenders": event_calenders,
+        "form": form,
+        "emp_id": emp_id,
+    }
+    return render(request, "tabs/event_calender.html", context=context)
+
+
 @login_required
 @hx_request_required
 @owner_can_enter("aiz_job_reference.view_job_reference", Employee)
@@ -960,6 +974,24 @@ def employee_training_create(request, emp_id):
     }
     return render(request, "tabs/htmx/employee_training_create_form.html", context=context)
 
+@login_required
+@hx_request_required
+def event_calender_create(request, emp_id):
+    employee_id = Employee.objects.get(id=emp_id)
+    form = EventalenderForm(initial={"employee_id": employee_id})
+    if request.method == "POST":
+        form = EventalenderForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, _("Event Calender created successfully."))
+            return HttpResponse("<script>window.location.reload();</script>")
+
+    context = {
+        "form": form,
+        "emp_id": emp_id,
+    }
+    return render(request, "tabs/htmx/event_calender_create.html", context=context)
+
 
 @login_required
 def update_document_title(request, id):
@@ -1088,6 +1120,61 @@ def update_employee_training_training_name(request, id):
     else:
         messages.error(request, _("Invalid request"))
     return HttpResponse("")
+
+@login_required
+def update_event_calender_title(request, id):
+    event = get_object_or_404(EventCalender, id=id)
+    event_name = request.POST.get("event_title")
+    if request.method == "POST":
+        event.event_title = event_name
+        event.save()
+        messages.success(request, _("Event Title updated successfully"))
+    else:
+        messages.error(request, _("Invalid request"))
+    return HttpResponse("")
+
+@login_required
+def update_event_calender_event_date(request, id):
+    event = get_object_or_404(EventCalender, id=id)
+    event_date= request.POST.get("event_date")
+    date_obj = datetime.strptime(event_date, "%B %d, %Y")
+    formatted_date = date_obj.strftime("%Y-%m-%d")
+
+    if request.method == "POST":
+        event.event_date = formatted_date
+        event.save()
+        messages.success(request, _("Event Date updated successfully"))
+    else:
+        messages.error(request, _("Invalid request"))
+    return HttpResponse("")
+
+@login_required
+def update_event_calender_event_description(request, id):
+    event = get_object_or_404(EventCalender, id=id)
+    event_des = request.POST.get("event_description")
+    if request.method == "POST":
+        event.event_description = event_des
+        event.save()
+        messages.success(request, _("Event Description updated successfully"))
+    else:
+        messages.error(request, _("Invalid request"))
+    return HttpResponse("")
+
+
+@login_required
+def update_event_calender_reminder_date(request, id):
+    event = get_object_or_404(EventCalender, id=id)
+    reminder_date = request.POST.get("reminder_date")
+    date_obj = datetime.strptime(reminder_date, "%B %d, %Y")
+    formatted_date = date_obj.strftime("%Y-%m-%d")
+    if request.method == "POST":
+        event.reminder_date = formatted_date
+        event.save()
+        messages.success(request, _("Event Reminder updated successfully"))
+    else:
+        messages.error(request, _("Invalid request"))
+    return HttpResponse("")
+
 
 @login_required
 def update_employee_training_institution_name(request, id):
@@ -1267,6 +1354,27 @@ def employee_training_delete(request, id):
             messages.error(request, _("Employee Training not found"))
     except ProtectedError:
         messages.error(request, _("You cannot delete this Employee Training."))
+    return HttpResponse("<script>window.location.reload();</script>")
+
+
+
+@login_required
+@hx_request_required
+def event_calender_delete(request, id):
+    try:
+        calender = EventCalender.objects.filter(id=id)
+        if calender:
+            calender.delete()
+            messages.success(
+                request,
+                _(
+                    f"Event calender deleted successfully"
+                ),
+            )
+        else:
+            messages.error(request, _("Event calender not found"))
+    except ProtectedError:
+        messages.error(request, _("You cannot delete this Event Calender."))
     return HttpResponse("<script>window.location.reload();</script>")
 
 
@@ -1663,6 +1771,8 @@ def employee_view(request):
     get_key_instances(Employee, data_dict)
     emp = Employee.objects.filter()
 
+    print(emp, 'emppp')
+
     # Store the employees in the session
     request.session["filtered_employees"] = [employee.id for employee in queryset]
 
@@ -2020,6 +2130,7 @@ def employee_view_update(request, obj_id, **kwargs):
     company = request.session["selected_company"]
     user = Employee.objects.filter(employee_user_id=request.user).first()
     work_info = HistoryTrackingFields.objects.first()
+    print(work_info, 'work')
     work_info_history = False
     if work_info and work_info.work_info_track == True:
         work_info_history = True
@@ -2425,6 +2536,13 @@ def employee_card(request):
     """
     previous_data = request.GET.urlencode()
     search = request.GET.get("search")
+    event_reminder = EventCalender.objects.all()
+    events = []
+    for event in  event_reminder:
+        print(event, 'calender')
+        #reminder = event.reminder_date
+        
+
     if isinstance(search, type(None)):
         search = ""
     employees = filtersubordinatesemployeemodel(

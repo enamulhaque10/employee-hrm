@@ -48,6 +48,7 @@ from employee.models import (
     NoteFiles,
     Policy,
     PolicyMultipleFile,
+    EventCalender
 )
 from aiz import aiz_middlewares
 from aiz_audit.models import AccountBlockUnblock
@@ -934,6 +935,29 @@ class EmployeeTagForm(ModelForm):
         exclude = ["is_active"]
         widgets = {"color": TextInput(attrs={"type": "color", "style": "height:50px"})}
 
+
+class EventalenderForm(ModelForm):
+
+    verbose_name = "Event Calender"
+
+    class Meta:
+        model = EventCalender
+        fields = "__all__"
+        exclude = ["status", "is_active"]
+        widgets = {
+            "employee_id": forms.HiddenInput(),
+            "event_date": forms.DateInput(
+                attrs={"type": "date", "class": "oh-input  w-100"}
+            ),
+            "reminder_date": forms.DateInput(
+                attrs={"type": "date", "class": "oh-input  w-100"}
+            ),
+        }
+
+    def as_p(self):
+        context = {"form": self}
+        table_html = render_to_string("common_form.html", context)
+        return table_html
 
 class EmployeeGeneralSettingPrefixForm(forms.ModelForm):
 

@@ -267,6 +267,7 @@ urlpatterns = [
     path("job-experiences-tab/<int:emp_id>", views.job_experiences_tab, name="job-experiences-tab"),
     path("employee-education-tab/<int:emp_id>", views.employee_education_tab, name="employee-education-tab"),
     path("employee-training-tab/<int:emp_id>", views.employee_training_tab, name="employee-training-tab"),
+    path("event-calender-tab/<int:emp_id>", views.event_calender_tab, name="event-calender-tab"),
     path("job-reference-tab/<int:emp_id>", views.job_reference_tab, name="job-reference-tab"),
     path(
         "bonus-points-tab/<int:emp_id>", views.bonus_points_tab, name="bonus-points-tab"
@@ -334,6 +335,7 @@ urlpatterns = [
 
     path("employee-education-create/<int:emp_id>", views.employee_education_create, name="employee-education-create"),
     path("employee-training-create/<int:emp_id>", views.employee_training_create, name="employee-training-create"),
+    path("event-calender-create/<int:emp_id>", views.event_calender_create, name="event-calender-create"),
     path("job-reference-create/<int:emp_id>", views.job_reference_create, name="job-reference-create"),
     path("document-category-create/", views.document_category_create, name="document-category-create"),
     #path("document-category-update/", views.document_category_create, name="document-category-update"),
@@ -347,7 +349,7 @@ urlpatterns = [
     path(
         "update-incident-document-title/<int:id>",
         views.update_incident_document_title,
-        name="update-document-title",
+        name="update-incident-document-title",
     ),
 
     # job experiences urls start
@@ -412,6 +414,29 @@ urlpatterns = [
         views.update_employee_training_training_name,
         name="update-employee-training-training-name",
     ),
+
+    path(
+        "update-event-calender-event-date/<int:id>/",
+        views.update_event_calender_event_date,
+        name="update-event-calender-event-date",
+    ),
+
+    path(
+        "update-event-calender-reminder-date/<int:id>/",
+        views.update_event_calender_reminder_date,
+        name="update-event-calender-reminder-date",
+    ),
+
+    path(
+        "update-event-calender-event-description/<int:id>/",
+        views.update_event_calender_event_description,
+        name="update-event-calender-event-description",
+    ),
+      path(
+        "update-event-calender-title/<int:id>/",
+        views.update_event_calender_title,
+        name="update-event-calender-title",
+    ),
     path(
         "update-employee-training-institution-name/<int:id>/",
         views.update_employee_training_institution_name,
@@ -421,6 +446,12 @@ urlpatterns = [
         "employee-training-delete/<int:id>/",
         views.employee_training_delete,
         name="employee-training-delete",
+    ),
+
+     path(
+        "event-calender-delete/<int:id>/",
+        views.event_calender_delete,
+        name="event-calender-delete",
     ),
     # employee training urls end
 
@@ -496,6 +527,11 @@ urlpatterns = [
         "document-delete/<int:id>/",
         views.document_delete,
         name="document-delete",
+    ),
+     path(
+        "incident-document-delete/<int:id>/",
+        views.incident_document_delete,
+        name="incident-document-delete",
     ),
     
     path("organisation-chart/", views.organisation_chart, name="organisation-chart"),
