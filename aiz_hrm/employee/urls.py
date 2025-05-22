@@ -330,7 +330,7 @@ urlpatterns = [
     path("document-create/<int:emp_id>", views.document_create, name="document-create"),
     path("incident-document-create/<int:emp_id>", views.incident_document_create, name="incident-document-create"),
     path("document-create-public/<int:emp_id>", views.document_create_public, name="document-create-public"),
-    path("incident-document-create-public/<int:emp_id>", views.incident_document_create_public, name="incident-document-create-public"),
+    #path("incident-document-create-public/<int:emp_id>", views.incident_document_create_public, name="incident-document-create-public"),
     path("job-experience-create/<int:emp_id>", views.job_experience_create, name="job-experience-create"),
 
 

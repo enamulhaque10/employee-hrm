@@ -1110,37 +1110,7 @@ class EmployeeGeneralSetting(aizModel):
     badge_id_prefix = models.CharField(max_length=5, default="PEP")
     company_id = models.ForeignKey(Company, null=True, on_delete=models.CASCADE)
     objects = aizCompanyManager("company_id")
-
-FORMATS = [
-    ("any", "Any"),
-    ("pdf", "PDF"),
-    ("txt", "TXT"),
-    ("docx", "DOCX"),
-    ("xlsx", "XLSX"),
-    ("jpg", "JPG"),
-    ("png", "PNG"),
-    ("jpeg", "JPEG"),
-    ("audio", "AUDIO"),
-    ("vedio", "VEDIO"),
-]
-class EmployeeIncident(aizModel):
-        title = models.CharField(max_length=100)
-        involved_member = models.TextField(blank=True,null=True, max_length=255)
-        description = models.TextField(blank=True, null=True, max_length=255)
-        employee_id = models.ForeignKey(Employee, on_delete=models.PROTECT)
-        document = models.FileField(upload_to="employee/documents", null=True)
-        format = models.CharField(choices=FORMATS, max_length=10)
         
-        
-
-        def __str__(self):
-            return self.title
-        
-
-
-
-
-
 
 class ProfileEditFeature(aizModel):
     """
