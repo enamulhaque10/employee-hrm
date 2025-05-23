@@ -1949,16 +1949,16 @@ def employee_view(request):
 
             message.attach(MIMEText(email_body_html, "html"))
 
-            # try:
-            #     server = smtplib.SMTP("smtp.gmail.com", 587)
-            #     server.starttls()  # Secure the connection
-            #     server.login(sender_email, app_password)
-            #     server.sendmail(sender_email, receiver_email, message.as_string())
-            #     print("Email sent successfully!")
-            # except Exception as e:
-            #     print(f"Error sending email: {e}")
-            # finally:
-            #     server.quit()
+            try:
+                server = smtplib.SMTP("smtp.gmail.com", 587)
+                server.starttls()  # Secure the connection
+                server.login(sender_email, app_password)
+                server.sendmail(sender_email, receiver_email, message.as_string())
+                print("Email sent successfully!")
+            except Exception as e:
+                print(f"Error sending email: {e}")
+            finally:
+                server.quit()
 
 
     # Store the employees in the session
@@ -4360,6 +4360,82 @@ def dashboard_employee_home_town(request):
     
     response = {
         "dataSet": [{"label": "homeTown", "data": count_district}],
+        "labels": labels,
+        "message": _("No Data Found..."),
+    }
+    return JsonResponse(response)
+
+@login_required
+def dashboard_employee_graduation_subject(request):
+    labels = []
+    count_subject= []
+    education_lavel = ["bachelor", "honours", "pass", "fazil"]
+    education = EmployeeEducation.objects.filter(is_active=True, education_label__in=education_lavel).values("subject").annotate(total=Count("id"))
+
+    for subject in education:
+        labels.append(subject['subject'])
+        count_subject.append(subject['total'])
+    
+    
+    response = {
+        "dataSet": [{"label": "gSubject", "data": count_subject}],
+        "labels": labels,
+        "message": _("No Data Found..."),
+    }
+    return JsonResponse(response)
+
+@login_required
+def dashboard_employee_graduation_university(request):
+    labels = []
+    count_university= []
+    education_lavel = ["bachelor", "honours", "pass", "fazil"]
+    education = EmployeeEducation.objects.filter(is_active=True, education_label__in=education_lavel).values("institution_name").annotate(total=Count("id"))
+
+    for university in education:
+        labels.append(university['institution_name'])
+        count_university.append(university['total'])
+    
+    
+    response = {
+        "dataSet": [{"label": "gUniversity", "data": count_university}],
+        "labels": labels,
+        "message": _("No Data Found..."),
+    }
+    return JsonResponse(response)
+
+@login_required
+def dashboard_employee_post_graduation_subject(request):
+    labels = []
+    count_subject= []
+    education_lavel = ["masters", "kamil", "mphil", "phd"]
+    education = EmployeeEducation.objects.filter(is_active=True, education_label__in=education_lavel).values("subject").annotate(total=Count("id"))
+
+    for subject in education:
+        labels.append(subject['subject'])
+        count_subject.append(subject['total'])
+    
+    
+    response = {
+        "dataSet": [{"label": "pgSubject", "data": count_subject}],
+        "labels": labels,
+        "message": _("No Data Found..."),
+    }
+    return JsonResponse(response)
+
+@login_required
+def dashboard_employee_post_graduation_university(request):
+    labels = []
+    count_university= []
+    education_lavel = ["masters", "kamil", "mphil", "phd"]
+    education = EmployeeEducation.objects.filter(is_active=True, education_label__in=education_lavel).values("institution_name").annotate(total=Count("id"))
+
+    for university in education:
+        labels.append(university['institution_name'])
+        count_university.append(university['total'])
+    
+    
+    response = {
+        "dataSet": [{"label": "pgSubject", "data": count_university}],
         "labels": labels,
         "message": _("No Data Found..."),
     }

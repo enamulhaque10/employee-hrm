@@ -229,6 +229,27 @@ urlpatterns = [
         views.dashboard_employee_home_town,
         name="dashboard-employee-home-town",
     ),
+
+      path(
+        "dashboard-employee-graduation-subject",
+        views.dashboard_employee_graduation_subject,
+        name="dashboard-employee-graduation-subject",
+    ),
+     path(
+        "dashboard-employee-post-graduation-subject",
+        views.dashboard_employee_post_graduation_subject,
+        name="dashboard-employee-post-graduation-subject",
+    ),
+     path(
+        "dashboard-employee-graduation-university",
+        views.dashboard_employee_graduation_university,
+        name="dashboard-employee-graduation-university",
+    ),
+     path(
+        "dashboard-employee-post-graduation-university",
+        views.dashboard_employee_post_graduation_university,
+        name="dashboard-employee-post-graduation-university",
+    ),
     path(
         "dashboard-employee-job-position",
         views.dashboard_employee_job_position,

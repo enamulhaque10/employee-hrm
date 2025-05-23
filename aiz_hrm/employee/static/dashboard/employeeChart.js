@@ -429,6 +429,150 @@ $(document).ready(function () {
         }
     }
 
+    function gSubjectChart(dataSet, labels) {
+        const data = {
+            labels: labels,
+            datasets: dataSet,
+        };
+        // Create chart using the Chart.js library
+        window["gSubjectChart"] = {};
+        if (document.getElementById("gSubjectChart")) {
+            const ctx = document.getElementById("gSubjectChart").getContext("2d");
+            gSubjectChart = new Chart(ctx, {
+                type: "doughnut",
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    onClick: (e, activeEls) => {
+                        let datasetIndex = activeEls[0].datasetIndex;
+                        let dataIndex = activeEls[0].index;
+                        let datasetLabel = e.chart.data.datasets[datasetIndex].label;
+                        let value = e.chart.data.datasets[datasetIndex].data[dataIndex];
+                        let label = e.chart.data.labels[dataIndex];
+                        localStorage.removeItem("savedFilters");
+                        window.location.href =
+                            "/employee/employee-view?gSubject=" + label;
+
+                    },
+                },
+                plugins: [
+                    {
+                        afterRender: (chart) => emptyChart(chart),
+                    },
+                ],
+            });
+        }
+    }
+
+    function gUniversityChart(dataSet, labels) {
+        const data = {
+            labels: labels,
+            datasets: dataSet,
+        };
+        // Create chart using the Chart.js library
+        window["gUniversityChart"] = {};
+        if (document.getElementById("gUniversityChart")) {
+            const ctx = document.getElementById("gUniversityChart").getContext("2d");
+            gUniversityChart = new Chart(ctx, {
+                type: "doughnut",
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    onClick: (e, activeEls) => {
+                        let datasetIndex = activeEls[0].datasetIndex;
+                        let dataIndex = activeEls[0].index;
+                        let datasetLabel = e.chart.data.datasets[datasetIndex].label;
+                        let value = e.chart.data.datasets[datasetIndex].data[dataIndex];
+                        let label = e.chart.data.labels[dataIndex];
+                        localStorage.removeItem("savedFilters");
+                        window.location.href =
+                            "/employee/employee-view?gUniversity=" + label;
+
+                    },
+                },
+                plugins: [
+                    {
+                        afterRender: (chart) => emptyChart(chart),
+                    },
+                ],
+            });
+        }
+    }
+
+    function pgSubjectChart(dataSet, labels) {
+        const data = {
+            labels: labels,
+            datasets: dataSet,
+        };
+        // Create chart using the Chart.js library
+        window["pgSubjectChart"] = {};
+        if (document.getElementById("pgSubjectChart")) {
+            const ctx = document.getElementById("pgSubjectChart").getContext("2d");
+            pgSubjectChart = new Chart(ctx, {
+                type: "doughnut",
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    onClick: (e, activeEls) => {
+                        let datasetIndex = activeEls[0].datasetIndex;
+                        let dataIndex = activeEls[0].index;
+                        let datasetLabel = e.chart.data.datasets[datasetIndex].label;
+                        let value = e.chart.data.datasets[datasetIndex].data[dataIndex];
+                        let label = e.chart.data.labels[dataIndex];
+                        localStorage.removeItem("savedFilters");
+                        window.location.href =
+                            "/employee/employee-view?pgSubject=" + label;
+
+                    },
+                },
+                plugins: [
+                    {
+                        afterRender: (chart) => emptyChart(chart),
+                    },
+                ],
+            });
+        }
+    }
+
+    function pgUniversity(dataSet, labels) {
+        const data = {
+            labels: labels,
+            datasets: dataSet,
+        };
+        // Create chart using the Chart.js library
+        window["pgUniversity"] = {};
+        if (document.getElementById("pgUniversity")) {
+            const ctx = document.getElementById("pgUniversity").getContext("2d");
+            pgUniversity = new Chart(ctx, {
+                type: "doughnut",
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    onClick: (e, activeEls) => {
+                        let datasetIndex = activeEls[0].datasetIndex;
+                        let dataIndex = activeEls[0].index;
+                        let datasetLabel = e.chart.data.datasets[datasetIndex].label;
+                        let value = e.chart.data.datasets[datasetIndex].data[dataIndex];
+                        let label = e.chart.data.labels[dataIndex];
+                        localStorage.removeItem("savedFilters");
+                        window.location.href =
+                            "/employee/employee-view?pgUniversity=" + label;
+
+                    },
+                },
+                plugins: [
+                    {
+                        afterRender: (chart) => emptyChart(chart),
+                    },
+                ],
+            });
+        }
+    }
+
 
     $.ajax({
         url: "/employee/dashboard-employee",
@@ -580,6 +724,68 @@ $(document).ready(function () {
             labels = response.labels;
             console.log(dataSet,'home')
             homeTownChart(dataSet, labels);
+        },
+        error: function (error) {
+            console.log(error);
+        },
+    });
+
+    
+
+    $.ajax({
+        url: "/employee/dashboard-employee-graduation-subject",
+        type: "GET",
+        success: function (response) {
+            // Code to handle the response
+            dataSet = response.dataSet;
+            labels = response.labels;
+            console.log(dataSet,'subject')
+            gSubjectChart(dataSet, labels);
+        },
+        error: function (error) {
+            console.log(error);
+        },
+    });
+
+    $.ajax({
+        url: "/employee/dashboard-employee-graduation-university",
+        type: "GET",
+        success: function (response) {
+            // Code to handle the response
+            dataSet = response.dataSet;
+            labels = response.labels;
+            console.log(dataSet,'guniversity')
+            gUniversityChart(dataSet, labels);
+        },
+        error: function (error) {
+            console.log(error);
+        },
+    });
+
+    $.ajax({
+        url: "/employee/dashboard-employee-post-graduation-subject",
+        type: "GET",
+        success: function (response) {
+            // Code to handle the response
+            dataSet = response.dataSet;
+            labels = response.labels;
+            console.log(dataSet,'pgsubjct')
+            pgSubjectChart(dataSet, labels);
+        },
+        error: function (error) {
+            console.log(error);
+        },
+    });
+
+    $.ajax({
+        url: "/employee/dashboard-employee-post-graduation-university",
+        type: "GET",
+        success: function (response) {
+            // Code to handle the response
+            dataSet = response.dataSet;
+            labels = response.labels;
+            console.log(dataSet,'pguniversity')
+            pgUniversity(dataSet, labels);
         },
         error: function (error) {
             console.log(error);

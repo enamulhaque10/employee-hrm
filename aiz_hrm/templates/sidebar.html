@@ -296,7 +296,7 @@ function initializeSummernote(candId,searchWords,) {
           style="display: none"
           >
           <ul class="oh-sidebar__submenu-items">
-            {% if "leave"|app_installed and perms.base.view_multipleapprovalcondition %}
+            <!-- {% if "leave"|app_installed and perms.base.view_multipleapprovalcondition %}
             <li class="oh-sidebar__submenu-item">
               <a
                 href="{% url 'multiple-approval-condition' %}"
@@ -304,8 +304,8 @@ function initializeSummernote(candId,searchWords,) {
                 >{% trans "Multiple Approvals" %}</a
               >
             </li>
-            {% endif %}
-            {% if perms.base.view_aizmailtemplate %}
+            {% endif %} -->
+            <!-- {% if perms.base.view_aizmailtemplate %}
             <li class="oh-sidebar__submenu-item">
               <a
                 class="oh-sidebar__submenu-link"
@@ -314,8 +314,8 @@ function initializeSummernote(candId,searchWords,) {
                 >{% trans "Mail Templates" %}</a
               >
             </li>
-            {% endif %}
-            {% if "aiz_automations"|app_installed and perms.aiz_automations.view_mailautomation %}
+            {% endif %} -->
+            <!-- {% if "aiz_automations"|app_installed and perms.aiz_automations.view_mailautomation %}
             <li class="oh-sidebar__submenu-item">
               <a
                 class="oh-sidebar__submenu-link"
@@ -324,7 +324,7 @@ function initializeSummernote(candId,searchWords,) {
                 >{% trans "Mail Automations" %}</a
               >
             </li>
-            {% endif %}
+            {% endif %} -->
             {% if perms.base.add_holidays %}
             <li class="oh-sidebar__submenu-item">
               <a
