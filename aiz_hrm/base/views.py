@@ -6703,6 +6703,7 @@ def check_chart_permission(request, charts):
         "leave_allocation_approve": "leave",
         "asset_request_approve": "asset",
         "employees_chart": "employee",
+        "employees_home_town": "employee",
         "gender_chart": "employee",
         "religion_chart": "employee",
         "blood_group_chart": "employee",
@@ -6712,7 +6713,11 @@ def check_chart_permission(request, charts):
         "job_section_chart":"base",
         "job_unit_chart":"base",
         "job_grade_chart":"base",
-        "employee_category_chart":"base"
+        "employee_category_chart":"base",
+        "graduation_subject_chart":"aiz_employee_education",
+        "graduation_university_chart":"aiz_employee_education",
+        "post_graduation_subject_chart":"aiz_employee_education",
+        "post_graduation_univeersity_chart":"aiz_employee_education"
         
     }
     permissions = {
@@ -6784,15 +6789,16 @@ def employee_chart_show(request):
         employee=request.user.employee_get
     )[0]
     charts = [
-        ("offline_employees", _("Offline Employees")),
-        ("online_employees", _("Online Employees")),
-        ("overall_leave_chart", _("Overall Leave Chart")),
-        ("hired_candidates", _("Hired Candidates")),
-        ("onboarding_candidates", _("Onboarding Candidates")),
-        ("recruitment_analytics", _("Recruitment Analytics")),
-        ("attendance_analytic", _("Attendance analytics")),
-        ("hours_chart", _("Hours Chart")),
+        # ("offline_employees", _("Offline Employees")),
+        # ("online_employees", _("Online Employees")),
+        # ("overall_leave_chart", _("Overall Leave Chart")),
+        # ("hired_candidates", _("Hired Candidates")),
+        # ("onboarding_candidates", _("Onboarding Candidates")),
+        # ("recruitment_analytics", _("Recruitment Analytics")),
+        # ("attendance_analytic", _("Attendance analytics")),
+        # ("hours_chart", _("Hours Chart")),
         ("employees_chart", _("Employees Chart")),
+        ("employees_home_town", _("Employees Home Town")),
         ("job_position_chart", _("Job Position")),
         ("job_section_chart", _("Job Section")),
         ("job_unit_chart", _("Job Unit")),
@@ -6802,17 +6808,21 @@ def employee_chart_show(request):
         ("blood_group_chart", _("Blood Group")),
         ("marital_chart", _("Marital Status")),
         ("employee_category_chart", _("Employee Category")),
-        ("objective_status", _("Objective Status")),
-        ("key_result_status", _("Key Result Status")),
-        ("feedback_status", _("Feedback Status")),
-        ("shift_request_approve", _("Shift Request to Approve")),
-        ("work_type_request_approve", _("Work Type Request to Approve")),
-        ("overtime_approve", _("Overtime to Approve")),
-        ("attendance_validate", _("Attendance to Validate")),
-        ("leave_request_approve", _("Leave Request to Approve")),
-        ("leave_allocation_approve", _("Leave Allocation to Approve")),
-        ("feedback_answer", _("Feedbacks to Answer")),
-        ("asset_request_approve", _("Asset Request to Approve")),
+        ("graduation_subject_chart", _("Graduation Subject")),
+        ("graduation_university_chart", _("Graduation University")),
+        ("post_graduation_subject_chart", _("Post Graduation Subject")),
+        ("post_graduation_univeersity_chart", _("Post Graduation University")),
+        # ("objective_status", _("Objective Status")),
+        # ("key_result_status", _("Key Result Status")),
+        # ("feedback_status", _("Feedback Status")),
+        # ("shift_request_approve", _("Shift Request to Approve")),
+        # ("work_type_request_approve", _("Work Type Request to Approve")),
+        # ("overtime_approve", _("Overtime to Approve")),
+        # ("attendance_validate", _("Attendance to Validate")),
+        # ("leave_request_approve", _("Leave Request to Approve")),
+        # ("leave_allocation_approve", _("Leave Allocation to Approve")),
+        # ("feedback_answer", _("Feedbacks to Answer")),
+        # ("asset_request_approve", _("Asset Request to Approve")),
     ]
     charts = check_chart_permission(request, charts)
 

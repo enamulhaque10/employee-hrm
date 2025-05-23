@@ -224,6 +224,11 @@ urlpatterns = [
         views.dashboard_employee_category,
         name="dashboard-employee-category",
     ),
+     path(
+        "dashboard-employee-home-town",
+        views.dashboard_employee_home_town,
+        name="dashboard-employee-home-town",
+    ),
     path(
         "dashboard-employee-job-position",
         views.dashboard_employee_job_position,

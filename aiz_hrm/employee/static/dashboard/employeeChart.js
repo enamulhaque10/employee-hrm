@@ -393,6 +393,42 @@ $(document).ready(function () {
         }
     }
 
+    function homeTownChart(dataSet, labels) {
+        const data = {
+            labels: labels,
+            datasets: dataSet,
+        };
+        // Create chart using the Chart.js library
+        window["homeTownChart"] = {};
+        if (document.getElementById("homeTownChart")) {
+            const ctx = document.getElementById("homeTownChart").getContext("2d");
+            homeTownChart = new Chart(ctx, {
+                type: "doughnut",
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    onClick: (e, activeEls) => {
+                        let datasetIndex = activeEls[0].datasetIndex;
+                        let dataIndex = activeEls[0].index;
+                        let datasetLabel = e.chart.data.datasets[datasetIndex].label;
+                        let value = e.chart.data.datasets[datasetIndex].data[dataIndex];
+                        let label = e.chart.data.labels[dataIndex];
+                        localStorage.removeItem("savedFilters");
+                        window.location.href =
+                            "/employee/employee-view?hometown=" + label;
+
+                    },
+                },
+                plugins: [
+                    {
+                        afterRender: (chart) => emptyChart(chart),
+                    },
+                ],
+            });
+        }
+    }
+
 
     $.ajax({
         url: "/employee/dashboard-employee",
@@ -529,6 +565,21 @@ $(document).ready(function () {
             labels = response.labels;
             console.log(dataSet,'category')
             categoryChart(dataSet, labels);
+        },
+        error: function (error) {
+            console.log(error);
+        },
+    });
+
+    $.ajax({
+        url: "/employee/dashboard-employee-home-town",
+        type: "GET",
+        success: function (response) {
+            // Code to handle the response
+            dataSet = response.dataSet;
+            labels = response.labels;
+            console.log(dataSet,'home')
+            homeTownChart(dataSet, labels);
         },
         error: function (error) {
             console.log(error);

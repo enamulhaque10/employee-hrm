@@ -28,7 +28,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.db import models, transaction
-from django.db.models import F, ProtectedError
+from django.db.models import F, ProtectedError, Count
 from django.db.models.query import QuerySet
 from django.forms import DateInput, Select
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, QueryDict
@@ -1949,16 +1949,16 @@ def employee_view(request):
 
             message.attach(MIMEText(email_body_html, "html"))
 
-            try:
-                server = smtplib.SMTP("smtp.gmail.com", 587)
-                server.starttls()  # Secure the connection
-                server.login(sender_email, app_password)
-                server.sendmail(sender_email, receiver_email, message.as_string())
-                print("Email sent successfully!")
-            except Exception as e:
-                print(f"Error sending email: {e}")
-            finally:
-                server.quit()
+            # try:
+            #     server = smtplib.SMTP("smtp.gmail.com", 587)
+            #     server.starttls()  # Secure the connection
+            #     server.login(sender_email, app_password)
+            #     server.sendmail(sender_email, receiver_email, message.as_string())
+            #     print("Email sent successfully!")
+            # except Exception as e:
+            #     print(f"Error sending email: {e}")
+            # finally:
+            #     server.quit()
 
 
     # Store the employees in the session
@@ -4324,7 +4324,6 @@ def dashboard_employee_category(request):
     count = []
     employee_type = EmployeeType.objects.all()
     for dept in employee_type:
-        print(dept)
         if len(
             Employee.objects.filter(
                 employee_work_info__employee_type_id=dept, is_active=True
@@ -4341,6 +4340,26 @@ def dashboard_employee_category(request):
             )
     response = {
         "dataSet": [{"label": "Category", "data": count}],
+        "labels": labels,
+        "message": _("No Data Found..."),
+    }
+    return JsonResponse(response)
+
+@login_required
+def dashboard_employee_home_town(request):
+    labels = []
+    count_district= []
+    employee = Employee.objects.filter(is_active=True).values("employee_home_district").annotate(total=Count("id"))
+    print(employee, 'employee')
+
+    for item in employee:
+        print(item, 'item')
+        labels.append(item['employee_home_district'])
+        count_district.append(item['total'])
+    
+    
+    response = {
+        "dataSet": [{"label": "homeTown", "data": count_district}],
         "labels": labels,
         "message": _("No Data Found..."),
     }
