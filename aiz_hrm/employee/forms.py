@@ -947,11 +947,11 @@ class EventalenderForm(ModelForm):
         exclude = ["status", "is_active"]
         widgets = {
             "employee_id": forms.HiddenInput(),
-            "event_date": forms.DateInput(
-                attrs={"type": "date", "class": "oh-input  w-100"}
+            "event_date": forms.DateTimeInput(
+                attrs={"type": "datetime-local", "class": "oh-input  w-100"}
             ),
-            "reminder_date": forms.DateInput(
-                attrs={"type": "date", "class": "oh-input  w-100"}
+            "reminder_date": forms.DateTimeInput(
+                attrs={"type": "datetime-local", "class": "oh-input  w-100"}
             ),
         }
 

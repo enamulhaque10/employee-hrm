@@ -41,7 +41,11 @@ from django.views.decorators.http import require_http_methods
 from io import BytesIO
 import requests
 from PIL import Image as PILImage
-from django.http import FileResponse, Http404
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from dateutil import parser
+
 
 
 
@@ -168,6 +172,9 @@ from aiz_employee_education.models import EmployeeEducation
 from aiz_employee_training.models import EmployeeTraining
 from aiz_job_reference.models import JobReference
 from notifications.signals import notify
+
+
+
 
 
 def return_none(a, b):
@@ -1226,10 +1233,11 @@ def update_event_calender_event_description(request, id):
 def update_event_calender_reminder_date(request, id):
     event = get_object_or_404(EventCalender, id=id)
     reminder_date = request.POST.get("reminder_date")
-    date_obj = datetime.strptime(reminder_date, "%B %d, %Y")
-    formatted_date = date_obj.strftime("%Y-%m-%d")
+    date_obj = parser.parse(reminder_date)
+    #date_obj = datetime.strptime(reminder_date, "%B %d, %Y, %I:%M %p")
+    # formatted_date = date_obj.strftime("%Y-%m-%d")
     if request.method == "POST":
-        event.reminder_date = formatted_date
+        event.reminder_date = date_obj
         event.save()
         messages.success(request, _("Event Reminder updated successfully"))
     else:
@@ -1908,8 +1916,50 @@ def employee_view(request):
     data_dict = parse_qs(previous_data)
     get_key_instances(Employee, data_dict)
     emp = Employee.objects.filter()
+    calender = EventCalender.objects.all()
 
-    print(emp, 'emppp')
+    for time in calender:
+        current_time = timezone.now()
+        calculated_time = time.reminder_date - current_time
+        if (calculated_time < timedelta(hours=1)):
+
+            sender_email = "enamulcse12@gmail.com"
+            receiver_email = "parvess1980@gmail.com"
+            app_password = "iorg yewo vzwp gtgx" 
+
+
+            subject = time.event_title
+            body = "Hello, this is a test email sent from Python."
+            email_body_html = f"""
+                <html>
+                <body>
+                    <p>This is a reminder for an event <strong>{time.event_title}</strong>.</p>
+                    <p>This is a Event Date <strong>{time.event_date}</strong>.</p>
+                    <p>This is event Description <strong>{time.event_description}</strong>.</p>
+                </body>
+                </html>
+                """
+            # <p>Please join us at: <a href=""></a></p>
+            # <p>Best regards,<br>Your Company Name</p>
+
+            message = MIMEMultipart()
+            message["From"] = sender_email
+            message["To"] = receiver_email
+            message["Subject"] = subject
+
+            message.attach(MIMEText(email_body_html, "html"))
+
+            try:
+                server = smtplib.SMTP("smtp.gmail.com", 587)
+                server.starttls()  # Secure the connection
+                server.login(sender_email, app_password)
+                server.sendmail(sender_email, receiver_email, message.as_string())
+                print("Email sent successfully!")
+            except Exception as e:
+                print(f"Error sending email: {e}")
+            finally:
+                server.quit()
+
 
     # Store the employees in the session
     request.session["filtered_employees"] = [employee.id for employee in queryset]

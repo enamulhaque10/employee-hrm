@@ -1148,9 +1148,9 @@ class EmployeeIncident(aizModel):
         
 class EventCalender(aizModel):
     event_title = models.CharField(max_length=100, verbose_name="Event Title")
-    event_date = models.DateField(null=True, blank=True, verbose_name=_("Event Date"))
+    event_date = models.DateTimeField(null=True, blank=True, verbose_name=_("Event Date"))
     event_description = models.TextField(blank=True,null=True,max_length=500)
-    reminder_date = models.DateField(null=True,blank=True, verbose_name="Reminder Date")
+    reminder_date = models.DateTimeField(null=True,blank=True, verbose_name="Reminder Date")
     employee_id = models.ForeignKey(Employee, on_delete=models.PROTECT, null=True)
 
     def __str__(self):
