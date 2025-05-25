@@ -1921,7 +1921,7 @@ def employee_view(request):
     for time in calender:
         current_time = timezone.now()
         calculated_time = time.reminder_date - current_time
-        if (calculated_time < timedelta(hours=1)):
+        if (calculated_time < timedelta(minutes=60)) and (calculated_time > timedelta(minutes=55)):
 
             sender_email = "enamulcse12@gmail.com"
             receiver_email = "parvess1980@gmail.com"

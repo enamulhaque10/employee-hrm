@@ -346,13 +346,11 @@ class Employee(models.Model):
             getattr(self, "employee_work_info", None), "reporting_manager_id", None
         )
     
-    # def get_educational_subject(self):
-    #     """
-    #     """
-    #     education = EmployeeEducation.objects.all()
-    #     return getattr(
-    #         getattr(self, "employee_educational_info", None), "education_label",
-    #     )
+    def get_all_education_subject(self):
+        
+        return list(
+            self.educations.values_list("subject", flat=True)
+        )
 
     def get_avatar(self):
         """

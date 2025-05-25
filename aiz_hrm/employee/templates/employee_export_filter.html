@@ -141,34 +141,40 @@
                                     {{export_filter.form.employee_work_info__service_length_in_incepta}}
                                 </div>
                             </div>
-
-                            
                         </div>
                     </div>
                 </div>
 
-                <!-- <div class="oh-accordion">
+                <div class="oh-accordion">
                     <div class="oh-accordion-header">{% trans "Educational Info" %}</div>
                     <div class="oh-accordion-body">
                         <div class="row">
                             <div class="col-sm-12 col-md-12 col-lg-6">
                                 <div class="oh-input-group">
                                     <label class="oh-label"
-                                        for="{{export_filter.form.education_info__education_label.id_for_label}}">{% trans "Subject" %}</label>
-                                    {{export_filter.form.employee_work_info__department_id}}
+                                        for="{{export_filter.form.education_info__education_label.id_for_label}}">{% trans "Education Label" %}</label>
+                                    {{export_filter.form.educations__education_label}}
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-12 col-lg-6">
                                 <div class="oh-input-group">
                                     <label class="oh-label"
+                                        for="{{export_filter.form.employee_work_info__job_position_id.id_for_label}}">{% trans "Subject" %}</label>
+                                    {{export_filter.form.educations__subject}}
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 col-md-12 col-lg-6">
+                                <div class="oh-input-group">
+                                    <label class="oh-label"
                                         for="{{export_filter.form.employee_work_info__job_position_id.id_for_label}}">{% trans "University" %}</label>
-                                    {{export_filter.form.employee_work_info__job_position_id}}
+                                    {{export_filter.form.educations__institution_name}}
                                 </div>
                             </div>
                                                         
                         </div>
                     </div>
-                </div> -->
+                </div>
             </div>
             <div class="oh-modal__dialog-footer p-0 pt-4">
                 <button type="submit" class="oh-btn oh-btn--secondary oh-btn--shadow">

@@ -44,7 +44,7 @@ class EmployeeEducation(aizModel):
     
 ]
 
-    employee_id = models.ForeignKey(Employee, on_delete=models.PROTECT)
+    employee_id = models.ForeignKey(Employee, on_delete=models.PROTECT, related_name="educations")
     education_label = models.CharField(
         max_length=50, blank=True, null=True, choices=choice_education, default="primary"
     )

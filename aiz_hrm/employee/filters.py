@@ -145,7 +145,9 @@ class EmployeeFilter(aizFilterSet):
             "employee_work_info__tags",
             "employee_user_id__groups",
             "employee_user_id__user_permissions",
-           # "employee_educational_info__education_label",
+            "educations__education_label",
+            "educations__institution_name",
+            "educations__subject",
             
         ]
 
