@@ -38,6 +38,7 @@ from django.utils import timezone
 from django.utils.translation import gettext as __
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
+from django.core.serializers.json import DjangoJSONEncoder
 from io import BytesIO
 import requests
 from PIL import Image as PILImage
@@ -798,10 +799,24 @@ def event_calender_tab(request, emp_id):
     form = EventalenderForm(request.POST, request.FILES)
     event_calenders = EventCalender.objects.all()
 
+    calender_events = []
+
+    for event in event_calenders:
+       item =  {
+           "id": event.id,
+            "title": event.event_title,
+            "start": event.event_date.strftime('%Y-%m-%d'),
+            "reminder": event.reminder_date.strftime('%Y-%m-%d'),
+            "description": event.event_description,
+        }
+       calender_events.append(item)
+       
+
     context = {
         "event_calenders": event_calenders,
         "form": form,
         "emp_id": emp_id,
+        "calendar_events_json": json.dumps(calender_events, cls=DjangoJSONEncoder),
     }
     return render(request, "tabs/event_calender.html", context=context)
 
@@ -1236,6 +1251,19 @@ def update_event_calender_event_description(request, id):
         event.event_description = event_des
         event.save()
         messages.success(request, _("Event Description updated successfully"))
+    else:
+        messages.error(request, _("Invalid request"))
+    return HttpResponse("")
+
+
+@login_required
+def update_event_calender_event_reminder_mail(request, id):
+    event = get_object_or_404(EventCalender, id=id)
+    event_reminder_mail = request.POST.get("reminder_person")
+    if request.method == "POST":
+        event.reminder_person = event_reminder_mail
+        event.save()
+        messages.success(request, _("Event Reminder Person updated successfully"))
     else:
         messages.error(request, _("Invalid request"))
     return HttpResponse("")

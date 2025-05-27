@@ -460,6 +460,11 @@ urlpatterns = [
         views.update_event_calender_event_description,
         name="update-event-calender-event-description",
     ),
+     path(
+        "update-event-calender-event-reminder-mail/<int:id>/",
+        views.update_event_calender_event_reminder_mail,
+        name="update-event-calender-event-reminder-mail",
+    ),
       path(
         "update-event-calender-title/<int:id>/",
         views.update_event_calender_title,

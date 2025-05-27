@@ -2,6 +2,11 @@
 {% block content %}
 {% load static %}
 {% load i18n %}
+
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+
 <div class="oh-btn-group p-3 justify-content-end">
 	<div>
 		<button
@@ -24,6 +29,9 @@
 				<div class="oh-user_permission-list_item accordion exclude-accordion-style" hx-target="#viewFile" data-toggle="oh-modal-toggle" data-target="#viewFileModal" >
 					<div class="oh-user_permission-list_profile row-status--yellow">
 						<div class="oh-feedback-card__name-container ms-1 title_form">
+							<div id="calendar-{{ event.id }}" class="mb-4"></div>
+
+
 
 							<span class="oh-profile__info-label mb-1">
 								<ion-icon name="construct-outline" role="img" class="md hydrated" aria-label="construct outline"></ion-icon>
@@ -107,6 +115,27 @@
 									style="width: 270px; border:none"
 									readonly />
 							</form>
+
+							<span class="oh-profile__info-label mb-1">
+								<ion-icon name="business-outline" role="img" class="md hydrated" aria-label="construct outline"></ion-icon>
+								<span>Reminder Person Mail</span>
+							</span>
+							<form method="POST"
+								hx-post="{% url 'update-event-calender-event-reminder-mail' event.id %}"
+								hx-swap="none"
+								hx-on:htmx-after-request="setTimeout(() => { reloadMessage(); }, 300);">
+								
+							{% csrf_token %}
+								<input class="oh-card__title oh-card__title--sm fw-bold me-1 editable-input"
+									name="reminder_person" 
+									value="{{event.reminder_person}}" 
+									hx-post="{% url 'update-event-calender-event-reminder-mail' event.id %}"
+									hx-trigger="keyup changed delay:700ms"
+									hx-target="closest form"
+									hx-swap="none"
+									style="width: 270px; border:none"
+									readonly />
+							</form>
 						</div>
 					</div>
 					<div class="oh-btn-group">
@@ -153,6 +182,27 @@
         console.log('HTMX is sending a request to:', evt.detail.path);
     });
 </script>
+
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		const eventData = {{ calendar_events_json|safe }};
+
+		eventData.forEach(function (event) {
+			const calendarEl = document.getElementById('calendar-' + event.id);
+			if (calendarEl) {
+				const calendar = new FullCalendar.Calendar(calendarEl, {
+					initialView: 'dayGridMonth',
+					events: [event],
+					eventClick: function(info) {
+						alert(info.event.title + "\n\n" + info.event.extendedProps.description);
+					}
+				});
+				calendar.render();
+			}
+		});
+	});
+</script>
+
 
 
  <script>

@@ -1150,6 +1150,7 @@ class EventCalender(aizModel):
     event_description = models.TextField(blank=True,null=True,max_length=500)
     reminder_date = models.DateTimeField(null=True,blank=True, verbose_name="Reminder Date")
     employee_id = models.ForeignKey(Employee, on_delete=models.PROTECT, null=True)
+    reminder_person = models.TextField(blank=True, null=True, max_length=1000)
 
     def __str__(self):
         return self.event_title
