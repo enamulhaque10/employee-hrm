@@ -67,6 +67,11 @@ class DocumentForm(ModelForm):
                 attrs={"type": "date", "class": "oh-input  w-100"}
             ),
         }
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+        self.fields["document_category_id"].queryset = DocumentCategory.objects.all()
+
 
     def as_p(self):
         """
@@ -118,6 +123,12 @@ class DocumentUpdateForm(ModelForm):
                 attrs={"type": "date", "class": "oh-input  w-100"}
             ),
         }
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+        self.fields["document_category_id"].queryset = DocumentCategory.objects.all()
+
 
 
 class DocumentRejectForm(ModelForm):

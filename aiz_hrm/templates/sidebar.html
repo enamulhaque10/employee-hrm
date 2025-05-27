@@ -65,7 +65,7 @@ function initializeSummernote(candId,searchWords,) {
     </span>
     <div class="oh-sidebar__company-details">
       <img
-      src="{% static 'images/ui/incepta.png' %}"
+      src="{% static 'images/ui/Incepta-01.png' %}"
       style="width: 94px; border-radius: 9px"
       />
       <!-- <span class="oh-sidebar__company-title" style="font-size: 13px"
@@ -173,7 +173,7 @@ function initializeSummernote(candId,searchWords,) {
       </li>
       {% endfor %}
 
-
+       {% if request.user %}
       <li class="oh-sidebar__menu-item">
         <a href="{% url 'employee-document-public-tab' request.user.id %}"
         onclick="window.location.href=this.href; return false;"
@@ -194,6 +194,7 @@ function initializeSummernote(candId,searchWords,) {
         
        </a>
       </li>
+      {% endif %}
 
       <li class="oh-sidebar__menu-item">
         <a href="{% url 'incident-document-public-tab' request.user.id %}"

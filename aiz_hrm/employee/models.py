@@ -349,7 +349,7 @@ class Employee(models.Model):
     def get_all_education_subject(self):
         
         return list(
-            self.educations.values_list("subject", flat=True)
+            self.employeeeducation_set.values_list("subject", flat=True)
         )
 
     def get_avatar(self):

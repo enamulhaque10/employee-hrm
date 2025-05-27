@@ -664,7 +664,7 @@ def employee_document_tab(request, emp_id):
 
     Returns: return document_tab template
     """
-    print(emp_id, 'emp')
+
     if request.method == "POST":
         form = DocumentUpdateForm(request.POST, request.FILES)
     else:
@@ -681,20 +681,8 @@ def employee_document_tab(request, emp_id):
     return render(request, "employee/update_form/document_tab.html", context=context)
 
 def employee_document_public_tab(request, emp_id):
-    """
-    This function is used to view documents tab of an employee in employee individual
-    & profile view.
-
-    Parameters:
-    request (HttpRequest): The HTTP request object.
-    emp_id (int): The id of the employee.
-
-    Returns: return document_tab template
-    """
+    
     form = DocumentUpdateForm(request.POST, request.FILES)
-    
-
-    
     documents = Document.objects.filter(employee_id=emp_id)
 
     context = {
@@ -703,6 +691,25 @@ def employee_document_public_tab(request, emp_id):
         "emp_id": emp_id,
     }
     return render(request, "tabs/document_public_tab.html", context=context)
+
+
+def document_category_search(request, emp_id):
+    
+    form = DocumentUpdateForm(request.POST, request.FILES)
+    documents = Document.objects.filter(employee_id=emp_id)
+    category_id = request.GET.get("category")
+    if category_id:
+        documents = documents.filter(document_category_id=category_id)
+    
+    print(documents, 'documents')
+
+    context = {
+        "documents": documents,
+        "form": form,
+        "emp_id": emp_id,
+    }
+    
+    return  render(request, "tabs/document_category_wise_list.html", context=context)
 
 def incident_document_public_tab(request, emp_id):
    
@@ -827,14 +834,16 @@ def document_create(request, emp_id):
 
     Returns: return document_tab template
     """
+    print(emp_id, 'emp')
     employee_id = Employee.objects.get(id=emp_id)
-    form = DocumentForm(initial={"employee_id": employee_id, "expiry_date": None})
     if request.method == "POST":
         form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             messages.success(request, _("Document created successfully."))
             return HttpResponse("<script>window.location.reload();</script>")
+    else:
+        form = DocumentForm(initial={"employee_id": employee_id, "expiry_date": None})
 
     context = {
         "form": form,
@@ -865,13 +874,16 @@ def incident_document_create(request, emp_id):
 def document_create_public(request, emp_id):
     
     employee_id = Employee.objects.get(id=emp_id)
-    form = DocumentForm(initial={"employee_id": employee_id, "expiry_date": None})
     if request.method == "POST":
         form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            document = form.save(commit=False)
+            document.employee_id = employee_id
+            document.save()
             messages.success(request, _("Document created successfully."))
             return HttpResponse("<script>window.location.reload();</script>")
+    else:
+            form = DocumentForm(initial={"employee_id": employee_id, "expiry_date": None})
 
     context = {
         "form": form,
@@ -5044,8 +5056,6 @@ def get_document_category(request):
             "id", "category_title"
         )
     )
-
-    print(document_category, 'documment')
 
     return JsonResponse({"document_category": dict(document_category)})
 

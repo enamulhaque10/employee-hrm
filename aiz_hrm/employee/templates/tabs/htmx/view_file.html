@@ -13,7 +13,7 @@
 		</a>
 		{% if document.document %}
 		{% if perms.aiz_document.change_documentrequest %}
-			{% if document.status == "approved" %}
+			<!-- {% if document.status == "approved" %}
 				<a class="oh-btn oh-btn--success w-100 oh-btn--disabled" title="{% trans 'Approved' %}">
 					<ion-icon class="me-1" name="checkmark-outline"></ion-icon>
 				</a>
@@ -27,8 +27,8 @@
 				>
 					<ion-icon class="me-1" name="checkmark-outline"></ion-icon>
 				</a>
-			{% endif %}
-			{% if document.status == "rejected" %}
+			{% endif %} -->
+			<!-- {% if document.status == "rejected" %}
 				<a class="oh-btn oh-btn--danger w-100 oh-btn--disabled" title="{% trans 'Rejected' %}">
 					<ion-icon class="me-1" name="close-circle-outline"></ion-icon>
 				</a>
@@ -44,7 +44,7 @@
 				>
 					<ion-icon class="me-1" name="close-circle-outline"></ion-icon>
 				</a>
-			{% endif %}
+			{% endif %} -->
 		{% endif %}
 		<a
 			href="data:{{ content_type }};base64,{{ file_content|base64_encode }}"

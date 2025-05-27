@@ -84,13 +84,16 @@
 								<input class="d-none title-submit" type="submit" onclick="event.stopPropagation();" />
 							</form>
 							<span class="oh-text--light" title="{{document.document_request_id.description}}">
-								{{document.document_request_id.description|truncatechars:60}}
-							</span>
-							{% if document.issue_date %}
-								<span class="oh-text--light" title="{{document.document_request_id.description}}">
 									{% trans "Issue Date" %} : {{ document.issue_date }}
 								</span>
-							{% endif %}
+								<span class="oh-text--light" title="{{document.document_request_id.description}}">
+									{% trans "Involved" %} : {{ document.involved_member }}
+								</span>
+								
+							<span class="oh-text--light" title="{{document.document_request_id.description}}">
+								 {% trans "Description" %} :  {{document.description|truncatechars:60}}
+							</span>
+							
 						</div>
 					</div>
 					<div class="oh-btn-group">
