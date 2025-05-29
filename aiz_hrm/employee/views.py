@@ -180,11 +180,11 @@ from employee.tasks import send_event_reminders
 
 
 
-schedule.every().day.at("09:00").do(send_event_reminders)
+# schedule.every().day.at("09:00").do(send_event_reminders)
 
-while True:
-    schedule.run_pending()
-    time.sleep(60)
+# while True:
+#     schedule.run_pending()
+#     time.sleep(60)
 
 
 
