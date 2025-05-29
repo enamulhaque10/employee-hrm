@@ -46,6 +46,8 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from dateutil import parser
+import schedule
+import time
 
 
 
@@ -173,6 +175,16 @@ from aiz_employee_education.models import EmployeeEducation
 from aiz_employee_training.models import EmployeeTraining
 from aiz_job_reference.models import JobReference
 from notifications.signals import notify
+from employee.tasks import send_event_reminders
+
+
+
+
+schedule.every().day.at("09:00").do(send_event_reminders)
+
+while True:
+    schedule.run_pending()
+    time.sleep(60)
 
 
 
@@ -1956,49 +1968,52 @@ def employee_view(request):
     data_dict = parse_qs(previous_data)
     get_key_instances(Employee, data_dict)
     emp = Employee.objects.filter()
-    calender = EventCalender.objects.all()
+    # calender = EventCalender.objects.all()
 
-    for time in calender:
-        current_time = timezone.now()
-        calculated_time = time.reminder_date - current_time
-        if (calculated_time < timedelta(minutes=60)) and (calculated_time > timedelta(minutes=55)):
+    # for time in calender:
+    #     current_time = timezone.now()
+    #     current_date = datetime.today()
+    #     calculated_time = time.reminder_date - current_time
+    #     # f (calculated_time < timedelta(minutes=60)) and (calculated_time > timedelta(minutes=55))
+    #     if time.reminder_date == current_date:
+    #         print(current_date, time.reminder_date)
 
-            sender_email = "enamulcse12@gmail.com"
-            receiver_email = "parvess1980@gmail.com"
-            app_password = "iorg yewo vzwp gtgx" 
+    #         sender_email = "enamulcse12@gmail.com"
+    #         receiver_email = "parvess1980@gmail.com"
+    #         app_password = "iorg yewo vzwp gtgx" 
 
 
-            subject = time.event_title
-            body = "Hello, this is a test email sent from Python."
-            email_body_html = f"""
-                <html>
-                <body>
-                    <p>This is a reminder for an event <strong>{time.event_title}</strong>.</p>
-                    <p>This is a Event Date <strong>{time.event_date}</strong>.</p>
-                    <p>This is event Description <strong>{time.event_description}</strong>.</p>
-                </body>
-                </html>
-                """
-            # <p>Please join us at: <a href=""></a></p>
-            # <p>Best regards,<br>Your Company Name</p>
+    #         subject = time.event_title
+    #         body = "Hello, this is a test email sent from Python."
+    #         email_body_html = f"""
+    #             <html>
+    #             <body>
+    #                 <p>This is a reminder for an event <strong>{time.event_title}</strong>.</p>
+    #                 <p>This is a Event Date <strong>{time.event_date}</strong>.</p>
+    #                 <p>This is event Description <strong>{time.event_description}</strong>.</p>
+    #             </body>
+    #             </html>
+    #             """
+    #         # <p>Please join us at: <a href=""></a></p>
+    #         # <p>Best regards,<br>Your Company Name</p>
 
-            message = MIMEMultipart()
-            message["From"] = sender_email
-            message["To"] = receiver_email
-            message["Subject"] = subject
+    #         message = MIMEMultipart()
+    #         message["From"] = sender_email
+    #         message["To"] = receiver_email
+    #         message["Subject"] = subject
 
-            message.attach(MIMEText(email_body_html, "html"))
+    #         message.attach(MIMEText(email_body_html, "html"))
 
-            try:
-                server = smtplib.SMTP("smtp.gmail.com", 587)
-                server.starttls()  # Secure the connection
-                server.login(sender_email, app_password)
-                server.sendmail(sender_email, receiver_email, message.as_string())
-                print("Email sent successfully!")
-            except Exception as e:
-                print(f"Error sending email: {e}")
-            finally:
-                server.quit()
+    #         try:
+    #             server = smtplib.SMTP("smtp.gmail.com", 587)
+    #             server.starttls()  # Secure the connection
+    #             server.login(sender_email, app_password)
+    #             server.sendmail(sender_email, receiver_email, message.as_string())
+    #             print("Email sent successfully!")
+    #         except Exception as e:
+    #             print(f"Error sending email: {e}")
+    #         finally:
+    #             server.quit()
 
 
     # Store the employees in the session
@@ -2764,11 +2779,6 @@ def employee_card(request):
     """
     previous_data = request.GET.urlencode()
     search = request.GET.get("search")
-    event_reminder = EventCalender.objects.all()
-    events = []
-    for event in  event_reminder:
-        print(event, 'calender')
-        #reminder = event.reminder_date
         
 
     if isinstance(search, type(None)):

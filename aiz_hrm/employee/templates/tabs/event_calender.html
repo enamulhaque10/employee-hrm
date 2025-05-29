@@ -29,7 +29,8 @@
 				<div class="oh-user_permission-list_item accordion exclude-accordion-style" hx-target="#viewFile" data-toggle="oh-modal-toggle" data-target="#viewFileModal" >
 					<div class="oh-user_permission-list_profile row-status--yellow">
 						<div class="oh-feedback-card__name-container ms-1 title_form">
-							<div id="calendar-{{ event.id }}" class="mb-4"></div>
+							<!-- <div id="calendar-{{ event.id }}" class="mb-4"></div> -->
+							 <div id="calendar" width="40%" class="mb-4"></div>
 
 
 
@@ -183,7 +184,7 @@
     });
 </script>
 
-<script>
+<!-- <script>
 	document.addEventListener('DOMContentLoaded', function () {
 		const eventData = {{ calendar_events_json|safe }};
 
@@ -201,6 +202,27 @@
 			}
 		});
 	});
+</script> -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const calendarEl = document.getElementById('calendar');
+
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+			headerToolbar: {
+						left: 'prev,next today',
+						center: 'title',
+						right: 'dayGridMonth,timeGridWeek,listWeek'
+										},
+            events: {{ calendar_events_json|safe }},
+            eventClick: function(info) {
+                alert(info.event.title + "\n\n" + info.event.extendedProps.description);
+            }
+        });
+
+        calendar.render();
+    });
 </script>
 
 
