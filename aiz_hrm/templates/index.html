@@ -130,6 +130,8 @@
             <!-- End of Notifications activity bar -->
 
             <!-- Start of Nav bar -->
+             <!-- {% if breadcrumbs %}it was below a tag {% include "base/navbar_components/breadcrumbs_view.html" %}{% endif %} -->
+
             <nav class="oh-navbar" style="width: -webkit-fill-available;;">
                 <div class="oh-wrapper oh-navbar__wrapper">
                     <div class="oh-navbar__toggle-container">
@@ -139,14 +141,11 @@
                                 class="oh-navbar__toggle-menu" loading="lazy" />
                         </a>
 
-                        {% if breadcrumbs %}
-                            <!-- Start of breadcrumb in nav bar -->
-                            {% include "base/navbar_components/breadcrumbs_view.html" %}
-                            <!-- End of breadcrumb in nav bar -->
-                        {% endif %}
+                      
                         </a>
+                          
                     </div>
-                    <div class="oh-navbar__systray">
+                     <div class="oh-navbar__systray">
                         {% if "attendance"|app_installed %}
                             
                             <div id="attendance-activity-container">

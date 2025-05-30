@@ -46,7 +46,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from dateutil import parser
-import schedule
+from dateutil.relativedelta import relativedelta
 import time
 
 
@@ -1244,11 +1244,11 @@ def update_event_calender_title(request, id):
 def update_event_calender_event_date(request, id):
     event = get_object_or_404(EventCalender, id=id)
     event_date= request.POST.get("event_date")
-    date_obj = datetime.strptime(event_date, "%B %d, %Y")
-    formatted_date = date_obj.strftime("%Y-%m-%d")
+    date_obj = parser.parse(event_date)
+    #formatted_date = date_obj.strftime("%Y-%m-%d")
 
     if request.method == "POST":
-        event.event_date = formatted_date
+        event.event_date = date_obj
         event.save()
         messages.success(request, _("Event Date updated successfully"))
     else:
