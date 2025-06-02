@@ -713,8 +713,6 @@ def document_category_search(request, emp_id):
     category_id = request.GET.get("category")
     if category_id:
         documents = documents.filter(document_category_id=category_id)
-    
-    print(documents, 'documents')
 
     context = {
         "documents": documents,
@@ -3523,7 +3521,7 @@ def work_info_import(request):
             "Employee Home District",
             "Employee Nationality",
             "Employee NID Number",
-            "Employee Passport Number(If Any)",
+            "Employee Passport Number (If Any)",
             "Employee Driving License Number(If Any)",
             # "Employee Updated Photo",
             # "Employee Scanned Signature"
@@ -3587,7 +3585,7 @@ def work_info_import(request):
     # Export the DataFrame to an Excel file
     response = HttpResponse(content_type="application/ms-excel")
     response["Content-Disposition"] = 'attachment; filename="work_info_template.xlsx"'
-    data_frame.to_excel(response, index=False)
+    data_frame.to_excel(response, index=False, engine='xlsxwriter')
     create_work_info = False
     if request.POST.get("create_work_info") == "true":
         create_work_info = True
@@ -3620,8 +3618,8 @@ def work_info_import(request):
             last_name = convert_nan("Last Name", work_info)
             badge_id = work_info["Employee ID"] 
             date_joining = work_info["Date Of Joining"]
-            iso_date = datetime.strptime(str(date_joining), "%Y-%m-%d %H:%M:%S")
-            date_of_joining = iso_date.date().isoformat()
+            # iso_date = datetime.strptime(str(date_joining), "%Y-%m-%d %H:%M:%S")
+            # date_of_joining = iso_date.date().isoformat()
             #last_promotion_date = work_info["Last Promotion Date"]
             #contract_end_date = work_info["Contract End Date"]
             # basic_salary = convert_nan("Basic Salary", work_info)
@@ -3667,13 +3665,13 @@ def work_info_import(request):
             else:
                 existing_name_emails.add(name_email_tuple)
 
-            try:
-                pd.to_datetime(date_joining).date()
-            except:
-                work_info["Joining Date Error"] = (
-                    f"Invalid Date format. Please use the format YYYY-MM-DD"
-                )
-                error = True
+            # try:
+            #     pd.to_datetime(date_joining).date()
+            # except:
+            #     work_info["Joining Date Error"] = (
+            #         f"Invalid Date format. Please use the format YYYY-MM-DD"
+            #     )
+            #     error = True
 
             # try:
             #     pd.to_datetime(last_promotion_date).date()

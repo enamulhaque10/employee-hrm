@@ -317,7 +317,7 @@
 									data-target="#personal_target">{% trans "About" %}</a>
 							</li>
 
-							{% if request.user == employee.employee_user_id or request.user|check_manager:employee or perms.attendance.view_worktyperequest or perms.attendance.view_shiftrequest %}
+							<!-- {% if request.user == employee.employee_user_id or request.user|check_manager:employee or perms.attendance.view_worktyperequest or perms.attendance.view_shiftrequest %}
 								<li data-cell-index="10" data-cell-title="{% trans 'Job Position & Shift' %}"
 									class="oh-general__tab">
 									<a hx-get={% url 'shift-tab' employee.id %} hx-target="#shift_target"
@@ -326,9 +326,9 @@
 										{% trans "Job Position & Shift"%}
 									</a>
 								</li>
-							{% endif %}
+							{% endif %} -->
 
-							{% if "attendance"|app_installed %}
+							<!-- {% if "attendance"|app_installed %}
 								{% if perms.attendance.view_attendance or request.user|check_manager:employee %}
 								<li data-cell-index="11" data-cell-title="{% trans 'Attendance' %}" class="oh-general__tab">
 									<a hx-get="{% url 'attendance-tab' employee.id %}" hx-target="#attendance_target"
@@ -336,7 +336,7 @@
 										class="oh-general__tab-link" role="button">{% trans "Attendance" %}</a>
 								</li>
 								{% endif %}
-							{% endif %}
+							{% endif %} -->
 
 							{% if "leave"|app_installed %}
 								{% if perms.leave.view_leaverequest or request.user|check_manager:employee or request.user == employee.employee_user_id %}
@@ -348,13 +348,13 @@
 								{% endif %}
 							{% endif %}
 
-							{% if "payroll"|app_installed %}
+							<!-- {% if "payroll"|app_installed %}
 								{% if perms.payroll.view_payslip or request.user == employee.employee_user_id %}
 									<li data-cell-index="13" data-cell-title="{% trans 'Payroll' %}" class="oh-general__tab">
 										<a href="#" class="oh-general__tab-link" data-action="general-tab"
 											data-target="#payroll">{% trans "Payroll" %}</a>
 									</li>
-								{% endif %}
+								{% endif %} -->
 
 								<!-- {% if perms.payroll.view_payslip or request.user == employee.employee_user_id %}
 									<li data-cell-index="14" data-cell-title="{% trans 'Allowance & Deduction' %}"
@@ -404,7 +404,7 @@
 									</li>
 								{% endif %}
 							{% endif %} -->
-
+<!-- 
 							{% if perms.auth.view_permission or perms.auth.view_group %}
 							<li data-cell-index="18" data-cell-title="{% trans 'Groups & Permissions' %}"
 								class="oh-general__tab">
@@ -414,16 +414,16 @@
 									{% trans "Groups & Permissions" %}
 								</a>
 							</li>
-							{% endif %}
+							{% endif %} -->
 
-							{% if perms.employee.view_employeenote or request.user|check_manager:employee %}
+							<!-- {% if perms.employee.view_employeenote or request.user|check_manager:employee %}
 								<li data-cell-index="19" data-cell-title="{% trans 'Note' %}" class="oh-general__tab">
 									<a hx-get={% url 'note-tab' employee.id %} hx-target="#note_target"
 										data-action="general-tab" data-target="#note_target" class="oh-general__tab-link"
 										role="button">{% trans "Note" %}
 									</a>
 								</li>
-							{% endif %}
+							{% endif %} -->
 
 							{% if perms.aiz_documents.view_document or request.user == employee.employee_user_id %}
 								<li data-cell-index="20" data-cell-title="{% trans 'Documents' %}" class="oh-general__tab">

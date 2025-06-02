@@ -210,8 +210,9 @@ def bulk_create_employee_import(success_lists):
         #address1, zip, city,state,country = [part.strip() for part in address.split(',')]
         permanent_address = work_info["Employee Permanent Address"]
         dob = work_info["Date of Birth"] if work_info["Date of Birth"] !="" else date.today()
-        dt = datetime.strptime(str(dob), "%Y-%m-%d %H:%M:%S")
-        date_str = dt.date().isoformat()  # This gives '2000-05-05'
+        dt = pd.to_datetime(dob).date() if dob else None
+        #datetime.strptime(str(dob), "%Y-%m-%d")
+        #date_str = dt.date()  # This gives '2000-05-05'
 
         marital_status = work_info["Employee Marital Status"]
         emergency_contact = work_info["Emergency Contact Number"]
@@ -240,7 +241,7 @@ def bulk_create_employee_import(success_lists):
             gender=gender,
             address=address,
             employee_permanent_address=permanent_address,
-            dob=date_str,
+            dob=dt,
             marital_status=marital_status,
             emergency_contact=emergency_contact,
             employee_blood_group=blood_group,
