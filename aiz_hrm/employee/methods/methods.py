@@ -164,15 +164,39 @@ def bulk_create_employee_import(success_lists):
     Bulk creation of employee instances based on the excel import of employees
     """
     employee_obj_list = []
+    employee_obj_update_list = []
     existing_users = {
         user.username: user
         for user in User.objects.filter(
             username__in=[row["Employee Email(Personal)"] for row in success_lists]
         )
     }
+    existing_employees = {
+        emp.email.strip().lower(): emp
+        for emp in Employee.objects.filter(
+            email__in=[row["Employee Email(Personal)"].strip().lower() for row in success_lists]
+        )
+    }
+
+    existing_emails = set(
+    Employee.objects.values_list('email', flat=True)
+    .order_by()
+    .distinct()
+        )
+    existing_emails = {email.strip().lower() for email in existing_emails}
+
+
+    emails_seen = set()
+    result = []
 
     for work_info in success_lists:
-        email = work_info["Employee Email(Personal)"]
+        email = work_info["Employee Email(Personal)"].strip().lower()
+
+        print(email, 'outside')
+        
+        if email in existing_emails:
+            print('trueee')
+            continue
         user = existing_users.get(email)
         if not user:
             continue
@@ -195,7 +219,7 @@ def bulk_create_employee_import(success_lists):
         religion=work_info["Employee Religion"]
         nationality=work_info["Employee Nationality"]
         nid = work_info["Employee NID Number"]
-        passport_number = work_info["Employee Passport Number(If Any)"]
+        passport_number = work_info["Employee Passport Number (If Any)"]
         driving_license = work_info["Employee Driving License Number(If Any)"]
         home_district = work_info["Employee Home District"]
         father_name=work_info["Employee Father's Name (According to NID)"]
@@ -205,6 +229,7 @@ def bulk_create_employee_import(success_lists):
         number_of_daughter = work_info["Number of Daughter of Employee"]
         nominee = work_info["Nominee Information"]
         n_name,n_number,n_relation = [part.strip() for part in nominee.split(',')]
+
         employee_obj = Employee(
             employee_user_id=user,
             badge_id=badge_id,
@@ -235,9 +260,15 @@ def bulk_create_employee_import(success_lists):
             employee_nominee_relation=n_relation
         )
         employee_obj_list.append(employee_obj)
-    result = []
-    if employee_obj_list:
+        emails_seen.add(email)
         result = Employee.objects.bulk_create(employee_obj_list)
+        for employee in employee_obj_list:
+            existing_emails.add(employee.email.strip().lower())
+        print('complete')
+
+   
+    # if employee_obj_list:
+    #     result = Employee.objects.bulk_create(employee_obj_list)
 
     return result
 
@@ -572,6 +603,7 @@ def bulk_create_work_info_import(success_lists):
         emp.badge_id: emp
         for emp in Employee.objects.filter(badge_id__in=badge_ids).only("badge_id")
     }
+
     existing_employee_work_infos = {
         emp.employee_id: emp
         for emp in EmployeeWorkInformation.objects.filter(
@@ -719,17 +751,26 @@ def bulk_create_work_info_import(success_lists):
                 company_id=company_obj,
                 location=location,
                 date_joining=(
-                    date_joining if not pd.isnull(date_joining) else datetime.today()
+                    date_joining.date() if not pd.isnull(date_joining) else datetime.today()
                 ),
                 last_promotion_date=(
-                    last_promotion_date if not pd.isnull(last_promotion_date) else datetime.today()
+                    last_promotion_date.date() if not pd.isnull(last_promotion_date) else datetime.today()
                 ),
                 employee_section_id=section_obj,
                 employee_unit_id=unit_obj,
                 employee_grade = employee_grade,
                 casual_id=casual_id,
-                casual_employee_joining_date=casual_joining_date,
-                casual_employee_payroll_joining_date=payroll_joining_date
+                # casual_employee_joining_date= (
+                #     casual_joining_date.date() if casual_joining_date else ""
+                # ),
+                casual_employee_joining_date = pd.to_datetime(casual_joining_date).date() if casual_joining_date else None,
+                #casual_employee_joining_date = datetime.strptime(casual_joining_date, "%Y-%m-%d").date() if casual_joining_date else None,
+                casual_employee_payroll_joining_date = pd.to_datetime(payroll_joining_date).date() if payroll_joining_date else None
+
+               #casual_employee_payroll_joining_date =  datetime.strptime(payroll_joining_date, "%Y-%m-%d").date() if payroll_joining_date else None
+                # casual_employee_payroll_joining_date=(
+                #     payroll_joining_date.date() if payroll_joining_date else ""
+                # ),
                 # contract_end_date=(
                 #     contract_end_date if not pd.isnull(contract_end_date) else None
                 # ),
@@ -800,15 +841,19 @@ def bulk_create_work_info_import(success_lists):
         contract_creation_thread.start()
 
 def bulk_create_job_experience_info_import(success_lists):
+     
      badge_ids = [row["Employee ID"] for row in success_lists]
      existing_employees = {
         emp.badge_id: emp
         for emp in Employee.objects.filter(badge_id__in=badge_ids).only("badge_id")
-        }
+           }
      employee_job_experience = []
      for work_info in success_lists:
         badge_id = work_info["Employee ID"]
         employee_obj = existing_employees.get(badge_id)
+        if not employee_obj:
+            print(f"Employee not found for badge ID: {badge_id}")
+            continue
         experience1 = work_info["Job Experience 1"]
         company_name1,designation1,experience_year1 = ([part.strip() for part in experience1.split(",")] if not pd.isna(experience1)  else ["None", "None", "0 years"])
         experience2 = work_info["Job Experience 2"]
@@ -861,6 +906,8 @@ def bulk_create_educational_info_import(success_lists):
     for work_info in success_lists:
         badge_id = work_info["Employee ID"]
         employee_obj = existing_employees.get(badge_id)
+        if not employee_obj:
+            continue
         graduation_subject = work_info["Graduation Subject"]
         graduation_university = work_info["Graduation University"]
         post_graduation_subject = work_info["Post Graduation Subject"]
@@ -902,6 +949,8 @@ def bulk_create_professional_training_import(success_lists):
     for work_info in success_lists:
         badge_id = work_info["Employee ID"]
         employee_obj = existing_employees.get(badge_id)
+        if not employee_obj:
+            continue
         professional_training = work_info["Professional Degree or Specialized Training"]
         
         training_name,institution = ([part.strip() for part in professional_training.split(",")] if not pd.isna(professional_training)  else ["None", "None"])
@@ -925,6 +974,8 @@ def bulk_create_job_reference_import(success_lists):
     for work_info in success_lists:
         badge_id = work_info["Employee ID"]
         employee_obj = existing_employees.get(badge_id)
+        if not employee_obj:
+            continue
         job_reference = work_info["Job Reference"]
         reference_name,department,company_name,mobile_number = ([part.strip() for part in job_reference.split(",")] if not pd.isna(job_reference)  else ["None", "None", "None", "None"])
         

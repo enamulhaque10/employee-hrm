@@ -588,7 +588,7 @@ excel_columns = [
     ("employee_home_district", trans("Employee Home District")),
     ("employee_nationality", trans("Employee Nationality")),
     ("employee_nid_number", trans("Employee NID Number")),
-    ("employee_passport_number", trans("Employee Passport Number(If Any)")),
+    ("employee_passport_number", trans("Employee Passport Number (If Any)")),
     ("employee_driving_license_number", trans("Employee Driving License Number(If Any)")),
     # ("employee_photo", trans("Employee Updated Photo")),
     # ("employee_signature", trans("Employee Scanned Signature")),

@@ -3728,10 +3728,10 @@ def work_info_import(request):
                 # )
                 users = bulk_create_user_import(success_lists)
                 employees = bulk_create_employee_import(success_lists)
-                # thread = threading.Thread(
-                #     target=set_initial_password, args=(employees,)
-                # )
-                # thread.start()
+                thread = threading.Thread(
+                    target=set_initial_password, args=(employees,)
+                )
+                thread.start()
 
                 total_count = len(employees)
                 bulk_create_department_import(success_lists)
