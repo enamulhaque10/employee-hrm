@@ -14,6 +14,7 @@ from django.db import models
 from datetime import date
 
 
+
 from base.context_processors import get_initial_prefix
 from base.models import (
     Company,
@@ -171,12 +172,6 @@ def bulk_create_employee_import(success_lists):
             username__in=[row["Employee Email(Personal)"] for row in success_lists]
         )
     }
-    existing_employees = {
-        emp.email.strip().lower(): emp
-        for emp in Employee.objects.filter(
-            email__in=[row["Employee Email(Personal)"].strip().lower() for row in success_lists]
-        )
-    }
 
     existing_emails = set(
     Employee.objects.values_list('email', flat=True)
@@ -185,17 +180,9 @@ def bulk_create_employee_import(success_lists):
         )
     existing_emails = {email.strip().lower() for email in existing_emails}
 
-
-    emails_seen = set()
-    result = []
-
     for work_info in success_lists:
         email = work_info["Employee Email(Personal)"].strip().lower()
-
-        print(email, 'outside')
-        
         if email in existing_emails:
-            print('trueee')
             continue
         user = existing_users.get(email)
         if not user:
@@ -261,16 +248,11 @@ def bulk_create_employee_import(success_lists):
             employee_nominee_relation=n_relation
         )
         employee_obj_list.append(employee_obj)
-        emails_seen.add(email)
-        result = Employee.objects.bulk_create(employee_obj_list)
-        for employee in employee_obj_list:
-            existing_emails.add(employee.email.strip().lower())
-        print('complete')
-
+        #result = Employee.objects.bulk_create(employee_obj_list, ignore_conflicts=True)
    
-    # if employee_obj_list:
-    #     result = Employee.objects.bulk_create(employee_obj_list)
-
+    if employee_obj_list:
+        result = Employee.objects.bulk_create(employee_obj_list, ignore_conflicts=True)
+        print(result, 'result')
     return result
 
 
@@ -735,6 +717,7 @@ def bulk_create_work_info_import(success_lists):
         # )
 
         employee_obj = existing_employees.get(badge_id)
+        print(employee_obj, 'employee', badge_id)
         employee_work_info = existing_employee_work_infos.get(employee_obj)
 
         if employee_work_info is None:

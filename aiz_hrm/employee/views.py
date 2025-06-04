@@ -48,6 +48,8 @@ from email.mime.multipart import MIMEMultipart
 from dateutil import parser
 from dateutil.relativedelta import relativedelta
 import time
+from django.db import transaction
+from time import sleep
 
 
 
@@ -3665,32 +3667,7 @@ def work_info_import(request):
             else:
                 existing_name_emails.add(name_email_tuple)
 
-            # try:
-            #     pd.to_datetime(date_joining).date()
-            # except:
-            #     work_info["Joining Date Error"] = (
-            #         f"Invalid Date format. Please use the format YYYY-MM-DD"
-            #     )
-            #     error = True
-
-            # try:
-            #     pd.to_datetime(last_promotion_date).date()
-            # except:
-            #     print("promotion")
-            #     work_info["Last Promotion Date Error"] = (
-            #         f"Invalid Date format. Please use the format YYYY-MM-DD"
-            #     )
-            #     error = True
-
-            # try:
-            #     pd.to_datetime(contract_end_date).date()
-            # except:
-            #     print("contract")
-            #     work_info["Contract Error"] = (
-            #         f"Invalid Date format. Please use the format YYYY-MM-DD"
-            #     )
-            #     error = True
-
+           
             # if badge_id in existing_badge_ids:
             #     work_info["Badge ID Error"] = (
             #         f"An Employee with the badge ID already exists"
@@ -3717,39 +3694,50 @@ def work_info_import(request):
             # error_occured = True
             # logger.error(e)
             if create_work_info or not error_lists:
-                #try:
-                # if name_email_tuple in existing_name_emails:
-                #     raise ValueError("Invalid input!")
+                # try:
 
-                # work_info["Name and Email Error"] = (
-                #     "An employee with this first name, last name, and email already exists."
-                # )
+                #     if name_email_tuple in existing_name_emails:
+
+                #         raise ValueError("Invalid input!")
+
+                    # work_info["Name and Email Error"] = (
+                    #     "An employee with this first name, last name, and email already exists."
+                    # )
+                # with transaction.atomic():
+                #      bulk_create_user_import(success_lists)
+                #      employees = bulk_create_employee_import(success_lists)
+
                 users = bulk_create_user_import(success_lists)
                 employees = bulk_create_employee_import(success_lists)
-                thread = threading.Thread(
-                    target=set_initial_password, args=(employees,)
-                )
-                thread.start()
+                print(employees, 'emp')
+                #sleep(0.5)
+                # employee_emails = [row["Employee Email(Personal)"].strip().lower() for row in success_lists]
+                # employees = list(Employee.objects.filter(email__in=employee_emails))
 
                 total_count = len(employees)
-                bulk_create_department_import(success_lists)
-                bulk_create_job_position_import(success_lists)
-                #bulk_create_job_section_import(success_lists)
-                #bulk_create_job_unit_import(success_lists)
-                
-                #bulk_create_job_role_import(success_lists)
-                bulk_create_work_types(success_lists)
-                #bulk_create_shifts(success_lists)
-                bulk_create_employee_types(success_lists)
-                bulk_create_work_info_import(success_lists)
-                bulk_create_job_experience_info_import(success_lists)
-                bulk_create_educational_info_import(success_lists)
-                bulk_create_professional_training_import(success_lists)
-                bulk_create_job_reference_import(success_lists)
+                if employees:
+                    # thread = threading.Thread(
+                    # target=set_initial_password, args=(employees,)
+                    # )
+                    # thread.start()
+                    department =  bulk_create_department_import(success_lists)
+                    job_position = bulk_create_job_position_import(success_lists)
+                    #bulk_create_job_section_import(success_lists)
+                    #bulk_create_job_unit_import(success_lists)
+                    #bulk_create_job_role_import(success_lists)
+                    work_type = bulk_create_work_types(success_lists)
+                    #bulk_create_shifts(success_lists)
+                    employee_types = bulk_create_employee_types(success_lists)
+                    work_data = bulk_create_work_info_import(success_lists)
+                    job_experience = bulk_create_job_experience_info_import(success_lists)
+                    education = bulk_create_educational_info_import(success_lists)
+                    training = bulk_create_professional_training_import(success_lists)
+                    reference = bulk_create_job_reference_import(success_lists)
 
-            # except Exception as e:
-            #     error_occured = True
-            #     logger.error(e)
+                   
+                # except Exception as e:
+                #     error_occured = True
+                #     logger.error(e)
         error_occured = False
         if error_occured:
             messages.error(request, "something went wrong....")
